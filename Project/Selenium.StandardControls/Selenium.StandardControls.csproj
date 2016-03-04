@@ -44,7 +44,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="WebElement.cs" />
+    <Compile Include="ElementDriver.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
