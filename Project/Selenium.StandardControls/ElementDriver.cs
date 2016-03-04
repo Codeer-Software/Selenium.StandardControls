@@ -1,112 +1,57 @@
-﻿using System;
-using OpenQA.Selenium;
-using OpenQA.Selenium.Interactions;
+﻿using OpenQA.Selenium;
+using Selenium.StandardControls.Inside;
 
 namespace Selenium.StandardControls
 {
     public class ElementDriver
     {
-        public IWebDriver Driver { get; protected set; }
-        public IJavaScriptExecutor Js => (IJavaScriptExecutor)Driver;
+        //public void MouseOver()
+        //{
+        //    switch (Type)
+        //    {
+        //        case ElementType.WebElement:
+        //            var action = new Actions(Driver);
+        //            action.MoveToElement(Element).Perform();
+        //            break;
 
-        private enum ElementType
+        //        default:
+        //            throw new ArgumentOutOfRangeException("");
+        //    }
+        //}
+
+        private readonly IElementCore _core;
+
+        public ElementDriver(IWebDriver driver, IElementCore core)
         {
-            Script,
-            WebElement,
-        }
-        private string Script { get; }
-        private IWebElement Element { get; }
-        private ElementType Type { get; }
-
-
-        public const string VarName = "element";
-        //ここに渡すscriptは下記のようにget_element();をVarNameで受けるのが必須条件。
-        //$"var {VarName} = ....get_element();"
-        public ElementDriver(IWebDriver driver, string script)
-        {
-            Driver = driver;
-            Script = script;
-            Type = ElementType.Script;
+            _core = core;
         }
 
-        public ElementDriver(IWebDriver driver, IWebElement element)
-        {
-            Driver = driver;
-            Element = element;
-            Type = ElementType.WebElement;
-        }
+        public string InnerHtml => GetAttribute<string>("innerHTML");
+        public string InnerText => GetAttribute<string>("innerText");
+        public string Text => GetAttribute<string>("text");
+        public string Value => GetAttribute<string>("value");
+        public object ClassName => GetCssValue("className");
+        public string Width => GetCssValue("width");
+        public string Height => GetCssValue("height");
+        public string FonsSize => GetCssValue("fontSize");
+        public string Font => GetCssValue("fontFamily");
 
-        public string InnerHtml => GetElement<string>("innerHTML");
-        public string InnerText => GetElement<string>("innerText");
-        public string Text => GetElement<string>("text");
-        public string Value => GetElement<string>("value");
-        public object ClassName => GetElementStyle("className");
-        public string Width => GetElementStyle("width");
-        public string Height => GetElementStyle("height");
-        public string FonsSize => GetElementStyle("fontSize");
-        public string Font => GetElementStyle("fontFamily");
-        //ToDo:太字はFirefoxでは700だったけ全部そうなのかな？boldもありそう。未確認
-        public bool FontBold => GetElementStyle("fontWeight") == "700" || GetElementStyle("fontWeight") == "bold";
-        public bool FontItalic => GetElementStyle("fontStyle") == "italic";
-        public bool TextUnderline => GetElementStyle("textDecoration").Contains("underline");
-        public bool TextLineThrough => GetElementStyle("textDecoration").Contains("line-through");
-        public string Color => GetElementStyle("color");
-        public string BackGroundColor => GetElementStyle("backgroundColor");
-        public string BackGroundImage => GetElementStyle("backgroundImage");
-        public long TabIndex => GetElement<long>("tabIndex");
-        public string ImeMode => GetElementStyle("imeMode");
-        public int? MaxLength => GetElement<int?>("maxLength");
-        public string TextAlign => GetElementStyle("textAlign");
+        //ToDo: bold = Firefox is 700. Other Browther is un know.
+        public bool FontBold => GetCssValue("fontWeight") == "700" || GetCssValue("fontWeight") == "bold";
 
-        public void MouseOver()
-        {
-            switch (Type)
-            {
-                case ElementType.WebElement:
-                    var action = new Actions(Driver);
-                    action.MoveToElement(Element).Perform();
-                    break;
+        public bool FontItalic => GetCssValue("fontStyle") == "italic";
+        public bool TextUnderline => GetCssValue("textDecoration").Contains("underline");
+        public bool TextLineThrough => GetCssValue("textDecoration").Contains("line-through");
+        public string Color => GetCssValue("color");
+        public string BackGroundColor => GetCssValue("backgroundColor");
+        public string BackGroundImage => GetCssValue("backgroundImage");
+        public long TabIndex => GetAttribute<long>("tabIndex");
+        public string ImeMode => GetCssValue("imeMode");
+        public int? MaxLength => GetAttribute<int?>("maxLength");
+        public string TextAlign => GetCssValue("textAlign");
 
-                default:
-                    throw new ArgumentOutOfRangeException("");
-            }
-        }
+        private T GetAttribute<T>(string name) => _core.GetAttribute<T>(name);
 
-
-        private T GetElement<T>(string name)
-        {
-            switch (Type)
-            {
-                case ElementType.Script:
-                    var script = $"{Script}return {VarName}.{name}";
-                    return (T)Js.ExecuteScript(script);
-
-                case ElementType.WebElement:
-                    var o = Element.GetAttribute(name);
-                    if (typeof(T) == typeof(int?)) return (o == null) ? default(T) : (T)(object)int.Parse(o);
-                    if (typeof(T) == typeof(string)) return (T)(object)o;
-                    if (typeof(T) == typeof(long)) return (T)(object)long.Parse(o);
-                    throw new ArgumentOutOfRangeException("");
-
-                default:
-                    throw new ArgumentOutOfRangeException("");
-            }
-        }
-
-        private string GetElementStyle(string name)
-        {
-            switch (Type)
-            {
-                case ElementType.Script:
-                    var script = $"{Script}return ({VarName}.currentStyle || document.defaultView.getComputedStyle({VarName}, null)).{name};";
-                    return (string)Js.ExecuteScript(script);
-
-                case ElementType.WebElement:
-                    return Element.GetCssValue(name);
-
-                default:
-                    throw new ArgumentOutOfRangeException("");
-            }
-        }
+        private string GetCssValue(string name) => _core.GetCssValue(name);
     }
 }
