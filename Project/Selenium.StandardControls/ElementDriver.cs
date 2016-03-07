@@ -1,30 +1,17 @@
-﻿using OpenQA.Selenium;
-using Selenium.StandardControls.Inside;
-
-namespace Selenium.StandardControls
+﻿namespace Selenium.StandardControls
 {
+    /// <summary>
+    /// JavaScript Element Driver
+    /// </summary>
     public class ElementDriver
     {
-        //public void MouseOver()
-        //{
-        //    switch (Type)
-        //    {
-        //        case ElementType.WebElement:
-        //            var action = new Actions(Driver);
-        //            action.MoveToElement(Element).Perform();
-        //            break;
+        #region Fields
 
-        //        default:
-        //            throw new ArgumentOutOfRangeException("");
-        //    }
-        //}
+        private IElementCore Core { get; }
 
-        private readonly IElementCore _core;
+        #endregion Fields
 
-        public ElementDriver(IWebDriver driver, IElementCore core)
-        {
-            _core = core;
-        }
+        #region Properties
 
         public string InnerHtml => GetAttribute<string>("innerHTML");
         public string InnerText => GetAttribute<string>("innerText");
@@ -50,8 +37,23 @@ namespace Selenium.StandardControls
         public int? MaxLength => GetAttribute<int?>("maxLength");
         public string TextAlign => GetCssValue("textAlign");
 
-        private T GetAttribute<T>(string name) => _core.GetAttribute<T>(name);
+        #endregion Properties
 
-        private string GetCssValue(string name) => _core.GetCssValue(name);
+        #region Constructors
+
+        public ElementDriver(IElementCore core)
+        {
+            Core = core;
+        }
+
+        #endregion Constructors
+
+        #region Private Methods
+
+        private T GetAttribute<T>(string name) => Core.GetAttribute<T>(name);
+
+        private string GetCssValue(string name) => Core.GetCssValue(name);
+
+        #endregion Private Methods
     }
 }
