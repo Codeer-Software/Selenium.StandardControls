@@ -5,14 +5,9 @@
     /// </summary>
     public class ElementDriver
     {
-        #region Fields
-
-        private IElementCore Core { get; }
-
-        #endregion Fields
-
         #region Properties
 
+        private IElementCore Core { get; }
         public string InnerHtml => GetAttribute<string>("innerHTML");
         public string InnerText => GetAttribute<string>("innerText");
         public string Text => GetAttribute<string>("text");
