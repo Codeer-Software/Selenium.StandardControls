@@ -5,10 +5,7 @@
     /// </summary>
     public class ElementDriver
     {
-        #region Properties
-
         private IElementCore Core { get; }
-
 
         public string InnerHtml => GetAttribute<string>("innerHTML");
         public string InnerText => GetAttribute<string>("innerText");
@@ -21,11 +18,11 @@
         public string Font => GetCssValue("fontFamily");
 
         //ToDo: bold = Firefox is 700. Other Browther is un know.
-        public string FontBold => (GetCssValue("fontWeight") == "700" || GetCssValue("fontWeight") == "bold").ToString();
+        public bool FontBold => GetCssValue("fontWeight") == "700" || GetCssValue("fontWeight") == "bold";
 
-        public string FontItalic => (GetCssValue("fontStyle") == "italic").ToString();
-        public string TextUnderline => (GetCssValue("textDecoration").Contains("underline")).ToString();
-        public string TextLineThrough => (GetCssValue("textDecoration").Contains("line-through")).ToString();
+        public bool FontItalic => GetCssValue("fontStyle") == "italic";
+        public bool TextUnderline => GetCssValue("textDecoration").Contains("underline");
+        public bool TextLineThrough => GetCssValue("textDecoration").Contains("line-through");
         public string Color => GetCssValue("color");
         public string BackGroundColor => GetCssValue("backgroundColor");
         public string BackGroundImage => GetCssValue("backgroundImage");
@@ -34,27 +31,15 @@
         public int? MaxLength => GetAttribute<int?>("maxLength");
         public string TextAlign => GetCssValue("textAlign");
 
-        #endregion Properties
-
-        #region Constructors
 
         public ElementDriver(IElementCore core)
         {
             Core = core;
         }
 
-        #endregion Constructors
-
-        #region Methods
-        public string SetAttribute(string attribute) => GetAttribute<string>(attribute);
-        #endregion Methods
-
-        #region Private Methods
-
         private T GetAttribute<T>(string name) => Core.GetAttribute<T>(name);
 
         private string GetCssValue(string name) => Core.GetCssValue(name);
 
-        #endregion Private Methods
     }
 }
