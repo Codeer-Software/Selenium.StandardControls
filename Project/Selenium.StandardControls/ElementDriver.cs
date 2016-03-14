@@ -8,22 +8,24 @@
         #region Properties
 
         private IElementCore Core { get; }
+
+
         public string InnerHtml => GetAttribute<string>("innerHTML");
         public string InnerText => GetAttribute<string>("innerText");
         public string Text => GetAttribute<string>("text");
         public string Value => GetAttribute<string>("value");
-        public object ClassName => GetCssValue("className");
+        public string CssClass => GetCssValue("className");
         public string Width => GetCssValue("width");
         public string Height => GetCssValue("height");
-        public string FonsSize => GetCssValue("fontSize");
+        public string FontSize => GetCssValue("fontSize");
         public string Font => GetCssValue("fontFamily");
 
         //ToDo: bold = Firefox is 700. Other Browther is un know.
-        public bool FontBold => GetCssValue("fontWeight") == "700" || GetCssValue("fontWeight") == "bold";
+        public string FontBold => (GetCssValue("fontWeight") == "700" || GetCssValue("fontWeight") == "bold").ToString();
 
-        public bool FontItalic => GetCssValue("fontStyle") == "italic";
-        public bool TextUnderline => GetCssValue("textDecoration").Contains("underline");
-        public bool TextLineThrough => GetCssValue("textDecoration").Contains("line-through");
+        public string FontItalic => (GetCssValue("fontStyle") == "italic").ToString();
+        public string TextUnderline => (GetCssValue("textDecoration").Contains("underline")).ToString();
+        public string TextLineThrough => (GetCssValue("textDecoration").Contains("line-through")).ToString();
         public string Color => GetCssValue("color");
         public string BackGroundColor => GetCssValue("backgroundColor");
         public string BackGroundImage => GetCssValue("backgroundImage");
@@ -42,6 +44,10 @@
         }
 
         #endregion Constructors
+
+        #region Methods
+        public string SetAttribute(string attribute) => GetAttribute<string>(attribute);
+        #endregion Methods
 
         #region Private Methods
 
