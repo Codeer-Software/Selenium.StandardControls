@@ -5,8 +5,6 @@
     /// </summary>
     public interface IElementCore
     {
-        #region Methods
-
         /// <summary>
         /// Get Element Attribute
         /// </summary>
@@ -21,7 +19,5 @@
         /// <param name="name">CSS Properties Name</param>
         /// <returns>CSS Properties</returns>
         string GetCssValue(string name);
-
-        #endregion Methods
     }
 }
