@@ -1,4 +1,6 @@
-﻿namespace Selenium.StandardControls
+﻿using OpenQA.Selenium;
+
+namespace Selenium.StandardControls
 {
     /// <summary>
     /// JavaScript Element Driver
@@ -31,15 +33,18 @@
         public int? MaxLength => GetAttribute<int?>("maxLength");
         public string TextAlign => GetCssValue("textAlign");
 
-
         public ElementDriver(IElementCore core)
         {
             Core = core;
         }
 
+        public ElementDriver(IWebElement core)
+        {
+            Core = new ElementWebElement(core);
+        }
+
         private T GetAttribute<T>(string name) => Core.GetAttribute<T>(name);
 
         private string GetCssValue(string name) => Core.GetCssValue(name);
-
     }
 }

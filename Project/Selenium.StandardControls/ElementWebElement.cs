@@ -1,14 +1,13 @@
 ﻿using System;
 using OpenQA.Selenium;
-using Selenium.StandardControls;
 
 namespace Selenium.StandardControls
 {
-    public class ElementWebElement : IElementCore
+    class ElementWebElement : IElementCore
     {
         private IWebElement Element { get; }
 
-        public ElementWebElement(IWebElement element)
+        internal ElementWebElement(IWebElement element)
         {
             Element = element;
         }
