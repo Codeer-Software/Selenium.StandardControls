@@ -17,6 +17,7 @@ namespace Test
         public DropDownListDriver DropDown_Fruit => ById("dropDownFruit");
         public TextAreaDriver TextArea_Freeans => ById("textareaFreeans");
         public ButtonDriver Button_JS => ById("inputJS");
+        public AnchorDriver A_Codeer => ById("codeer");
 
         public Page_Controls(IWebDriver driver) : base(driver) { }
 

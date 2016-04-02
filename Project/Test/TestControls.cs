@@ -80,5 +80,13 @@ namespace Test
             _page.Button_JS.Click();
             _page.TextBox_Name.Text.Is("JS");
         }
+
+        [TestMethod]
+        public void Anchor()
+        {
+            _page.A_Codeer.Text.Is("codeer");
+            _page.A_Codeer.Click();
+            _page.Driver.Url.Is("http://www.codeer.co.jp/");
+        }
     }
 }
