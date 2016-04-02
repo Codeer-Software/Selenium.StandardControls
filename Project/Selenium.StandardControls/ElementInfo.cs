@@ -1,14 +1,16 @@
 ﻿using OpenQA.Selenium;
+using System;
 
 namespace Selenium.StandardControls
 {
     /// <summary>
     /// JavaScript Element Driver
     /// </summary>
-    public class ElementDriver
+    public class ElementInfo
     {
-        private IElementCore Core { get; }
+        private IWebElement Core { get; }
 
+        public string Id => GetAttribute<string>("id");
         public string InnerHtml => GetAttribute<string>("innerHTML");
         public string InnerText => GetAttribute<string>("innerText");
         public string Text => GetAttribute<string>("text");
@@ -33,18 +35,20 @@ namespace Selenium.StandardControls
         public int? MaxLength => GetAttribute<int?>("maxLength");
         public string TextAlign => GetCssValue("textAlign");
 
-        public ElementDriver(IElementCore core)
+        public ElementInfo(IWebElement core)
         {
             Core = core;
         }
-
-        public ElementDriver(IWebElement core)
+        
+        public T GetAttribute<T>(string name)
         {
-            Core = new ElementWebElement(core);
+            var o = Core.GetAttribute(name);
+            if (typeof(T) == typeof(int?)) return (o == null) ? default(T) : (T)(object)int.Parse(o);
+            if (typeof(T) == typeof(string)) return (T)(object)o;
+            if (typeof(T) == typeof(long)) return (T)(object)long.Parse(o);
+            throw new ArgumentOutOfRangeException("");
         }
 
-        private T GetAttribute<T>(string name) => Core.GetAttribute<T>(name);
-
-        private string GetCssValue(string name) => Core.GetCssValue(name);
+        public string GetCssValue(string name) => Core.GetCssValue(name);
     }
 }

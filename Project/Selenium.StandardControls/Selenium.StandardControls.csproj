@@ -42,12 +42,24 @@
       <HintPath>packages\Selenium.WebDriver.2.53.0\lib\net40\WebDriver.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="WebDriver.Support, Version=2.53.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\Selenium.Support.2.53.0\lib\net40\WebDriver.Support.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ElementDriver.cs" />
-    <Compile Include="ElementWebElement.cs" />
-    <Compile Include="IElementCore.cs" />
+    <Compile Include="ButtonDriver.cs" />
+    <Compile Include="CheckBoxDriver.cs" />
+    <Compile Include="ControlDriverBase.cs" />
+    <Compile Include="DropDownListDriver.cs" />
+    <Compile Include="PageObjectUtility\ElementFinder.cs" />
+    <Compile Include="ElementInfo.cs" />
+    <Compile Include="LabelDriver.cs" />
+    <Compile Include="PageObjectUtility\PageBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RadioButtonDriver.cs" />
+    <Compile Include="TextAreaDriver.cs" />
+    <Compile Include="TextBoxDriver.cs" />
     <Compile Include="WebElementExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
