@@ -1,4 +1,5 @@
 ﻿using OpenQA.Selenium;
+using OpenQA.Selenium.IE;
 using OpenQA.Selenium.Support.UI;
 using Selenium.StandardControls.PageObjectUtility;
 using System.Collections.Generic;
@@ -12,12 +13,23 @@ namespace Selenium.StandardControls
         public SelectElement Core => new SelectElement(Element);
         public string Text => Items[SelectedIndex];
         public long SelectedIndex => (long)JS.ExecuteScript("return arguments[0].selectedIndex;", Element);
-
+        
         public string[] Items
         {
             get
             {
-                dynamic items = JS.ExecuteScript("return arguments[0].options;", Element);
+                dynamic items = null;
+                if (WebDriver is InternetExplorerDriver)
+                {
+                    items = JS.ExecuteScript("var options = arguments[0].options;" +
+                        "var array = new Array(options.length);" +
+                        "for (var i = 0; i < array.length; i++) array[i] = options[i];" +
+                        "return array;", Element);
+                }
+                else
+                {
+                    items = JS.ExecuteScript("return arguments[0].options;", Element);
+                }
                 var l = new List<string>();
                 for (int i = 0; i < items.Count; i++)
                 {
