@@ -36,6 +36,14 @@ namespace Test
         }
 
         [TestMethod]
+        public void ShowFocusBlur()
+        {
+            _page.TextBox_Name.Show();
+            _page.TextBox_Name.Focus();
+            _page.TextBox_Name.Blur();
+        }
+
+        [TestMethod]
         public void Radio()
         {
             _page.Radio_Man.Checked.IsTrue();

@@ -4,9 +4,6 @@ using System;
 namespace Selenium.StandardControls
 {
     //TODO need test.
-    /// <summary>
-    /// JavaScript Element Driver
-    /// </summary>
     public class ElementInfo
     {
         private IWebElement Core { get; }

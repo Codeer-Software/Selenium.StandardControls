@@ -14,5 +14,9 @@ namespace Selenium.StandardControls
         {
             Element = element;
         }
+
+        public void Show() => Element.Show();
+        public void Blur() => Element.Blur();
+        public void Focus() => Element.Focus();
     }
 }
