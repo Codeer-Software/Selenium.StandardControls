@@ -1,14 +1,12 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Firefox;
 using OpenQA.Selenium.IE;
-using OpenQA.Selenium.Remote;
 using Selenium.StandardControls;
 
-namespace UnitTestProject1
+namespace Test
 {
     [TestClass]
     public class ElementDriverTest
@@ -63,6 +61,7 @@ namespace UnitTestProject1
                 driver4.TabIndex.Is(2);
             }
         }
+
         [TestMethod]
         public void ChromeDriverElementTest()
         {
@@ -112,6 +111,7 @@ namespace UnitTestProject1
                 driver4.TabIndex.Is(2);
             }
         }
+
         [TestMethod]
         public void InternetExplorerDriverElementTest()
         {
@@ -161,7 +161,5 @@ namespace UnitTestProject1
                 driver4.TabIndex.Is(2);
             }
         }
-
-
     }
 }
