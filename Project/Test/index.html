@@ -1,0 +1,39 @@
+<html>
+        <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>Test</title>
+		<style type="text/css">
+
+			p.exampleTrue { font-weight: bold; }
+			p.exampleTrue { font-style: italic; }
+			p.exampleTrue { text-decoration: underline; }
+			p.exampleTrue { text-decoration: line-through; }
+			p.exampleTrue { text-align: left }
+			p.exampleTrue { ime-mode: auto; }
+			p.exampleTrue { color: #99cc00; background-color: #000000 }
+			p.exampleTrue { font-size: 120%; }
+			p.exampleTrue { font-family: "ＭＳ ゴシック",sans-serif; }
+			p.exampleTrue { background-image: url("./test.jpg") }
+	
+			p.exampleFalse {font-weight: normal; }
+			p.exampleFalse {font-style: normal; }
+			p.exampleFalse { text-decoration: none; }
+			p.exampleFalse { text-align: right }
+			p.exampleFalse { ime-mode: disabled; }
+			p.exampleFalse { color: #000000; background-color: #99cc00 }
+			p.exampleFalse { font-size: 12ex; }
+			p.exampleFalse { font-family: Impact,Charcoal; }
+
+		</style>
+        </head>
+
+        <body>
+	        <p class="exampleTrue" id='ptest1'>True</p>
+	        <p class="exampleFalse" id='ptest2'>False</p>
+			<font id='font1' size="1" color="#0000ff">フォントサイズ1、カラー青（16進数で指定）</font><br>
+			<form action="demo_form.asp">
+			  Username: <input id="text1" type="text" name="usrname"  tabindex="2" maxlength="10"><br>
+			  <input type="submit" value="Submit">
+			</form>
+        </body>
+</html>
