@@ -11,6 +11,7 @@ namespace Selenium.StandardControls
 
         public void Edit()
         {
+            Element.Show();
             Element.Click();
         }
 

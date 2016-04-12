@@ -13,6 +13,7 @@ namespace Selenium.StandardControls
         {
             if (Checked != check)
             {
+                Element.Show();
                 Element.Click();
             }
         }

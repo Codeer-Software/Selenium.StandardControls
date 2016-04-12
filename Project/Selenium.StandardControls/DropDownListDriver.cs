@@ -13,7 +13,7 @@ namespace Selenium.StandardControls
         public SelectElement Core => new SelectElement(Element);
         public string Text => Items[SelectedIndex];
         public long SelectedIndex => (long)JS.ExecuteScript("return arguments[0].selectedIndex;", Element);
-        
+
         public string[] Items
         {
             get
@@ -41,12 +41,14 @@ namespace Selenium.StandardControls
 
         public void Edit(string text)
         {
+            Element.Show();
             JS.ExecuteScript("return arguments[0].blur();", Element);
             Core.SelectByText(text);
         }
 
         public void Edit(int index)
         {
+            Element.Show();
             JS.ExecuteScript("return arguments[0].blur();", Element);
             Core.SelectByIndex(index);
         }

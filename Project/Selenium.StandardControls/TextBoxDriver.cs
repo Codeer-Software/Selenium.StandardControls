@@ -11,6 +11,7 @@ namespace Selenium.StandardControls
 
         public void Edit(string text)
         {
+            Element.Show();
             Element.Clear();
             Element.SendKeys(text);
         }

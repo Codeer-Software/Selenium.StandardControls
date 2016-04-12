@@ -11,6 +11,7 @@ namespace Selenium.StandardControls
 
         public void Click()
         {
+            Element.Show();
             Element.Click();
         }
 
