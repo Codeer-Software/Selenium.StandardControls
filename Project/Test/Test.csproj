@@ -64,6 +64,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="ElementDriverTest.cs" />
     <Compile Include="Page_Controls.cs" />
     <Compile Include="TestControls.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
