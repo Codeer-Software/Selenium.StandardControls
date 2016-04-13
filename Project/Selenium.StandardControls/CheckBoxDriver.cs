@@ -11,9 +11,9 @@ namespace Selenium.StandardControls
 
         public void Edit(bool check)
         {
+            Element.Show();
             if (Checked != check)
             {
-                Element.Show();
                 Element.Click();
             }
         }
