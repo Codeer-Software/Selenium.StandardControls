@@ -66,6 +66,7 @@
   <ItemGroup>
     <Compile Include="ElementDriverTest.cs" />
     <Compile Include="Page_Controls.cs" />
+    <Compile Include="TestControlsWait.cs" />
     <Compile Include="TestControls.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -1,4 +1,5 @@
-﻿using OpenQA.Selenium;
+﻿using System;
+using OpenQA.Selenium;
 using OpenQA.Selenium.IE;
 using OpenQA.Selenium.Support.UI;
 using Selenium.StandardControls.PageObjectUtility;
@@ -8,11 +9,13 @@ namespace Selenium.StandardControls
 {
     public class DropDownListDriver : ControlDriverBase
     {
-        public DropDownListDriver(IWebElement element) : base(element) { }
+        public DropDownListDriver(IWebElement element) : base(element){}
+        public DropDownListDriver(IWebElement element, Action wait) : base(element){ Wait = wait; }
 
         public SelectElement Core => new SelectElement(Element);
         public string Text => Items[SelectedIndex];
         public long SelectedIndex => (long)JS.ExecuteScript("return arguments[0].selectedIndex;", Element);
+        public Action Wait { get; set; }
 
         public string[] Items
         {
@@ -44,6 +47,7 @@ namespace Selenium.StandardControls
             Element.Show();
             JS.ExecuteScript("return arguments[0].blur();", Element);
             Core.SelectByText(text);
+            Wait?.Invoke();
         }
 
         public void Edit(int index)
@@ -51,6 +55,7 @@ namespace Selenium.StandardControls
             Element.Show();
             JS.ExecuteScript("return arguments[0].blur();", Element);
             Core.SelectByIndex(index);
+            Wait?.Invoke();
         }
 
         public static implicit operator DropDownListDriver(ElementFinder finder) => new DropDownListDriver(finder.Find());
