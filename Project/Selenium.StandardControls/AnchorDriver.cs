@@ -14,10 +14,15 @@ namespace Selenium.StandardControls
 
         public void Invoke()
         {
+            var js = JS;
             Element.Show();
             Element.Focus();
             Element.SendKeys(Keys.Enter);
-            JS.ExecuteScript("");//sync.
+            try
+            {
+                js.ExecuteScript("");//sync.
+            }
+            catch { }
             Wait?.Invoke();
         }
 

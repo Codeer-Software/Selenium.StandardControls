@@ -13,12 +13,17 @@ namespace Selenium.StandardControls
 
         public void Edit(string text)
         {
+            var js = JS;
             Element.Show();
             Element.Focus();
-            JS.ExecuteScript("arguments[0].select();", Element);
+            js.ExecuteScript("arguments[0].select();", Element);
             Element.SendKeys(Keys.Delete);
             Element.SendKeys(text);
-            JS.ExecuteScript("");
+            try
+            {
+                js.ExecuteScript("");//sync.
+            }
+            catch { }
             Wait?.Invoke();
         }
 

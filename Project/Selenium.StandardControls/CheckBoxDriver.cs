@@ -13,12 +13,17 @@ namespace Selenium.StandardControls
 
         public void Edit(bool check)
         {
+            var js = JS;
             Element.Show();
             Element.Focus();
             if (Checked != check)
             {
                 Element.SendKeys(Keys.Space);
-                JS.ExecuteScript("");//sync.
+                try
+                {
+                    js.ExecuteScript("");//sync.
+                }
+                catch { }
             }
             Wait?.Invoke();
         }
