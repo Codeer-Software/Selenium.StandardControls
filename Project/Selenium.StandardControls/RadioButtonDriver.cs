@@ -19,7 +19,7 @@ namespace Selenium.StandardControls
             while (Checked != check)
             {
                 Element.Show();
-                Element.Click();
+                Element.SendKeys(Keys.Space);
                 if (Checked == check)break;
                 Thread.Sleep(10);
             }

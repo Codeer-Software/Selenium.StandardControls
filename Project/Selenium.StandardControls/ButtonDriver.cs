@@ -12,10 +12,10 @@ namespace Selenium.StandardControls
         public string Text => Info.Value;
         public Action Wait { get; set; }
 
-        public void Click()
+        public void Invoke()
         {
             Element.Show();
-            Element.Click();
+            Element.SendKeys(Keys.Space);
             Wait?.Invoke();
         }
 

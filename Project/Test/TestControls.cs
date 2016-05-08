@@ -85,7 +85,7 @@ namespace Test
         [TestMethod]
         public void Button()
         {
-            _page.Button_JS.Click();
+            _page.Button_JS.Invoke();
             _page.TextBox_Name.Text.Is("JS");
         }
 
@@ -93,7 +93,7 @@ namespace Test
         public void Anchor()
         {
             _page.A_Codeer.Text.Is("codeer");
-            _page.A_Codeer.Click();
+            _page.A_Codeer.Invoke();
             _page.Driver.Url.Is("http://www.codeer.co.jp/");
         }
     }

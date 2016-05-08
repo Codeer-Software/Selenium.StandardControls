@@ -18,8 +18,8 @@ namespace Selenium.StandardControls
             while (Checked != check)
             {
                 Element.Show();
-                Element.Click();
-	            if (Checked == check)break;
+                Element.SendKeys(Keys.Space);
+                if (Checked == check)break;
 	            Thread.Sleep(10);
             }
             Wait?.Invoke();

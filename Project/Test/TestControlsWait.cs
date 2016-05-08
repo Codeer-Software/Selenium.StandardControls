@@ -2,6 +2,7 @@
 using OpenQA.Selenium;
 using OpenQA.Selenium.Firefox;
 using Selenium.StandardControls;
+using System;
 
 namespace Test
 {
@@ -27,7 +28,7 @@ namespace Test
         [TestMethod]
         public void TextBoxShowWait()
         {
-            var textbox = new TextBoxDriver(_driver.FindElement(By.Id("textBoxName")), () => _page.Button_JS.Show());
+            var textbox = new TextBoxDriver(_driver.FindElement(By.Id("textBoxName")), () => WaitForSuccess(() => _page.Button_JS.Show()));
             textbox.Edit("abc");
             textbox.Text.Is("abc");
         }
@@ -35,8 +36,8 @@ namespace Test
         [TestMethod]
         public void Radio()
         {
-            var radioMan = new RadioButtonDriver(_driver.FindElement(By.Id("radioMan")), () => _page.Button_JS.Show());
-            var radioWoman = new RadioButtonDriver(_driver.FindElement(By.Id("radioWoman")), () => _page.Button_JS.Show());
+            var radioMan = new RadioButtonDriver(_driver.FindElement(By.Id("radioMan")), () => WaitForSuccess(() => _page.Button_JS.Show()));
+            var radioWoman = new RadioButtonDriver(_driver.FindElement(By.Id("radioWoman")), () => WaitForSuccess(() => _page.Button_JS.Show()));
 
             radioMan.Checked.IsTrue();
             radioWoman.Edit();
@@ -47,7 +48,7 @@ namespace Test
         [TestMethod]
         public void CheckBox()
         {
-            var check = new CheckBoxDriver(_driver.FindElement(By.Id("checkBoxCellPhone")), () => _page.Button_JS.Show());
+            var check = new CheckBoxDriver(_driver.FindElement(By.Id("checkBoxCellPhone")), () => WaitForSuccess(() => _page.Button_JS.Show()));
             check.Edit(true);
             check.Checked.IsTrue();
             check.Edit(false);
@@ -59,7 +60,7 @@ namespace Test
         [TestMethod]
         public void DropDownList()
         {
-            var dropDown = new DropDownListDriver(_driver.FindElement(By.Id("dropDownFruit")), () => _page.Button_JS.Show());
+            var dropDown = new DropDownListDriver(_driver.FindElement(By.Id("dropDownFruit")), () => WaitForSuccess(() => _page.Button_JS.Show()));
             dropDown.Edit("Apple");
             dropDown.SelectedIndex.Is(0);
             dropDown.Edit("Orange");
@@ -72,9 +73,29 @@ namespace Test
         [TestMethod]
         public void Button()
         {
-            var button = new ButtonDriver(_driver.FindElement(By.Id("inputJS")), () => _page.DropDown_Fruit.Show());
-            button.Click();
+            var button = new ButtonDriver(_driver.FindElement(By.Id("inputJS")), () => WaitForSuccess(() => _page.DropDown_Fruit.Show()));
+            button.Invoke();
             _page.TextBox_Name.Text.Is("JS");
+        }
+
+        [TestMethod]
+        public void Anchor()
+        {
+            var anchor = new AnchorDriver(_driver.FindElement(By.Id("codeer")), () => WaitForSuccess(()=>_driver.Url.Is("http://www.codeer.co.jp/")));
+            anchor.Invoke();
+        }
+
+        void WaitForSuccess(Action a)
+        {
+            while (true)
+            {
+                try
+                {
+                    a();
+                    break;
+                }
+                catch { }
+            }   
         }
     }
 }
