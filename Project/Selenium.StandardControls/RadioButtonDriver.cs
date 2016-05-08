@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading;
 using OpenQA.Selenium;
 using Selenium.StandardControls.PageObjectUtility;
 
@@ -15,13 +14,11 @@ namespace Selenium.StandardControls
         public void Edit()
         {
             Element.Show();
-            bool check = !Checked;
-            while (Checked != check)
+            Element.Focus();
+            if (!Checked)
             {
-                Element.Show();
                 Element.SendKeys(Keys.Space);
-                if (Checked == check)break;
-                Thread.Sleep(10);
+                JS.ExecuteScript("");//sync.
             }
             Wait?.Invoke();
         }

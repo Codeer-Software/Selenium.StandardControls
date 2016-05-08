@@ -14,8 +14,11 @@ namespace Selenium.StandardControls
         public void Edit(string text)
         {
             Element.Show();
-            Element.Clear();
+            Element.Focus();
+            JS.ExecuteScript("arguments[0].select();", Element);
+            Element.SendKeys(Keys.Delete);
             Element.SendKeys(text);
+            JS.ExecuteScript("");
             Wait?.Invoke();
         }
 

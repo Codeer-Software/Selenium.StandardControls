@@ -15,7 +15,9 @@ namespace Selenium.StandardControls
         public void Invoke()
         {
             Element.Show();
+            Element.Focus();
             Element.SendKeys(Keys.Enter);
+            JS.ExecuteScript("");//sync.
             Wait?.Invoke();
         }
 
