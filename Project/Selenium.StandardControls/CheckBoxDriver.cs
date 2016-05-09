@@ -19,9 +19,16 @@ namespace Selenium.StandardControls
             Element.Focus();
             while (Checked != check)
             {
-                Element.ClickEx();
-                if (Checked == check) break;
-                Thread.Sleep(100);
+                try
+                {
+                    Element.ClickEx();
+                    if (Checked == check) break;
+                    Thread.Sleep(100);
+                }
+                catch
+                {
+                    break;
+                }
             }
             Wait?.Invoke();
         }
