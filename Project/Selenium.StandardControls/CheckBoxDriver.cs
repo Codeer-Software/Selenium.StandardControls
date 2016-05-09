@@ -2,6 +2,7 @@
 using OpenQA.Selenium;
 using Selenium.StandardControls.PageObjectUtility;
 using Selenium.StandardControls.AdjustBrowser;
+using System.Threading;
 
 namespace Selenium.StandardControls
 {
@@ -16,9 +17,11 @@ namespace Selenium.StandardControls
         {
             Element.Show();
             Element.Focus();
-            if (Checked != check)
+            while (Checked != check)
             {
                 Element.ClickEx();
+                if (Checked == check) break;
+                Thread.Sleep(100);
             }
             Wait?.Invoke();
         }
