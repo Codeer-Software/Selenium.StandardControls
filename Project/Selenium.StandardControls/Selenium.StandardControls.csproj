@@ -49,6 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AnchorDriver.cs" />
+    <Compile Include="AdjustBrowser\AdjustBrowserExtensions.cs" />
     <Compile Include="ButtonDriver.cs" />
     <Compile Include="CheckBoxDriver.cs" />
     <Compile Include="ControlDriverBase.cs" />

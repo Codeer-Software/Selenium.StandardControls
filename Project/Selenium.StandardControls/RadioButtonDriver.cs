@@ -1,6 +1,7 @@
 ﻿using System;
 using OpenQA.Selenium;
 using Selenium.StandardControls.PageObjectUtility;
+using Selenium.StandardControls.AdjustBrowser;
 
 namespace Selenium.StandardControls
 {
@@ -18,12 +19,7 @@ namespace Selenium.StandardControls
             Element.Focus();
             if (!Checked)
             {
-                Element.SendKeys(Keys.Space);
-                try
-                {
-                    js.ExecuteScript("");//sync.
-                }
-                catch { }
+                Element.ClickEx();
             }
             Wait?.Invoke();
         }

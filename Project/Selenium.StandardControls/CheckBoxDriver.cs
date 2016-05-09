@@ -1,6 +1,7 @@
 ﻿using System;
 using OpenQA.Selenium;
 using Selenium.StandardControls.PageObjectUtility;
+using Selenium.StandardControls.AdjustBrowser;
 
 namespace Selenium.StandardControls
 {
@@ -13,17 +14,11 @@ namespace Selenium.StandardControls
 
         public void Edit(bool check)
         {
-            var js = JS;
             Element.Show();
             Element.Focus();
             if (Checked != check)
             {
-                Element.SendKeys(Keys.Space);
-                try
-                {
-                    js.ExecuteScript("");//sync.
-                }
-                catch { }
+                Element.ClickEx();
             }
             Wait?.Invoke();
         }
