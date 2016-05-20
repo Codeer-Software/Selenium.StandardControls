@@ -9,7 +9,7 @@ namespace Selenium.StandardControls
         public static RemoteWebElement GetRemoteWebElement(this IWebElement element) => element as RemoteWebElement;
         public static IWebDriver GetWebDriver(this IWebElement element) => GetRemoteWebElement(element)?.WrappedDriver;
         public static IJavaScriptExecutor GetJS(this IWebElement element) => GetWebDriver(element) as IJavaScriptExecutor;
-        public static void Show(this IWebElement element) => element.GetRemoteWebElement().LocationOnScreenOnceScrolledIntoView.ToString();
+        public static void Show(this IWebElement element) => element.GetJS().ExecuteScript("arguments[0].scrollIntoView(true);", element);
         public static void Focus(this IWebElement element) => element.GetJS().ExecuteScript("arguments[0].focus();", element);
         public static void Blur(this IWebElement element) => element.GetJS().ExecuteScript("arguments[0].blur();", element);
     }
