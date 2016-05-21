@@ -15,6 +15,8 @@ namespace Selenium.StandardControls
 
         public void Invoke()
         {
+            //It does not move when you are viewing Show 's only part of the button .
+            Element.ScrollIntoView(true);
             Element.ClickEx();
             Wait?.Invoke();
         }
