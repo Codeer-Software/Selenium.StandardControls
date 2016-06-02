@@ -1,5 +1,6 @@
 Selenium.StandardControls
 ===
+[![NuGet Version and Downloads count](https://buildstats.info/nuget/Selenium.StandardControls)](https://www.nuget.org/packages/Selenium.StandardControls/)  
 Created by Ishikawa-Tatsuya Matsui-Bin
 
 What is Selenium.StandardControls?
@@ -97,7 +98,7 @@ TextBox.Blur();
 
 Author Info
 ---
-Ishikawa-Tatsuya & Matsui-Bin is a software developer in Japan at Codeer, Inc.
+Ishikawa-Tatsuya & Matsui-Bin is a software developer in Japan at Codeer, Inc.  
 Ishikawa-Tatsuya & Matsui-Bin is awarding Microsoft MVP.
 
 License
