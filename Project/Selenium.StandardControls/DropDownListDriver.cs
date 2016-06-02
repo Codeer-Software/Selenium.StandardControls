@@ -7,16 +7,43 @@ using System.Collections.Generic;
 
 namespace Selenium.StandardControls
 {
+    /// <summary>
+    /// DropDownList Driver
+    /// </summary>
     public class DropDownListDriver : ControlDriverBase
     {
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="element">Element for generating the driver</param>
         public DropDownListDriver(IWebElement element) : base(element){}
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="element">Element for generating the driver</param>
+        /// <param name="wait">Wait for end of the time of Invoke</param>
         public DropDownListDriver(IWebElement element, Action wait) : base(element){ Wait = wait; }
 
+        /// <summary>
+        /// Simple to SelectElement accessor
+        /// </summary>
         public SelectElement Core => new SelectElement(Element);
+        /// <summary>
+        /// The DropDown selection number
+        /// </summary>
         public string Text => Items[SelectedIndex];
+        /// <summary>
+        /// The DropDown selection number
+        /// </summary>
         public long SelectedIndex => (long)JS.ExecuteScript("return arguments[0].selectedIndex;", Element);
+        /// <summary>
+        /// Wait for end of the time of Invoke
+        /// </summary>
         public Action Wait { get; set; }
 
+        /// <summary>
+        /// String of each item in the DropDown
+        /// </summary>
         public string[] Items
         {
             get
@@ -42,6 +69,10 @@ namespace Selenium.StandardControls
             }
         }
 
+        /// <summary>
+        /// Select the text of the item in the DropDown
+        /// </summary>
+        /// <param name="text">Item Text</param>
         public void Edit(string text)
         {
             Element.Show();
@@ -50,6 +81,11 @@ namespace Selenium.StandardControls
             Wait?.Invoke();
         }
 
+
+        /// <summary>
+        /// Select the number of the item in the DropDown
+        /// </summary>
+        /// <param name="index">Item Index</param>
         public void Edit(int index)
         {
             Element.Show();
@@ -58,6 +94,10 @@ namespace Selenium.StandardControls
             Wait?.Invoke();
         }
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="finder">A variety of find to the elements</param>
         public static implicit operator DropDownListDriver(ElementFinder finder) => new DropDownListDriver(finder.Find());
     }
 }

@@ -5,14 +5,36 @@ using Selenium.StandardControls.AdjustBrowser;
 
 namespace Selenium.StandardControls
 {
+    /// <summary>
+    /// Button Driver
+    /// </summary>
     public class ButtonDriver : ControlDriverBase
     {
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="element">Element for generating the driver</param>
         public ButtonDriver(IWebElement element) : base(element){}
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="element">Element for generating the driver</param>
+        /// <param name="wait">Wait for end of the time of Invoke</param>
         public ButtonDriver(IWebElement element, Action wait = null) : base(element){ Wait = wait; }
 
+        /// <summary>
+        /// Button text
+        /// </summary>
         public string Text => Info.Value;
+        /// <summary>
+        /// Wait for end of the time of Invoke
+        /// </summary>
         public Action Wait { get; set; }
 
+        /// <summary>
+        /// Press the button
+        /// </summary>
         public void Invoke()
         {
             //It does not move when you are viewing Show 's only part of the button .
@@ -21,6 +43,10 @@ namespace Selenium.StandardControls
             Wait?.Invoke();
         }
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="finder">A variety of find to the elements</param>
         public static implicit operator ButtonDriver(ElementFinder finder)=> new ButtonDriver(finder.Find());
     }
 }
