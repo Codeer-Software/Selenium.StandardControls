@@ -1,7 +1,7 @@
 Selenium.StandardControls
 ===
-[![NuGet Version and Downloads count](https://buildstats.info/nuget/Selenium.StandardControls)](https://www.nuget.org/packages/Selenium.StandardControls/)  
-Created by Ishikawa-Tatsuya Matsui-Bin
+Created by Ishikawa-Tatsuya Matsui-Bin  
+[![NuGet Version and Downloads count](https://buildstats.info/nuget/Selenium.StandardControls)](https://www.nuget.org/packages/Selenium.StandardControls/)
 
 What is Selenium.StandardControls?
 ---
