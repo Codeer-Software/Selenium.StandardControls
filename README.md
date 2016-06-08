@@ -96,6 +96,38 @@ TextBox.Focus();
 TextBox.Blur();
 ```
 
+About Wait
+---
+The following controls there is a Action, which says Wait.
+- AnchorDriver
+- ButtonDriver
+- CheckBoxDriver
+- DropDownListDriver
+- RadioButtonDriver
+- TextBoxDriver
+
+This is used in case that does not work properly and not listening to the post- editing of each control . Since the part that depends on the screen , there is no single answer , such as may be wait unconditionally 5 seconds . Where it has been making that can last in the Action to set the editing of each control .
+
+Example: After editing TextBox, wait until you see again TextBox
+```cs 
+TextBox.Wait = () =>
+{
+    while (true)
+    {
+        try
+        {
+        　　TextBox.Show();
+            break;
+        }
+        catch { }
+        Thread.Sleep(100);
+    }
+};
+TextBox.Edit("abc");
+//Waiting for the Show
+TextBox.Text.Is("abc");
+```
+
 Author Info
 ---
 Ishikawa-Tatsuya & Matsui-Bin is a software developer in Japan at Codeer, Inc.  
