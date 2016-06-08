@@ -96,9 +96,11 @@ TextBox.Focus();
 TextBox.Blur();
 ```
 
-About ElementInfo
+About Element & ElementInfo
 ---
-Each control is made is ElementInfo at the time of creation. This class is a typical element of GetAttribute and GetCssValue of IWebElement, it was to be able to get from the following properties.
+Each control has a IWebElement and ElementInfo. Please operate using the IWebElement directly depending on the situation. Also ElementInfo is useful to get the information of the attributes.
+
+ElementInfo Property
  - Id
  - InnerHtml
  - InnerText
@@ -120,6 +122,24 @@ Each control is made is ElementInfo at the time of creation. This class is a typ
  - ImeMode
  - MaxLength
  - TextAlign
+ 
+```cs 
+TextBox.Element.Click();
+TextBox.Element.SendKeys(Keys.Enter);
+
+TextBox.Info.FontBold.IsTrue();
+TextBox.Info.FontItalic.IsTrue();
+TextBox.Info.TextLineThrough.IsTrue();
+TextBox.Info.Class.Is("exampleTrue");
+TextBox.Info.ImeMode.Is("auto");
+TextBox.Info.Color.Is("rgba(153, 204, 0, 1)");
+TextBox.Info.BackGroundColor.Is("rgba(0, 0, 0, 1)");
+TextBox.Info.TextAlign.Is("left");
+TextBox.Info.FontSize.Is("19.2px");
+TextBox.Info.Font.Is("sans-serif");
+TextBox.Info.Width.Is("1388.77px");
+TextBox.Info.Height.Is("19.8333px");
+```
 
 About Wait
 ---
