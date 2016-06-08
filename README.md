@@ -123,6 +123,7 @@ ElementInfo Property
  - MaxLength
  - TextAlign
  
+Example:
 ```cs 
 TextBox.Element.Click();
 TextBox.Element.SendKeys(Keys.Enter);
@@ -140,7 +141,6 @@ TextBox.Info.Font.Is("sans-serif");
 TextBox.Info.Width.Is("1388.77px");
 TextBox.Info.Height.Is("19.8333px");
 ```
-
 About Wait
 ---
 The following controls there is a Action, which says Wait.
