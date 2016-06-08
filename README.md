@@ -96,6 +96,31 @@ TextBox.Focus();
 TextBox.Blur();
 ```
 
+About ElementInfo
+---
+Each control is made is ElementInfo at the time of creation. This class is a typical element of GetAttribute and GetCssValue of IWebElement, it was to be able to get from the following properties.
+ - Id
+ - InnerHtml
+ - InnerText
+ - Text
+ - Value
+ - Class
+ - Width
+ - Height
+ - FontSize
+ - Font
+ - FontBold
+ - FontItalic
+ - TextUnderline
+ - TextLineThrough
+ - Color
+ - BackGroundColor
+ - BackGroundImage
+ - TabIndex
+ - ImeMode
+ - MaxLength
+ - TextAlign
+
 About Wait
 ---
 The following controls there is a Action, which says Wait.
