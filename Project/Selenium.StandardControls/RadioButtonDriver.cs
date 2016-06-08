@@ -20,14 +20,14 @@ namespace Selenium.StandardControls
         /// Constructor
         /// </summary>
         /// <param name="element">Element for generating the driver</param>
-        /// <param name="wait">Wait for end of the time of Invoke</param>
+        /// <param name="wait">Wait for end of the time of Edit</param>
         public RadioButtonDriver(IWebElement element, Action wait) : base(element){ Wait = wait; }
         /// <summary>
         /// State of the check RadioButton
         /// </summary>
         public bool Checked => (bool)JS.ExecuteScript("return arguments[0].checked;", Element);
         /// <summary>
-        /// Wait for end of the time of Invoke
+        /// Wait for end of the time of Edit
         /// </summary>
         public Action Wait { get; set; }
 

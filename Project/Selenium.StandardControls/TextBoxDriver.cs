@@ -18,10 +18,10 @@ namespace Selenium.StandardControls
         /// Constructor
         /// </summary>
         /// <param name="element">Element for generating the driver</param>
-        /// <param name="wait">Wait for end of the time of Invoke</param>
+        /// <param name="wait">Wait for end of the time of Edit</param>
         public TextBoxDriver(IWebElement element, Action wait) : base(element){ Wait = wait; }
         /// <summary>
-        /// Wait for end of the time of Invoke
+        /// Wait for end of the time of Edit
         /// </summary>
         public Action Wait { get; set; }
         /// <summary>
