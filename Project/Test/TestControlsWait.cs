@@ -3,19 +3,20 @@ using OpenQA.Selenium;
 using OpenQA.Selenium.Firefox;
 using Selenium.StandardControls;
 using System;
+using OpenQA.Selenium.Chrome;
 
 namespace Test
 {
     [TestClass]
     public class TestControlsWait
     {
-        FirefoxDriver _driver;
+        ChromeDriver _driver;
         Page_Controls _page;
 
         [TestInitialize]
         public void TestInitialize()
         {
-            _driver = new FirefoxDriver();
+            _driver = new ChromeDriver();
             _page = Page_Controls.Open(_driver);
         }
 
@@ -95,7 +96,7 @@ namespace Test
                     break;
                 }
                 catch { }
-            }   
+            }
         }
     }
 }

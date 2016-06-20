@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Firefox;
 
 namespace Test
@@ -6,13 +7,13 @@ namespace Test
     [TestClass]
     public class TestControls
     {
-        FirefoxDriver _driver;
+        ChromeDriver _driver;
         Page_Controls _page;
 
         [TestInitialize]
         public void TestInitialize()
         {
-            _driver = new FirefoxDriver();
+            _driver = new ChromeDriver();
             _page = Page_Controls.Open(_driver);
         }
 
