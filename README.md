@@ -96,6 +96,83 @@ TextBox.Focus();
 TextBox.Blur();
 ```
 
+About Element & ElementInfo
+---
+Each control has a IWebElement and ElementInfo. Please operate using the IWebElement directly depending on the situation. Also ElementInfo is useful to get the information of the attributes.
+
+ElementInfo Property
+ - Id
+ - InnerHtml
+ - InnerText
+ - Text
+ - Value
+ - Class
+ - Width
+ - Height
+ - FontSize
+ - Font
+ - FontBold
+ - FontItalic
+ - TextUnderline
+ - TextLineThrough
+ - Color
+ - BackGroundColor
+ - BackGroundImage
+ - TabIndex
+ - ImeMode
+ - MaxLength
+ - TextAlign
+ 
+Example:
+```cs 
+TextBox.Element.Click();
+TextBox.Element.SendKeys(Keys.Enter);
+
+TextBox.Info.FontBold.IsTrue();
+TextBox.Info.FontItalic.IsTrue();
+TextBox.Info.TextLineThrough.IsTrue();
+TextBox.Info.Class.Is("exampleTrue");
+TextBox.Info.ImeMode.Is("auto");
+TextBox.Info.Color.Is("rgba(153, 204, 0, 1)");
+TextBox.Info.BackGroundColor.Is("rgba(0, 0, 0, 1)");
+TextBox.Info.TextAlign.Is("left");
+TextBox.Info.FontSize.Is("19.2px");
+TextBox.Info.Font.Is("sans-serif");
+TextBox.Info.Width.Is("1388.77px");
+TextBox.Info.Height.Is("19.8333px");
+```
+About Wait
+---
+The following controls there is a Action, which says Wait.
+- AnchorDriver
+- ButtonDriver
+- CheckBoxDriver
+- DropDownListDriver
+- RadioButtonDriver
+- TextBoxDriver
+
+This is used in case that does not work properly and not listening to the post- editing of each control . Since the part that depends on the screen , there is no single answer , such as may be wait unconditionally 5 seconds . Where it has been making that can last in the Action to set the editing of each control .
+
+Example: After editing TextBox, wait until you see again TextBox
+```cs 
+TextBox.Wait = () =>
+{
+    while (true)
+    {
+        try
+        {
+        　　TextBox.Show();
+            break;
+        }
+        catch { }
+        Thread.Sleep(100);
+    }
+};
+TextBox.Edit("abc");
+//Waiting for the Show
+TextBox.Text.Is("abc");
+```
+
 Author Info
 ---
 Ishikawa-Tatsuya & Matsui-Bin is a software developer in Japan at Codeer, Inc.  
