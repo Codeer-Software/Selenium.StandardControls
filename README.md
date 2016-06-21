@@ -5,7 +5,8 @@ Created by Ishikawa-Tatsuya Matsui-Bin
 
 What is Selenium.StandardControls?
 ---
-The Selenium.StandardControls, wraps the Seleinum in C#, test libraries to handle the standard controls of html in a simple manner.
+- Wrapped test library selenium in C#
+- You can use the HTML standard control to simple
 
 Sample Code
 ---
