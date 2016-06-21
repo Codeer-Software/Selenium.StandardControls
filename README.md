@@ -97,13 +97,10 @@ TextBox.Focus();
 TextBox.Blur();
 ```
 
-About Element & ElementInfo
+About Info
 ---
 Example:
 ```cs 
-TextBox.Element.Click();
-TextBox.Element.SendKeys(Keys.Enter);
-
 TextBox.Info.FontBold.IsTrue();
 TextBox.Info.FontItalic.IsTrue();
 TextBox.Info.TextLineThrough.IsTrue();
@@ -117,7 +114,7 @@ TextBox.Info.Font.Is("sans-serif");
 TextBox.Info.Width.Is("1388.77px");
 TextBox.Info.Height.Is("19.8333px");
 ```
-ElementInfo Property
+Info Property
  - Id
  - InnerHtml
  - InnerText
@@ -161,7 +158,7 @@ TextBox.Edit("abc");
 //Waiting for the Show
 TextBox.Text.Is("abc");
 ```
-Target control
+Target Dirver
 - AnchorDriver
 - ButtonDriver
 - CheckBoxDriver
