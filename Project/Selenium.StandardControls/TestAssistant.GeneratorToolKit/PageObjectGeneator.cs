@@ -39,7 +39,7 @@ namespace Selenium.StandardControls.TestAssistant.GeneratorToolKit
             //member
             foreach (var e in properties)
             {
-                code.Add($"{Indent}{Indent}{GetTypeName(e.Type)} {e.Name} => {GetIdentify(e)};");
+                code.Add($"{Indent}{Indent}public {GetTypeName(e.Type)} {e.Name} => {GetIdentify(e)};");
             }
             code.Add(string.Empty);
 
