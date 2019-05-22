@@ -56,20 +56,15 @@ namespace Selenium.StandardControls
         /// <param name="finder">A variety of find to the elements</param>
         public static implicit operator TextBoxDriver(ElementFinder finder) => new TextBoxDriver(finder.Find());
 
-        //@@@
         [CaptureCodeGenerator]
         public string GetWebElementCaptureGenerator()
         {
             return $@"
                     element.addEventListener('change', function() {{ 
                       var name = __codeerTestAssistantPro.getElementName(this);
-                      __codeerTestAssistantPro.pushCode(name + '.Clear();');
-                      __codeerTestAssistantPro.pushCode(name + '.SendKeys(""' + this.value + '"");');
+                      __codeerTestAssistantPro.pushCode(name + '.Edit(""' + this.value + '"");');
                     }}, false);
-                    element.addEventListener('click', function() {{ 
-                      var name = __codeerTestAssistantPro.getElementName(this);
-                      __codeerTestAssistantPro.pushCode(name + '.Click();');
-                    }}, false);";
+            ";
         }
     }
 }

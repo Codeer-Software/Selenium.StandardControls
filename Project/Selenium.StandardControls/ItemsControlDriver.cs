@@ -28,21 +28,5 @@ namespace Selenium.StandardControls
         /// </summary>
         /// <param name="finder">Convert</param>
         public static implicit operator ItemsControlDriver<T>(ElementFinder finder)=> new ItemsControlDriver<T>(finder.Find());
-
-        //@@@
-        [CaptureCodeGenerator]
-        public string GetWebElementCaptureGenerator()
-        {
-            return $@"
-                    element.addEventListener('change', function() {{ 
-                      var name = __codeerTestAssistantPro.getElementName(this);
-                      __codeerTestAssistantPro.pushCode(name + '.Clear();');
-                      __codeerTestAssistantPro.pushCode(name + '.SendKeys(""' + this.value + '"");');
-                    }}, false);
-                    element.addEventListener('click', function() {{ 
-                      var name = __codeerTestAssistantPro.getElementName(this);
-                      __codeerTestAssistantPro.pushCode(name + '.Click();');
-                    }}, false);";
-        }
     }
 }
