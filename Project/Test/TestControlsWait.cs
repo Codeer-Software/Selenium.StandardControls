@@ -11,13 +11,13 @@ namespace Test
     public class TestControlsWait
     {
         ChromeDriver _driver;
-        Page_Controls _page;
+        ControlsHtmlPage _page;
 
         [TestInitialize]
         public void TestInitialize()
         {
             _driver = new ChromeDriver();
-            _page = Page_Controls.Open(_driver);
+            _page = ControlsHtmlPage.Open(_driver);
         }
 
         [TestCleanup]

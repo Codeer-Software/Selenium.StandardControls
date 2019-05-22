@@ -2,10 +2,11 @@
 using System.IO;
 using Selenium.StandardControls.PageObjectUtility;
 using OpenQA.Selenium;
+using Selenium.StandardControls.TestAssistant.GeneratorToolKit;
 
 namespace Test
 {
-    class Page_Controls : PageBase
+    public class ControlsHtmlPage : PageBase
     {
         public LabelDriver Label_Title => ById("labelTitle");
         public TextBoxDriver TextBox_Name => ById("textBoxName");
@@ -19,12 +20,18 @@ namespace Test
         public ButtonDriver Button_JS => ById("inputJS");
         public AnchorDriver A_Codeer => ById("codeer");
 
-        public Page_Controls(IWebDriver driver) : base(driver) { }
+        public ControlsHtmlPage(IWebDriver driver) : base(driver) { }
 
-        public static Page_Controls Open(IWebDriver driver)
+        public static ControlsHtmlPage Open(IWebDriver driver)
         {
             driver.Url = Path.GetFullPath("../../Controls.html");
-            return new Page_Controls(driver);
+            return new ControlsHtmlPage(driver);
         }
+    }
+
+    public static class ControlsHtmlPageExtensions
+    {
+        [PageObjectIdentify(PartOfUrl = "Controls.html")]
+        public static ControlsHtmlPage AttachControlsHtml(this IWebDriver driver) => new ControlsHtmlPage(driver);
     }
 }
