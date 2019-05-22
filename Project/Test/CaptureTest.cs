@@ -11,7 +11,6 @@ namespace Test
 
         void Test()
         {
-            //usingsに変なものがはいってるやろ。あとはおっけ
         }
     }
 }
