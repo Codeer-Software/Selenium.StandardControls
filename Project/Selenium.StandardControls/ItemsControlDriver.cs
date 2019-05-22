@@ -14,19 +14,23 @@ namespace Selenium.StandardControls
 
         public T GetItem(int index)
         {
-            return null;
+            var indexConstructor = typeof(T).GetConstructor(new[] { typeof(IWebElement), typeof(int) });
+            var element = JS.ExecuteScript("arguments[0].children[arguments[1]];", Element, index);
+
+            if (indexConstructor != null) return (T)Activator.CreateInstance(typeof(T), new object[] { element, index });
+            return (T)Activator.CreateInstance(typeof(T), new object[] { element });
         }
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="element">Element for generating the driver</param>
-        public ItemsControlDriver(IWebElement element) : base(element){}
+        public ItemsControlDriver(IWebElement element) : base(element) { }
 
         /// <summary>
         /// Converter
         /// </summary>
         /// <param name="finder">Convert</param>
-        public static implicit operator ItemsControlDriver<T>(ElementFinder finder)=> new ItemsControlDriver<T>(finder.Find());
+        public static implicit operator ItemsControlDriver<T>(ElementFinder finder) => new ItemsControlDriver<T>(finder.Find());
     }
 }

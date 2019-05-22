@@ -55,6 +55,7 @@
     <Compile Include="CheckBoxDriver.cs" />
     <Compile Include="ControlDriverBase.cs" />
     <Compile Include="DropDownListDriver.cs" />
+    <Compile Include="ItemsControlDriver.cs" />
     <Compile Include="PageObjectUtility\ElementFinder.cs" />
     <Compile Include="ElementInfo.cs" />
     <Compile Include="LabelDriver.cs" />
