@@ -95,7 +95,7 @@ namespace Test
         {
             _page.A_Codeer.Text.Is("codeer");
             _page.A_Codeer.Invoke();
-            _page.Driver.Url.Is("http://www.codeer.co.jp/");
+            _page.Driver.Url.Is("https://www.codeer.co.jp/");
         }
     }
 }

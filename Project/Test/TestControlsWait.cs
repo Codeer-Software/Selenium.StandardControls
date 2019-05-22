@@ -82,7 +82,7 @@ namespace Test
         [TestMethod]
         public void Anchor()
         {
-            var anchor = new AnchorDriver(_driver.FindElement(By.Id("codeer")), () => WaitForSuccess(()=>_driver.Url.Is("http://www.codeer.co.jp/")));
+            var anchor = new AnchorDriver(_driver.FindElement(By.Id("codeer")), () => WaitForSuccess(()=>_driver.Url.Is("https://www.codeer.co.jp/")));
             anchor.Invoke();
         }
 

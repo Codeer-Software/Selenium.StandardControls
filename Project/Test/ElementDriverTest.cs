@@ -11,7 +11,7 @@ namespace Test
     [TestClass]
     public class ElementDriverTest
     {
-        [TestMethod]
+      //  [TestMethod]
         public void FirefoxDriverElementTest()
         {
             using (var firefoxDriver = new FirefoxDriver())
