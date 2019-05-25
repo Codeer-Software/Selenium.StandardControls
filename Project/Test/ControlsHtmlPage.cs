@@ -31,7 +31,7 @@ namespace Test
 
     public static class ControlsHtmlPageExtensions
     {
-        [PageObjectIdentify(PartOfUrl = "Controls.html")]
+        [PageObjectIdentify("Controls.html", UrlComapreType.Contains)]
         public static ControlsHtmlPage AttachControlsHtml(this IWebDriver driver) => new ControlsHtmlPage(driver);
     }
 }

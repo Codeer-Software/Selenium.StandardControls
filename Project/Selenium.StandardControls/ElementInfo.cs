@@ -20,13 +20,13 @@ namespace Selenium.StandardControls
 
         private IWebElement Core { get; }
         /// <summary>
-        /// To get the innerHTML attributes of
-        /// </summary>
-        public string Name => GetAttribute<string>("name");
-        /// <summary>
         /// To get the id attributes of
         /// </summary>
         public string Id => GetAttribute<string>("id");
+        /// <summary>
+        /// To get the innerHTML attributes of
+        /// </summary>
+        public string Name => GetAttribute<string>("name");
         /// <summary>
         /// To get the innerHTML attributes of
         /// </summary>

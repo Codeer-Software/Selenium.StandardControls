@@ -1,4 +1,6 @@
 ﻿using OpenQA.Selenium;
+using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace Selenium.StandardControls.PageObjectUtility
 {
@@ -9,6 +11,9 @@ namespace Selenium.StandardControls.PageObjectUtility
     {
         ISearchContext _context;
         By _by;
+
+        ElementFinder _innerFinder;
+        int _index;
 
         /// <summary>
         /// Constructor
@@ -21,10 +26,34 @@ namespace Selenium.StandardControls.PageObjectUtility
             _by = by;
         }
 
+        ElementFinder(ElementFinder innerFinder, int index)
+        {
+            _innerFinder = innerFinder;
+            _index = index;
+        }
+
         /// <summary>
         /// Finds the first OpenQA.Selenium.IWebElement using the given method
         /// </summary>
         /// <returns></returns>
-        public IWebElement Find() => _context.FindElement(_by);
+        public IWebElement Find()
+        {
+            if (_innerFinder != null) return _innerFinder.FindMany()[_index];
+            return _context.FindElement(_by);
+        }
+
+        IWebElement[] FindMany()
+        {
+            if (_innerFinder != null) return new[] { _innerFinder.FindMany()[_index] };
+            return _context.FindElements(_by).ToArray();
+        }
+
+        public ElementFinder this[int index]
+        {
+            get
+            {
+                return new ElementFinder(this, index);
+            }
+        }
     }
 }

@@ -2,6 +2,7 @@
 {
     public class PageIdentifyInfo
     {
-        public string PartOfUrl { get; set; }
+        public string Url { get; set; }
+        public string UrlComapreType { get; set; }
     }
 }

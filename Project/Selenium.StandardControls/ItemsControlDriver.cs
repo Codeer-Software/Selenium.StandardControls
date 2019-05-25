@@ -10,12 +10,12 @@ namespace Selenium.StandardControls
     /// </summary>
     public class ItemsControlDriver<T> : ControlDriverBase where T : class
     {
-        public int Count { get; }
+        public int Count => (int)(long)JS.ExecuteScript("return arguments[0].children.length;", Element);
 
         public T GetItem(int index)
         {
             var indexConstructor = typeof(T).GetConstructor(new[] { typeof(IWebElement), typeof(int) });
-            var element = JS.ExecuteScript("arguments[0].children[arguments[1]];", Element, index);
+            var element = JS.ExecuteScript("return arguments[0].children[arguments[1]];", Element, index);
 
             if (indexConstructor != null) return (T)Activator.CreateInstance(typeof(T), new object[] { element, index });
             return (T)Activator.CreateInstance(typeof(T), new object[] { element });
