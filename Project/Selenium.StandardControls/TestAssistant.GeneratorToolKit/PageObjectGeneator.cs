@@ -30,7 +30,7 @@ namespace Selenium.StandardControls.TestAssistant.GeneratorToolKit
                 "using Selenium.StandardControls.PageObjectUtility;",
                 "using Selenium.StandardControls.TestAssistant.GeneratorToolKit;"
             };
-            code.AddRange(properties.Select(e => "using " + GetNameSpace(e.Type) + ";"));
+            code.AddRange(properties.SelectMany(e => GetNameSpace(e.Type)).Select(e => "using " + e + ";"));
             code = code.Distinct().ToList();
 
             code.Add(string.Empty);
@@ -75,7 +75,7 @@ namespace Selenium.StandardControls.TestAssistant.GeneratorToolKit
                 "using Selenium.StandardControls.PageObjectUtility;",
                 "using Selenium.StandardControls.TestAssistant.GeneratorToolKit;"
             };
-            code.AddRange(properties.Select(e => "using " + GetNameSpace(e.Type) + ";"));
+            code.AddRange(properties.SelectMany(e => GetNameSpace(e.Type)).Select(e => "using " + e + ";"));
             code = code.Distinct().ToList();
 
             code.Add(string.Empty);
@@ -87,7 +87,7 @@ namespace Selenium.StandardControls.TestAssistant.GeneratorToolKit
             //member
             foreach (var e in properties)
             {
-                code.Add($"public {Indent}{Indent}{GetTypeName(e.Type)} {e.Name} => {GetIdentify(e)};");
+                code.Add($"{Indent}{Indent}public {GetTypeName(e.Type)} {e.Name} => {GetIdentify(e)};");
             }
             code.Add(string.Empty);
 
@@ -124,6 +124,7 @@ namespace Selenium.StandardControls.TestAssistant.GeneratorToolKit
             //perfect xpath
             if (!isSpecialPerfect)
             {
+                //TODO Heavy
                 var identifyInfo = MakeShortcutXPath(serachContext, element);
                 if (identifyInfo != null)
                 {
@@ -150,7 +151,7 @@ namespace Selenium.StandardControls.TestAssistant.GeneratorToolKit
         static string AdjustName(string defaultName, string tagName)
         {
             var adjusted = defaultName.Replace(" ", "").Replace("-", "_");
-            return _cspDom.IsValidIdentifier(defaultName) ? defaultName : tagName;
+            return _cspDom.IsValidIdentifier(adjusted) ? adjusted : tagName;
         }
 
         static void GetIdentifyInfo(ISearchContext serachContext, IWebElement element, string key, string func, Func<string, By> by, List<IdentifyInfo> candidate)
@@ -318,13 +319,26 @@ namespace Selenium.StandardControls.TestAssistant.GeneratorToolKit
             return propertyInfo.Identify;
         }
 
-        static string GetTypeName(string type) => type.Split('.').Last();
-
-        static string GetNameSpace(string type)
+        static string GetTypeName(string typeFullName)
         {
-            var ret = type.Split('.');
-            if (ret.Length <= 1) return string.Empty;
-            return string.Join(".", ret.Take(ret.Length - 1));
+            var sp = typeFullName.Split(new[] { '<', '>' }, StringSplitOptions.RemoveEmptyEntries);
+            if (sp.Length == 2)
+            {
+                return sp[0].Split(new[] { '.' }, StringSplitOptions.RemoveEmptyEntries).Last() + "<" + sp[1].Split(new[] { '.' }, StringSplitOptions.RemoveEmptyEntries).Last() + ">";
+            }
+            return typeFullName.Split(new[] { '.' }, StringSplitOptions.RemoveEmptyEntries).Last();
+        }
+
+        static string[] GetNameSpace(string typeFullName)
+        {
+            var sp = typeFullName.Split(new[] { '<', '>' }, StringSplitOptions.RemoveEmptyEntries);
+            if (sp.Length == 2)
+            {
+                var sp0 = sp[0].Split(new[] { '.' }, StringSplitOptions.RemoveEmptyEntries);
+                var sp1 = sp[1].Split(new[] { '.' }, StringSplitOptions.RemoveEmptyEntries);
+                return new[] { string.Join(".", sp0.Take(sp0.Length - 1)), string.Join(".", sp1.Take(sp1.Length - 1)) };
+            }
+            return new[] { string.Join(".", sp.Take(sp.Length - 1)) };
         }
     }
 }

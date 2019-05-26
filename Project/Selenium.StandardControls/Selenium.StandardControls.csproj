@@ -63,7 +63,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RadioButtonDriver.cs" />
     <Compile Include="TestAssistant.GeneratorToolKit\BrowserAnalyzeInfo.cs" />
+    <Compile Include="TestAssistant.GeneratorToolKit\ControlDriverTypeSelector.cs" />
     <Compile Include="TestAssistant.GeneratorToolKit\GridSelectedType.cs" />
+    <Compile Include="TestAssistant.GeneratorToolKit\IControlDriverTypeSelector.cs" />
     <Compile Include="TestAssistant.GeneratorToolKit\IdentifyInfo.cs" />
     <Compile Include="TestAssistant.GeneratorToolKit\IPageObjectGeneator.cs" />
     <Compile Include="TestAssistant.GeneratorToolKit\PageIdentifyInfo.cs" />
