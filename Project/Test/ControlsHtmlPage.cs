@@ -10,6 +10,7 @@ namespace Test
     {
         public LabelDriver Label_Title => ById("labelTitle");
         public TextBoxDriver TextBox_Name => ById("textBoxName");
+        public DateDriver Date => ById("date");
         public RadioButtonDriver Radio_Man => ById("radioMan");
         public RadioButtonDriver Radio_Woman => ById("radioWoman");
         public CheckBoxDriver CheckBox_CellPhone => ById("checkBoxCellPhone");

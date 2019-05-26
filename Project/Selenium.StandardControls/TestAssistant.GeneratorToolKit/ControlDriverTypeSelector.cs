@@ -21,6 +21,7 @@ namespace Selenium.StandardControls.TestAssistant.GeneratorToolKit
                     switch (element.GetAttribute("type"))
                     {
                         case "submit": return typeof(ButtonDriver).FullName;
+                        case "date": return typeof(DateDriver).FullName;
                         default: return typeof(TextBoxDriver).FullName;
                     }
                 case "textarea": return typeof(TextAreaDriver).FullName;

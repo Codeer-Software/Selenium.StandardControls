@@ -13,9 +13,6 @@ namespace Test
 
         void Test()
         {
-            _driver.Url = "file:///C:/tfs/codeer/Codeer.TestAssistantPro/Product_201805/Product/UnitTest/Controls.html";
-            var controlsHtmlPage = _driver.AttachControlsHtml();
-            controlsHtmlPage.TextBox_Name.Edit("aaa");
         }
     }
 }
