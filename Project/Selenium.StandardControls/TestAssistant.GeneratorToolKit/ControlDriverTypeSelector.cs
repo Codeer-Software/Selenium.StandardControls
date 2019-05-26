@@ -1,5 +1,4 @@
 ﻿using OpenQA.Selenium;
-using Selenium.StandardControls;
 
 namespace Selenium.StandardControls.TestAssistant.GeneratorToolKit
 {
@@ -32,7 +31,7 @@ namespace Selenium.StandardControls.TestAssistant.GeneratorToolKit
                 case "select":
                     return typeof(DropDownListDriver).FullName;
             }
-            return string.Empty;
+            return typeof(IWebElement).FullName;
         }
     }
 }

@@ -30,7 +30,7 @@ namespace Selenium.StandardControls.TestAssistant.GeneratorToolKit
                 "using Selenium.StandardControls.PageObjectUtility;",
                 "using Selenium.StandardControls.TestAssistant.GeneratorToolKit;"
             };
-            code.AddRange(properties.SelectMany(e => GetNameSpace(e.Type)).Select(e => "using " + e + ";"));
+            code.AddRange(properties.SelectMany(e => GetNameSpace(e.Type)).Where(e=>!string.IsNullOrEmpty(e)).Select(e => "using " + e + ";"));
             code = code.Distinct().ToList();
 
             code.Add(string.Empty);
@@ -75,7 +75,7 @@ namespace Selenium.StandardControls.TestAssistant.GeneratorToolKit
                 "using Selenium.StandardControls.PageObjectUtility;",
                 "using Selenium.StandardControls.TestAssistant.GeneratorToolKit;"
             };
-            code.AddRange(properties.SelectMany(e => GetNameSpace(e.Type)).Select(e => "using " + e + ";"));
+            code.AddRange(properties.SelectMany(e => GetNameSpace(e.Type)).Where(e => !string.IsNullOrEmpty(e)).Select(e => "using " + e + ";"));
             code = code.Distinct().ToList();
 
             code.Add(string.Empty);
@@ -121,8 +121,10 @@ namespace Selenium.StandardControls.TestAssistant.GeneratorToolKit
                 if (infoByName.IsPerfect) isSpecialPerfect = true;
             }
 
+            var isRoot = element.GetJS().ExecuteScript("return document;").Equals(serachContext);
+
             //perfect xpath
-            if (!isSpecialPerfect)
+            if (isRoot && !isSpecialPerfect)
             {
                 //TODO Heavy
                 var identifyInfo = MakeShortcutXPath(serachContext, element);
@@ -140,7 +142,10 @@ namespace Selenium.StandardControls.TestAssistant.GeneratorToolKit
             GetIdentifyInfo(serachContext, element, element.TagName, "ByTagName", By.TagName, candidate);
 
             //simple xpath.
-            candidate.Add(MakeSimpleXPath(serachContext, element));
+            if (isRoot)
+            {
+                candidate.Add(MakeSimpleXPath(serachContext, element));
+            }
 
             //adjust name.
             candidate.ForEach(e => e.DefaultName = AdjustName(e.DefaultName, element.TagName));
@@ -338,7 +343,9 @@ namespace Selenium.StandardControls.TestAssistant.GeneratorToolKit
                 var sp1 = sp[1].Split(new[] { '.' }, StringSplitOptions.RemoveEmptyEntries);
                 return new[] { string.Join(".", sp0.Take(sp0.Length - 1)), string.Join(".", sp1.Take(sp1.Length - 1)) };
             }
-            return new[] { string.Join(".", sp.Take(sp.Length - 1)) };
+
+            var spByDot = typeFullName.Split(new[] { '.' }, StringSplitOptions.RemoveEmptyEntries);
+            return new[] { string.Join(".", spByDot.Take(spByDot.Length - 1)) };
         }
     }
 }
