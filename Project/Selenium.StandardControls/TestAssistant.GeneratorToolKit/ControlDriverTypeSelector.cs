@@ -22,6 +22,9 @@ namespace Selenium.StandardControls.TestAssistant.GeneratorToolKit
                     {
                         case "submit": return typeof(ButtonDriver).FullName;
                         case "date": return typeof(DateDriver).FullName;
+                        case "radio": return typeof(RadioButtonDriver).FullName;
+                        case "checkbox": return typeof(CheckBoxDriver).FullName;
+                        case "button": return typeof(ButtonDriver).FullName;
                         default: return typeof(TextBoxDriver).FullName;
                     }
                 case "textarea": return typeof(TextAreaDriver).FullName;
