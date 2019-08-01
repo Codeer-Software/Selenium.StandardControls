@@ -63,7 +63,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="CaptureTest.cs" />
+    <Compile Include="Scenario\CaptureTest.cs" />
     <Compile Include="ElementDriverTest.cs" />
     <Compile Include="ControlsHtmlPage.cs" />
     <Compile Include="TestControlsWait.cs" />
@@ -78,6 +78,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="PageObjects\" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

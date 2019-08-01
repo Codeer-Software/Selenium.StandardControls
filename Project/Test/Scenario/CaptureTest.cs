@@ -4,7 +4,7 @@ using OpenQA.Selenium.Firefox;
 using System.IO;
 using Test;
 
-namespace Test
+namespace Test.Scenario
 {
     [TestClass]
     public class CaptureTest
