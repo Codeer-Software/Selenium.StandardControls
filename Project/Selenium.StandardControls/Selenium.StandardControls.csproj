@@ -87,13 +87,6 @@
     <PostBuildEvent>if $(ConfigurationName) == Release "../../../.nuget/nuget" pack "../../../.nuget/Selenium.StandardControls.nuspec"
 </PostBuildEvent>
   </PropertyGroup>
-  <Import Project="packages\Selenium.WebDriver.ChromeDriver.74.0.3729.6\build\Selenium.WebDriver.ChromeDriver.targets" Condition="Exists('packages\Selenium.WebDriver.ChromeDriver.74.0.3729.6\build\Selenium.WebDriver.ChromeDriver.targets')" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>このプロジェクトは、このコンピューター上にない NuGet パッケージを参照しています。それらのパッケージをダウンロードするには、[NuGet パッケージの復元] を使用します。詳細については、http://go.microsoft.com/fwlink/?LinkID=322105 を参照してください。見つからないファイルは {0} です。</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('packages\Selenium.WebDriver.ChromeDriver.74.0.3729.6\build\Selenium.WebDriver.ChromeDriver.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\Selenium.WebDriver.ChromeDriver.74.0.3729.6\build\Selenium.WebDriver.ChromeDriver.targets'))" />
-  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
