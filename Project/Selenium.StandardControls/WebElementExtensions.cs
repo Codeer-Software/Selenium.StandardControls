@@ -1,4 +1,5 @@
 ﻿using OpenQA.Selenium;
+using OpenQA.Selenium.Internal;
 using OpenQA.Selenium.Remote;
 
 namespace Selenium.StandardControls
@@ -21,11 +22,23 @@ namespace Selenium.StandardControls
         /// <returns>RemoteWebElement</returns>
         public static RemoteWebElement GetRemoteWebElement(this IWebElement element) => element as RemoteWebElement;
         /// <summary>
+        /// Simple to ILocatable accessor
+        /// </summary>
+        /// <param name="element"></param>
+        /// <returns>ILocatable</returns>
+        public static ILocatable GetLocatable(this IWebElement element) => element as ILocatable;
+        /// <summary>
+        /// Simple to IWrapsDriver accessor
+        /// </summary>
+        /// <param name="element"></param>
+        /// <returns>IWrapsDriver</returns>
+        public static IWrapsDriver GetWrapsDriver(this IWebElement element) => element as IWrapsDriver;
+        /// <summary>
         /// Simple to IWebDriver accessor
         /// </summary>
         /// <param name="element">Target element</param>
         /// <returns>IWebDriver</returns>
-        public static IWebDriver GetWebDriver(this IWebElement element) => GetRemoteWebElement(element)?.WrappedDriver;
+        public static IWebDriver GetWebDriver(this IWebElement element) => GetWrapsDriver(element)?.WrappedDriver;
         /// <summary>
         /// Simple to IJavaScriptExecutor accessor
         /// </summary>
@@ -36,12 +49,17 @@ namespace Selenium.StandardControls
         /// Show Scroll If there is no element in the screen
         /// </summary>
         /// <param name="element">Target element</param>
-        public static void Show(this IWebElement element) => element.GetRemoteWebElement().LocationOnScreenOnceScrolledIntoView.ToString();
+        public static void Show(this IWebElement element)
+        {
+            var locatar = element.GetLocatable();
+            if (locatar == null) return;
+            locatar.LocationOnScreenOnceScrolledIntoView.ToString();
+        }
         /// <summary>
-        ///Reliably Show(Show failure and other elements at the top)
-        /// </summary>
-        /// <param name="element">Target element</param>
-        /// <param name="alignToTop"></param>
+         ///Reliably Show(Show failure and other elements at the top)
+         /// </summary>
+         /// <param name="element">Target element</param>
+         /// <param name="alignToTop"></param>
         public static void ScrollIntoView(this IWebElement element, bool alignToTop) => element.GetJS().ExecuteScript($"arguments[0].scrollIntoView({alignToTop.ToString().ToLower()});", element);
         /// <summary>
         /// The focus to Element
