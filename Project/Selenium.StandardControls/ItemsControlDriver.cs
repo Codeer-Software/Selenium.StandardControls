@@ -9,7 +9,7 @@ namespace Selenium.StandardControls
     /// Access item by index.
     /// </summary>
     /// <typeparam name="T">Item's type.</typeparam>
-    public interface IIndexItemsControlDriver<T>
+    public interface IIndexAccessItemsControlDriver<T>
     {
         /// <summary>
         /// Item count.
@@ -35,7 +35,7 @@ namespace Selenium.StandardControls
     /// Items Control Driver
     /// </summary>
     /// <typeparam name="T">Item's type.</typeparam>
-    public class ItemsControlDriver<T> : ControlDriverBase, IIndexItemsControlDriver<T> where T : class
+    public class ItemsControlDriver<T> : ControlDriverBase, IIndexAccessItemsControlDriver<T> where T : class
     {
         /// <summary>
         /// Item count.
