@@ -1,5 +1,5 @@
 ﻿using OpenQA.Selenium;
-using System.Collections.ObjectModel;
+using System;
 using System.Linq;
 
 namespace Selenium.StandardControls.PageObjectUtility
@@ -38,8 +38,18 @@ namespace Selenium.StandardControls.PageObjectUtility
         /// <returns></returns>
         public IWebElement Find()
         {
-            if (_innerFinder != null) return _innerFinder.FindMany()[_index];
-            return _context.FindElement(_by);
+            if (_innerFinder != null)
+            {
+                var elements = _innerFinder.FindMany();
+                if (_index < elements.Length) return elements[_index];
+                return null;
+            }
+            else
+            {
+                var elements = _context.FindElements(_by);
+                if (elements.Count != 1) return null;
+                return elements[0];
+            }
         }
 
         IWebElement[] FindMany()
@@ -48,12 +58,28 @@ namespace Selenium.StandardControls.PageObjectUtility
             return _context.FindElements(_by).ToArray();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns></returns>
         public ElementFinder this[int index]
         {
             get
             {
                 return new ElementFinder(this, index);
             }
+        }
+
+        /// <summary>
+        /// Finds the first OpenQA.Selenium.IWebElement using the given method. And Convert to T. T have to have constructor of one IWebElement arugment.
+        /// </summary>
+        /// <typeparam name="T">Type.</typeparam>
+        /// <returns>T</returns>
+        public T Find<T>() where T : class
+        {
+            var element = Find();
+            return element == null ? null : (T)Activator.CreateInstance(typeof(T), new object[] { element });
         }
     }
 }

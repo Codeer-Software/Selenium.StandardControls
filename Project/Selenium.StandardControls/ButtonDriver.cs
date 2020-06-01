@@ -48,7 +48,7 @@ namespace Selenium.StandardControls
         /// Constructor
         /// </summary>
         /// <param name="finder">A variety of find to the elements</param>
-        public static implicit operator ButtonDriver(ElementFinder finder)=> new ButtonDriver(finder.Find());
+        public static implicit operator ButtonDriver(ElementFinder finder) => finder.Find<ButtonDriver>();
 
         [CaptureCodeGenerator]
         public string GetWebElementCaptureGenerator()

@@ -46,7 +46,7 @@ namespace Selenium.StandardControls
         /// Constructor
         /// </summary>
         /// <param name="finder">A variety of find to the elements</param>
-        public static implicit operator AnchorDriver(ElementFinder finder) => new AnchorDriver(finder.Find());
+        public static implicit operator AnchorDriver(ElementFinder finder) => finder.Find<AnchorDriver>();
 
         [CaptureCodeGenerator]
         public string GetWebElementCaptureGenerator()

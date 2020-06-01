@@ -62,7 +62,7 @@ namespace Selenium.StandardControls
         /// Constructor
         /// </summary>
         /// <param name="finder">A variety of find to the elements</param>
-        public static implicit operator CheckBoxDriver(ElementFinder finder) => new CheckBoxDriver(finder.Find());
+        public static implicit operator CheckBoxDriver(ElementFinder finder) => finder.Find<CheckBoxDriver>();
 
         [CaptureCodeGenerator]
         public string GetWebElementCaptureGenerator()

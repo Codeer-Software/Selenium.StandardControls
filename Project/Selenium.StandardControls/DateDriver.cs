@@ -65,7 +65,7 @@ namespace Selenium.StandardControls
         /// Constructor
         /// </summary>
         /// <param name="finder">A variety of find to the elements</param>
-        public static implicit operator DateDriver(ElementFinder finder) => new DateDriver(finder.Find());
+        public static implicit operator DateDriver(ElementFinder finder) => finder.Find<DateDriver>();
 
         [CaptureCodeGenerator]
         public string GetWebElementCaptureGenerator()

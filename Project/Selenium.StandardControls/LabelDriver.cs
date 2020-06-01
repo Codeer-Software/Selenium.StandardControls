@@ -24,6 +24,6 @@ namespace Selenium.StandardControls
         /// Constructor
         /// </summary>
         /// <param name="finder">A variety of find to the elements</param>
-        public static implicit operator LabelDriver(ElementFinder finder) => new LabelDriver(finder.Find());
+        public static implicit operator LabelDriver(ElementFinder finder) => finder.Find<LabelDriver>();
     }
 }

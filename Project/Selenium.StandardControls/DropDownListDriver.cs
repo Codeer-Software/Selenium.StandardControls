@@ -99,7 +99,7 @@ namespace Selenium.StandardControls
         /// Constructor
         /// </summary>
         /// <param name="finder">A variety of find to the elements</param>
-        public static implicit operator DropDownListDriver(ElementFinder finder) => new DropDownListDriver(finder.Find());
+        public static implicit operator DropDownListDriver(ElementFinder finder) => finder.Find<DropDownListDriver>();
 
         [CaptureCodeGenerator]
         public string GetWebElementCaptureGenerator()

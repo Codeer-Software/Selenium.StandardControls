@@ -59,7 +59,7 @@ namespace Selenium.StandardControls
         /// Constructor
         /// </summary>
         /// <param name="finder">A variety of find to the elements</param>
-        public static implicit operator RadioButtonDriver(ElementFinder finder) => new RadioButtonDriver(finder.Find());
+        public static implicit operator RadioButtonDriver(ElementFinder finder) => finder.Find<RadioButtonDriver>();
 
         [CaptureCodeGenerator]
         public string GetWebElementCaptureGenerator()

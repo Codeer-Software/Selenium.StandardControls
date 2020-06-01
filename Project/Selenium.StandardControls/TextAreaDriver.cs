@@ -19,6 +19,6 @@ namespace Selenium.StandardControls
         /// Constructor
         /// </summary>
         /// <param name="finder">A variety of find to the elements</param>
-        public static implicit operator TextAreaDriver(ElementFinder finder) => new TextAreaDriver(finder.Find());
+        public static implicit operator TextAreaDriver(ElementFinder finder) => finder.Find<TextAreaDriver>();
     }
 }
