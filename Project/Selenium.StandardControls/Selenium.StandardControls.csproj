@@ -65,6 +65,8 @@
     <Compile Include="TestAssistant.GeneratorToolKit\BrowserAnalyzeInfo.cs" />
     <Compile Include="TestAssistant.GeneratorToolKit\ControlDriverTypeSelector.cs" />
     <Compile Include="TestAssistant.GeneratorToolKit\GridSelectedType.cs" />
+    <Compile Include="TestAssistant.GeneratorToolKit\IAnalysisKeyActionCustomizer.cs" />
+    <Compile Include="TestAssistant.GeneratorToolKit\ICaptureKeyActionCustomizer.cs" />
     <Compile Include="TestAssistant.GeneratorToolKit\IControlDriverTypeSelector.cs" />
     <Compile Include="TestAssistant.GeneratorToolKit\IdentifyInfo.cs" />
     <Compile Include="TestAssistant.GeneratorToolKit\IPageObjectGeneator.cs" />
