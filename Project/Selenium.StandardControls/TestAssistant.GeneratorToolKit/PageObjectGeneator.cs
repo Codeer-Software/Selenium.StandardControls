@@ -94,6 +94,9 @@ namespace Selenium.StandardControls.TestAssistant.GeneratorToolKit
             //constructor
             code.Add($"{Indent}{Indent}public {name}(IWebElement element) : base(element) {{ }}");
 
+            //converter
+            code.Add($"{Indent}{Indent}public static implicit operator {name}(ElementFinder finder) => finder.Find<{name}>();");
+
             code.Add($"{Indent}}}");
             code.Add("}");
 
