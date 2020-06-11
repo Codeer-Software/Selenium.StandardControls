@@ -4,7 +4,7 @@ using Selenium.StandardControls.PageObjectUtility;
 using OpenQA.Selenium;
 using Selenium.StandardControls.TestAssistant.GeneratorToolKit;
 
-namespace Test
+namespace Test.PageObjects
 {
     public class ControlsHtmlPage : PageBase
     {
@@ -17,6 +17,7 @@ namespace Test
         public CheckBoxDriver CheckBox_Car => ById("checkBoxCar");
         public CheckBoxDriver CheckBox_Cottage => ById("checkBoxCottage");
         public DropDownListDriver DropDown_Fruit => ById("dropDownFruit");
+        public DropDownListDriver DropDownFruitValue => ById("dropDownFruitValue");
         public TextAreaDriver TextArea_Freeans => ById("textareaFreeans");
         public ButtonDriver Button_JS => ById("inputJS");
         public AnchorDriver A_Codeer => ById("codeer");

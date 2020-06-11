@@ -106,8 +106,16 @@ namespace Selenium.StandardControls
         {
             return $@"
                     element.addEventListener('change', function() {{ 
-                      var name = __codeerTestAssistantPro.getElementName(this);
-                      __codeerTestAssistantPro.pushCode(name + '.Edit(""' + this.value + '"");');
+                        var name = __codeerTestAssistantPro.getElementName(this);
+                        var text = this.value;
+
+                        for (var i = 0; i < this.options.length; i++) {{
+                            if (this.options[i].value == this.value){{
+                                text = this.options[i].text;
+                                break;
+                            }}
+                        }}
+                        __codeerTestAssistantPro.pushCode(name + '.Edit(""' + text + '"");');
                     }}, false);
                     ";
         }

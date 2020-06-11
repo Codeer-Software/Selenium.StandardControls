@@ -4,6 +4,7 @@ using OpenQA.Selenium.Firefox;
 using Selenium.StandardControls;
 using System;
 using OpenQA.Selenium.Chrome;
+using Test.PageObjects;
 
 namespace Test
 {

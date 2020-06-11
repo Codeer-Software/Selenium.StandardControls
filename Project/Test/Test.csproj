@@ -65,7 +65,7 @@
   <ItemGroup>
     <Compile Include="Scenario\CaptureTest.cs" />
     <Compile Include="ElementDriverTest.cs" />
-    <Compile Include="ControlsHtmlPage.cs" />
+    <Compile Include="PageObjects\ControlsHtmlPage.cs" />
     <Compile Include="TestControlsWait.cs" />
     <Compile Include="TestControls.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -79,9 +79,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="PageObjects\" />
-  </ItemGroup>
+  <ItemGroup />
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>
