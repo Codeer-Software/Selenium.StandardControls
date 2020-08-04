@@ -30,7 +30,7 @@ namespace Selenium.StandardControls.TestAssistant.GeneratorToolKit
                 "using Selenium.StandardControls.PageObjectUtility;",
                 "using Selenium.StandardControls.TestAssistant.GeneratorToolKit;"
             };
-            code.AddRange(properties.SelectMany(e => GetNameSpace(e.Type)).Where(e=>!string.IsNullOrEmpty(e)).Select(e => "using " + e + ";"));
+            code.AddRange(properties.SelectMany(e => GetNameSpace(e.Type)).Where(e => !string.IsNullOrEmpty(e)).Select(e => "using " + e + ";"));
             code = code.Distinct().ToList();
 
             code.Add(string.Empty);
@@ -55,8 +55,18 @@ namespace Selenium.StandardControls.TestAssistant.GeneratorToolKit
 
             code.Add($"{Indent}public static class {name}Extensions");
             code.Add($"{Indent}{{");
-            code.Add($"{Indent}{Indent}[PageObjectIdentify(\"{pageIdenfityInfo.Url}\", UrlComapreType.{pageIdenfityInfo.UrlComapreType})]");
+
+            if (pageIdenfityInfo.TitleComapreType != "None")
+            {
+                code.Add($"{Indent}{Indent}[PageObjectIdentify(\"{pageIdenfityInfo.Title}\", TitleComapreType.{pageIdenfityInfo.TitleComapreType})]");
+            }
+            else if (pageIdenfityInfo.UrlComapreType != "None")
+            {
+                code.Add($"{Indent}{Indent}[PageObjectIdentify(\"{pageIdenfityInfo.Url}\", UrlComapreType.{pageIdenfityInfo.UrlComapreType})]");
+            }
+
             code.Add($"{Indent}{Indent}public static {name} Attach{name}(this IWebDriver driver) => new {name}(driver);");
+
             code.Add($"{Indent}}}");
 
             code.Add("}");
