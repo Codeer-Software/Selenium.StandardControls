@@ -347,11 +347,13 @@ return attrs;
                             if (string.IsNullOrEmpty(value)) continue;
 
                             var selector = $"{target.TagName}[{key}='{value}']";
+                            var checkSelector = selector;
                             if (i == 0)
                             {
                                 selector = "> " + selector;
+                                checkSelector = target.TagName + selector;
                             }
-                            var finded = serachContext.FindElements(By.CssSelector(selector));
+                            var finded = serachContext.FindElements(By.CssSelector(checkSelector));
                             if (finded.Count == 1)
                             {
                                 identifyIndex = i;
@@ -392,12 +394,12 @@ return attrs;
                     {
                         for (int j = 0; j < tags.Count; j++)
                         {
-                            if (target.Equals(tags[i]))
+                            if (target.Equals(tags[j]))
                             {
                                 identifyIndex = i;
                                 cssPath += " > ";
                                 cssPath += target.TagName;
-                                cssPath += $":nth-child({i + 1})";
+                                cssPath += $":nth-child({j + 1})";
                                 break;
                             }
                         }
