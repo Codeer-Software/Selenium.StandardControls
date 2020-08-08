@@ -265,12 +265,57 @@ return attrs;
                 }
                 else
                 {
-                    for (int i = 0; i < tags.Count; i++)
+
+                    //ここで属性を使うことができないか？
+                    //span[@class='regular_price']
+
+
+
+                    //by attribute
+                    var attrs = js.ExecuteScript(@"
+var target = arguments[0];
+var src = target.attributes;
+var attrs = {};
+for (var key in src) {
+    var val = src[key];
+    if (target.getAttribute(val.name)) {
+        attrs[val.name] =  val.value;
+    }
+}
+return attrs;
+", e) as IDictionary;
+
+                    var hit = false;
+                    if (attrs != null)
                     {
-                        if (e.Equals(tags[i]))
+                        foreach (var x in attrs.Keys)
                         {
-                            path += "/" + e.TagName + "[" + (i + 1) + "]";
-                            break;
+                            var key = x?.ToString();
+                            if (string.IsNullOrEmpty(key)) continue;
+                            var value = attrs[x]?.ToString();
+                            if (string.IsNullOrEmpty(value)) continue;
+
+                            var selector = $"{e.TagName}[@{key}='{value}']";
+                            var checkSelector = selector;
+
+                            var finded = serachContext.FindElements(By.XPath(checkSelector));
+                            if (finded.Count == 1)
+                            {
+                                hit = true;
+                                path += "/" + selector;
+                                break;
+                            }
+                        }
+                    }
+                    if (!hit)
+                    {
+                        for (int i = 0; i < tags.Count; i++)
+                        {
+                            if (e.Equals(tags[i]))
+                            {
+                                path += "/" + e.TagName + "[" + (i + 1) + "]";
+                                break;
+                            }
                         }
                     }
                 }
@@ -348,11 +393,7 @@ return attrs;
 
                             var selector = $"{target.TagName}[{key}='{value}']";
                             var checkSelector = selector;
-                            if (i == 0)
-                            {
-                                selector = "> " + selector;
-                                checkSelector = target.TagName + selector;
-                            }
+
                             var finded = serachContext.FindElements(By.CssSelector(checkSelector));
                             if (finded.Count == 1)
                             {
@@ -363,46 +404,6 @@ return attrs;
                             }
                         }
 
-                        if (identifyIndex != -1)
-                        {
-                            break;
-                        }
-                    }
-
-                    if (i != 0) continue;
-
-                    //by tag from children
-                    var tags = new List<IWebElement>();
-                    var parent = js.ExecuteScript("return arguments[0].parentElement;", target);
-                    if (parent != null)
-                    {
-                        var children = js.ExecuteScript("return arguments[0].children;", parent) as IEnumerable;
-                        if (children != null)
-                        {
-                            tags.AddRange(children.OfType<IWebElement>().Where(x => x.TagName == target.TagName));
-                        }
-                    }
-
-                    if (tags.Count <= 1)
-                    {
-                        identifyIndex = i;
-                        cssPath += " > ";
-                        cssPath += target.TagName;
-                        break;
-                    }
-                    else
-                    {
-                        for (int j = 0; j < tags.Count; j++)
-                        {
-                            if (target.Equals(tags[j]))
-                            {
-                                identifyIndex = i;
-                                cssPath += " > ";
-                                cssPath += target.TagName;
-                                cssPath += $":nth-child({j + 1})";
-                                break;
-                            }
-                        }
                         if (identifyIndex != -1)
                         {
                             break;
