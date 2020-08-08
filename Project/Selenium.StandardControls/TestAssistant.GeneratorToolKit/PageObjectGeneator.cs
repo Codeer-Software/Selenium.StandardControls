@@ -116,50 +116,103 @@ namespace Selenium.StandardControls.TestAssistant.GeneratorToolKit
 
         public IdentifyInfo[] GetIdentifyingCandidates(ISearchContext serachContext, IWebElement element)
         {
+            var js = element.GetJS();
             var isSpecialPerfect = false;
 
-            //id
-            var elementInfo = new ElementInfo(element);
             var candidate = new List<IdentifyInfo>();
-            if (!string.IsNullOrEmpty(elementInfo.Id))
+            var elementInfo = new ElementInfo(element);
+
+            //id
+            try
             {
-                candidate.Add(new IdentifyInfo { Identify = $"ById(\"{elementInfo.Id}\")", IsPerfect = true, DefaultName = elementInfo.Id });
-                isSpecialPerfect = true;
+                if (!string.IsNullOrEmpty(elementInfo.Id) && serachContext.FindElements(By.Id(elementInfo.Id)).Count == 1)
+                {
+                    candidate.Add(new IdentifyInfo { Identify = $"ById(\"{elementInfo.Id}\")", IsPerfect = true, DefaultName = elementInfo.Id });
+                    isSpecialPerfect = true;
+                }
             }
+            catch { }
 
             //name
-            var infoByName = GetIdentifyInfo(serachContext, element, elementInfo.Name, "ByName", By.Name);
-            if (infoByName != null)
+            try
             {
-                candidate.Add(infoByName);
-                if (infoByName.IsPerfect) isSpecialPerfect = true;
+                if (!string.IsNullOrEmpty(elementInfo.Name) && serachContext.FindElements(By.Name(elementInfo.Name)).Count == 1)
+                {
+                    candidate.Add(new IdentifyInfo { Identify = $"ByName(\"{elementInfo.Name}\")", IsPerfect = true, DefaultName = elementInfo.Name });
+                    isSpecialPerfect = true;
+                }
             }
+            catch { }
+
+            //tag
+            try
+            {
+                if ( serachContext.FindElements(By.TagName(element.TagName)).Count == 1)
+                {
+                    candidate.Add(new IdentifyInfo { Identify = $"ByTagName(\"{element.TagName}\")", IsPerfect = true, DefaultName = element.TagName });
+                    isSpecialPerfect = true;
+                }
+            }
+            catch { }
+
+            //css selector
+            try
+            {
+                var attrs = js.ExecuteScript(@"
+var element = arguments[0];
+var src = element.attributes;
+var attrs = {};
+for (var key in src) {
+    var val = src[key];
+    if (element.getAttribute(val.name)) {
+        attrs[val.name] =  val.value;
+    }
+}
+return attrs;
+", element) as IDictionary;
+
+                if (attrs != null)
+                {
+                    foreach (var e in attrs.Keys)
+                    {
+                        var key = e?.ToString();
+                        if (string.IsNullOrEmpty(key)) continue;
+                        var value = attrs[e]?.ToString();
+                        if (string.IsNullOrEmpty(value)) continue;
+
+                        if (key == "id" || key == "name") continue;
+
+                        var selector = $"{element.TagName}[{key}='{value}']";
+                        var finded = serachContext.FindElements(By.CssSelector(selector));
+                        if (finded.Count == 1)
+                        {
+                            candidate.Add(new IdentifyInfo { Identify = $"ByCssSelector(\"{selector}\")", IsPerfect = true, DefaultName = value });
+                            isSpecialPerfect = true;
+                        }
+                    }
+                }
+            }
+            catch { }
 
             var isRoot = element.GetJS().ExecuteScript("return document;").Equals(serachContext);
 
             //perfect xpath
-            if (isRoot && !isSpecialPerfect)
+            if (!isSpecialPerfect)
             {
-                //TODO Heavy
-                var identifyInfo = MakeShortcutXPath(serachContext, element);
-                if (identifyInfo != null)
+                try
                 {
-                    candidate.Add(identifyInfo);
-                    isSpecialPerfect = true;
+                    var identifyInfo = MakeCssPath(serachContext, element);
+                    if (identifyInfo != null)
+                    {
+                        candidate.Add(identifyInfo);
+                        isSpecialPerfect = identifyInfo.IsPerfect;
+                    }
                 }
+                catch { }
             }
 
-            //class name
-            GetIdentifyInfo(serachContext, element, elementInfo.Class, "ByClassName", By.ClassName, candidate);
-
-            //tag name
-            GetIdentifyInfo(serachContext, element, element.TagName, "ByTagName", By.TagName, candidate);
-
-            //simple xpath.
-            if (isRoot)
-            {
-                candidate.Add(MakeFullXPath(serachContext, element));
-            }
+            //full xpath.
+            candidate.Add(MakeFullXPath(isRoot, serachContext, element));
 
             //adjust name.
             candidate.ForEach(e => e.DefaultName = AdjustName(e.DefaultName, element.TagName));
@@ -173,43 +226,7 @@ namespace Selenium.StandardControls.TestAssistant.GeneratorToolKit
             return _cspDom.IsValidIdentifier(adjusted) ? adjusted : tagName;
         }
 
-        static void GetIdentifyInfo(ISearchContext serachContext, IWebElement element, string key, string func, Func<string, By> by, List<IdentifyInfo> candidate)
-        {
-            var info = GetIdentifyInfo(serachContext, element, key, func, by);
-            if (info != null) candidate.Add(info);
-        }
-
-        static IdentifyInfo GetIdentifyInfo(ISearchContext serachContext, IWebElement element, string key, string func, Func<string, By> by)
-        {
-            IdentifyInfo info = null;
-            try
-            {
-                if (!string.IsNullOrEmpty(key))
-                {
-                    var items = serachContext.FindElements(by(key));
-                    if (items.Count == 1)
-                    {
-                        info = new IdentifyInfo { Identify = $"{func}(\"{key}\")", IsPerfect = true, DefaultName = key };
-                    }
-                    else
-                    {
-                        for (int i = 0; i < items.Count; i++)
-                        {
-                            if (element.Equals(items[i]))
-                            {
-                                info = new IdentifyInfo { Identify = $"{func}(\"{key}\")[{i}]", DefaultName = key + i };
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-            catch { }
-
-            return info;
-        }
-
-        static IdentifyInfo MakeFullXPath(ISearchContext rootSerachContext, IWebElement element)
+        static IdentifyInfo MakeFullXPath(bool isRoot, ISearchContext rootSerachContext, IWebElement element)
         {
             var list = new List<IWebElement>();
             var checkElement = element;
@@ -238,7 +255,7 @@ namespace Selenium.StandardControls.TestAssistant.GeneratorToolKit
                     var children = js.ExecuteScript("return arguments[0].children;", parent) as IEnumerable;
                     if (children != null)
                     {
-                        tags.AddRange(children.OfType<IWebElement>().Where(x=>x.TagName == e.TagName));
+                        tags.AddRange(children.OfType<IWebElement>().Where(x => x.TagName == e.TagName));
                     }
                 }
 
@@ -260,35 +277,21 @@ namespace Selenium.StandardControls.TestAssistant.GeneratorToolKit
                 serachContext = e;
             }
 
+            if (!isRoot && 0 < path.Length)
+            {
+                path = path.Substring(1);
+            }
+
             return new IdentifyInfo { Identify = $"ByXPath(\"{path}\")", IsPerfect = true, DefaultName = element.TagName };
         }
 
-        static IdentifyInfo MakeShortcutXPath(ISearchContext rootSerachContext, IWebElement element)
+        static IdentifyInfo MakeCssPath(ISearchContext rootSerachContext, IWebElement element)
         {
             var list = new List<IWebElement>();
             var checkElement = element;
-            var shortcut = false;
             while (checkElement != null && !rootSerachContext.Equals(checkElement))
             {
                 list.Insert(0, checkElement);
-
-                var elementInfo = new ElementInfo(checkElement);
-                if (!string.IsNullOrEmpty(elementInfo.Id))
-                {
-                    shortcut = true;
-                    break;
-                }
-
-                if (!string.IsNullOrEmpty(elementInfo.Name))
-                {
-                    var names = rootSerachContext.FindElements(By.Name(elementInfo.Name));
-                    if (names.Count == 1)
-                    {
-                        shortcut = true;
-                        break;
-                    }
-                }
-
                 try
                 {
                     checkElement = checkElement.GetParent();
@@ -298,49 +301,124 @@ namespace Selenium.StandardControls.TestAssistant.GeneratorToolKit
                     break;
                 }
             }
-            if (!shortcut) return null;
 
-            var path = "/";
+            string cssPath = string.Empty;
+            var js = element.GetJS();
             var serachContext = rootSerachContext;
-            foreach (var e in list)
-            {
-                var eInfo = new ElementInfo(e);
-                var names = string.IsNullOrEmpty(eInfo.Name) ? new IWebElement[0] : serachContext.FindElements(By.TagName(eInfo.Name)).ToArray();
-                var tags = serachContext.FindElements(By.TagName(e.TagName)).ToArray();
-                var classes = string.IsNullOrEmpty(eInfo.Class) ? new IWebElement[0] : serachContext.FindElements(By.TagName(eInfo.Class)).ToArray();
 
-                if (!string.IsNullOrEmpty(eInfo.Id))
+            while (0 < list.Count)
+            {
+                int identifyIndex = -1;
+
+                for (int i = list.Count - 1; 0 <= i; i--)
                 {
-                    path += $"/{e.TagName}[@id='{eInfo.Id}']";
-                }
-                else if (names.Length == 1)
-                {
-                    path += $"/{e.TagName}[@name='{eInfo.Name}']";
-                }
-                else if (tags.Length == 1)
-                {
-                    path += "/" + e.TagName;
-                }
-                else if (classes.Length == 1)
-                {
-                    path += $"/{e.TagName}[@class='{eInfo.Class}']";
-                }
-                else
-                {
-                    for (int i = 0; i < tags.Length; i++)
+                    var target = list[i];
+
+                    //by tag
+                    if (i != 0 && serachContext.FindElements(By.TagName(target.TagName)).Count == 1)
                     {
-                        if (e.Equals(tags[i]))
+                        identifyIndex = i;
+                        cssPath += " ";
+                        cssPath += target.TagName;
+                        break;
+                    }
+
+                    //by attribute
+                    var attrs = js.ExecuteScript(@"
+var target = arguments[0];
+var src = target.attributes;
+var attrs = {};
+for (var key in src) {
+    var val = src[key];
+    if (target.getAttribute(val.name)) {
+        attrs[val.name] =  val.value;
+    }
+}
+return attrs;
+", target) as IDictionary;
+
+                    if (attrs != null)
+                    {
+                        foreach (var e in attrs.Keys)
                         {
-                            path += "/" + e.TagName + "[" + (i + 1) + "]";
+                            var key = e?.ToString();
+                            if (string.IsNullOrEmpty(key)) continue;
+                            var value = attrs[e]?.ToString();
+                            if (string.IsNullOrEmpty(value)) continue;
+
+                            var selector = $"{target.TagName}[{key}='{value}']";
+                            if (i == 0)
+                            {
+                                selector = "> " + selector;
+                            }
+                            var finded = serachContext.FindElements(By.CssSelector(selector));
+                            if (finded.Count == 1)
+                            {
+                                identifyIndex = i;
+                                cssPath += " ";
+                                cssPath += selector;
+                                break;
+                            }
+                        }
+
+                        if (identifyIndex != -1)
+                        {
                             break;
                         }
                     }
 
+                    if (i != 0) continue;
+
+                    //by tag from children
+                    var tags = new List<IWebElement>();
+                    var parent = js.ExecuteScript("return arguments[0].parentElement;", target);
+                    if (parent != null)
+                    {
+                        var children = js.ExecuteScript("return arguments[0].children;", parent) as IEnumerable;
+                        if (children != null)
+                        {
+                            tags.AddRange(children.OfType<IWebElement>().Where(x => x.TagName == target.TagName));
+                        }
+                    }
+
+                    if (tags.Count <= 1)
+                    {
+                        identifyIndex = i;
+                        cssPath += " > ";
+                        cssPath += target.TagName;
+                        break;
+                    }
+                    else
+                    {
+                        for (int j = 0; j < tags.Count; j++)
+                        {
+                            if (target.Equals(tags[i]))
+                            {
+                                identifyIndex = i;
+                                cssPath += " > ";
+                                cssPath += target.TagName;
+                                cssPath += $":nth-child({i + 1})";
+                                break;
+                            }
+                        }
+                        if (identifyIndex != -1)
+                        {
+                            break;
+                        }
+                    }
                 }
-                serachContext = e;
+
+                if (identifyIndex == -1) return null;
+
+                serachContext = list[identifyIndex];
+                list = list.Skip(identifyIndex + 1).ToList();
             }
 
-            return new IdentifyInfo { Identify = $"ByXPath(\"{path}\")", IsPerfect = true, DefaultName = "" };
+            if (0 < cssPath.Length)
+            {
+                cssPath = cssPath.Substring(1);
+            }
+            return new IdentifyInfo { Identify = $"ByCssSelector(\"{cssPath}\")", IsPerfect = true, DefaultName = element.TagName };
         }
 
         static string GetIdentify(PageObjectPropertyInfo propertyInfo)

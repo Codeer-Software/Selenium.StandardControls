@@ -50,6 +50,13 @@ namespace Selenium.StandardControls.PageObjectUtility
         public ElementFinder ByTagName(string tagNameToFind) => new ElementFinder(SearchContext, By.TagName(tagNameToFind));
 
         /// <summary>
+        /// Find Element in XPath
+        /// </summary>
+        /// <param name="xpathToFind">XPath</param>
+        /// <returns>ElementFinder</returns>
+        public ElementFinder ByXPath(string xpathToFind) => new ElementFinder(SearchContext, By.XPath(xpathToFind));
+
+        /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="searchContext">SearchContext.</param>
@@ -65,13 +72,6 @@ namespace Selenium.StandardControls.PageObjectUtility
         /// Driver to generate a page
         /// </summary>
         public IWebDriver Driver { get; }
-
-        /// <summary>
-        /// Find Element in XPath
-        /// </summary>
-        /// <param name="xpathToFind">XPath</param>
-        /// <returns>ElementFinder</returns>
-        public ElementFinder ByXPath(string xpathToFind) => new ElementFinder(SearchContext, By.XPath(xpathToFind));
 
         /// <summary>
         /// Constructor

@@ -4,6 +4,23 @@
     function clickJS(){
     document.getElementById("textBoxName").value = "JS";
     }
+
+    function getAttributes(id){
+
+    var element = document.getElementById(id);
+    var src = element.attributes;
+
+    var attrs = {};
+    for (var key in src) {
+    var val = src[key];
+    if (element.getAttribute(val.name) != null) {
+    attrs[val.name] =  val.value;
+    }
+    }
+
+    return attrs;
+
+    }
 </script>
 <form method="post" action="/courier/htm-form">
     <label id="labelTitle">Title Controls</label><br />
