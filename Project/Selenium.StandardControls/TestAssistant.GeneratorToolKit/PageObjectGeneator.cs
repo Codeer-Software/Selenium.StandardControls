@@ -1,6 +1,7 @@
 ﻿using OpenQA.Selenium;
 using System;
 using System.CodeDom.Compiler;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -157,7 +158,7 @@ namespace Selenium.StandardControls.TestAssistant.GeneratorToolKit
             //simple xpath.
             if (isRoot)
             {
-                candidate.Add(MakeSimpleXPath(serachContext, element));
+                candidate.Add(MakeFullXPath(serachContext, element));
             }
 
             //adjust name.
@@ -208,7 +209,7 @@ namespace Selenium.StandardControls.TestAssistant.GeneratorToolKit
             return info;
         }
 
-        static IdentifyInfo MakeSimpleXPath(ISearchContext rootSerachContext, IWebElement element)
+        static IdentifyInfo MakeFullXPath(ISearchContext rootSerachContext, IWebElement element)
         {
             var list = new List<IWebElement>();
             var checkElement = element;
@@ -225,12 +226,23 @@ namespace Selenium.StandardControls.TestAssistant.GeneratorToolKit
                 }
             }
 
+            var js = element.GetJS();
             var path = "";
             var serachContext = rootSerachContext;
             foreach (var e in list)
             {
-                var tags = serachContext.FindElements(By.TagName(e.TagName));
-                if (tags.Count == 1)
+                var tags = new List<IWebElement>();
+                var parent = js.ExecuteScript("return arguments[0].parentElement;", e);
+                if (parent != null)
+                {
+                    var children = js.ExecuteScript("return arguments[0].children;", parent) as IEnumerable;
+                    if (children != null)
+                    {
+                        tags.AddRange(children.OfType<IWebElement>().Where(x=>x.TagName == e.TagName));
+                    }
+                }
+
+                if (tags.Count <= 1)
                 {
                     path += "/" + e.TagName;
                 }
