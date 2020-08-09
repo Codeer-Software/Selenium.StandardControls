@@ -158,13 +158,26 @@ namespace Selenium.StandardControls.TestAssistant.GeneratorToolKit
             //css selector (attribute)
             try
             {
-                foreach (var e in GetAttributes(element).Where(e=>e.Key != "id" && e.Key != "name"))
+                var attrs = GetAttributes(element);
+                foreach (var e in attrs.Where(e=>e.Key != "id" && e.Key != "name"))
                 {
                     var selector = $"{element.TagName}[{e.Key}='{e.Value}']";
                     var finded = serachContext.FindElements(By.CssSelector(selector));
                     if (finded.Count == 1)
                     {
                         candidate.Add(new IdentifyInfo { Identify = $"ByCssSelector(\"{selector}\")", IsPerfect = true, DefaultName = e.Value });
+                        isSpecialPerfect = true;
+                    }
+                }
+
+                //multi attributes
+                if (!isSpecialPerfect && 1 < attrs.Count)
+                {
+                    var selector = element.TagName + string.Join(string.Empty, attrs.Select(e => $"[{e.Key}='{e.Value}']"));
+                    var finded = serachContext.FindElements(By.CssSelector(selector));
+                    if (finded.Count == 1)
+                    {
+                        candidate.Add(new IdentifyInfo { Identify = $"ByCssSelector(\"{selector}\")", IsPerfect = true, DefaultName = element.TagName });
                         isSpecialPerfect = true;
                     }
                 }
@@ -235,7 +248,8 @@ namespace Selenium.StandardControls.TestAssistant.GeneratorToolKit
                 {
                     //by attribute
                     var hit = false;
-                    foreach (var x in GetAttributes(e))
+                    var attrs = GetAttributes(e);
+                    foreach (var x in attrs)
                     {
                         var selector = $"{e.TagName}[@{x.Key}='{x.Value}']";
                         var finded = serachContext.FindElements(By.XPath(selector));
@@ -246,6 +260,19 @@ namespace Selenium.StandardControls.TestAssistant.GeneratorToolKit
                             break;
                         }
                     }
+
+                    //multi attributes
+                    if (!hit && 1 < attrs.Count)
+                    {
+                        var selector = e.TagName + string.Join(string.Empty, attrs.Select(x => $"[@{x.Key}='{x.Value}']"));
+                        var finded = serachContext.FindElements(By.XPath(selector));
+                        if (finded.Count == 1)
+                        {
+                            hit = true;
+                            fullXPath += "/" + selector;
+                        }
+                    }
+
                     if (!hit)
                     {
                         for (int i = 0; i < tags.Count; i++)
@@ -299,7 +326,8 @@ namespace Selenium.StandardControls.TestAssistant.GeneratorToolKit
                     }
 
                     //by attribute
-                    foreach (var e in GetAttributes(target))
+                    var attrs = GetAttributes(target);
+                    foreach (var e in attrs)
                     {
                         var selector = $"{target.TagName}[{e.Key}='{e.Value}']";
                         var finded = serachContext.FindElements(By.CssSelector(selector));
@@ -311,10 +339,23 @@ namespace Selenium.StandardControls.TestAssistant.GeneratorToolKit
                             break;
                         }
                     }
-
                     if (identifyIndex != -1)
                     {
                         break;
+                    }
+
+                    //multi attributes
+                    if (1 < attrs.Count)
+                    {
+                        var selector = target.TagName + string.Join(string.Empty, attrs.Select(e => $"[{e.Key}='{e.Value}']"));
+                        var finded = serachContext.FindElements(By.CssSelector(selector));
+                        if (finded.Count == 1)
+                        {
+                            identifyIndex = i;
+                            cssPath += " ";
+                            cssPath += selector;
+                            break;
+                        }
                     }
                 }
 
