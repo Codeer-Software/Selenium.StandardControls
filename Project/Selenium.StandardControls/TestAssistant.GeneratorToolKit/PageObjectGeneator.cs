@@ -308,6 +308,10 @@ namespace Selenium.StandardControls.TestAssistant.GeneratorToolKit
             var js = element.GetJS();
             var serachContext = rootSerachContext;
 
+            //TODO It will be supported once the scope specifications are finalized.
+            //:scope > div[class=bbb]
+
+
             while (0 < ancestors.Count)
             {
                 int identifyIndex = -1;
