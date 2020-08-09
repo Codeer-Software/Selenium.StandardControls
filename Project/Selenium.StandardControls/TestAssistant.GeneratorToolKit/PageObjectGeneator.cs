@@ -155,40 +155,17 @@ namespace Selenium.StandardControls.TestAssistant.GeneratorToolKit
             }
             catch { }
 
-            //css selector
+            //css selector (attribute)
             try
             {
-                var attrs = js.ExecuteScript(@"
-var element = arguments[0];
-var src = element.attributes;
-var attrs = {};
-for (var key in src) {
-    var val = src[key];
-    if (element.getAttribute(val.name)) {
-        attrs[val.name] =  val.value;
-    }
-}
-return attrs;
-", element) as IDictionary;
-
-                if (attrs != null)
+                foreach (var e in GetAttributes(element).Where(e=>e.Key != "id" && e.Key != "name"))
                 {
-                    foreach (var e in attrs.Keys)
+                    var selector = $"{element.TagName}[{e.Key}='{e.Value}']";
+                    var finded = serachContext.FindElements(By.CssSelector(selector));
+                    if (finded.Count == 1)
                     {
-                        var key = e?.ToString();
-                        if (string.IsNullOrEmpty(key)) continue;
-                        var value = attrs[e]?.ToString();
-                        if (string.IsNullOrEmpty(value)) continue;
-
-                        if (key == "id" || key == "name") continue;
-
-                        var selector = $"{element.TagName}[{key}='{value}']";
-                        var finded = serachContext.FindElements(By.CssSelector(selector));
-                        if (finded.Count == 1)
-                        {
-                            candidate.Add(new IdentifyInfo { Identify = $"ByCssSelector(\"{selector}\")", IsPerfect = true, DefaultName = value });
-                            isSpecialPerfect = true;
-                        }
+                        candidate.Add(new IdentifyInfo { Identify = $"ByCssSelector(\"{selector}\")", IsPerfect = true, DefaultName = e.Value });
+                        isSpecialPerfect = true;
                     }
                 }
             }
@@ -196,7 +173,7 @@ return attrs;
 
             var isRoot = element.GetJS().ExecuteScript("return document;").Equals(serachContext);
 
-            //perfect xpath
+            //css selector
             if (!isSpecialPerfect)
             {
                 try
@@ -212,7 +189,11 @@ return attrs;
             }
 
             //full xpath.
-            candidate.Add(MakeFullXPath(isRoot, serachContext, element));
+            try
+            {
+                candidate.Add(MakeFullXPath(isRoot, serachContext, element));
+            }
+            catch { }
 
             //adjust name.
             candidate.ForEach(e => e.DefaultName = AdjustName(e.DefaultName, element.TagName));
@@ -228,25 +209,12 @@ return attrs;
 
         static IdentifyInfo MakeFullXPath(bool isRoot, ISearchContext rootSerachContext, IWebElement element)
         {
-            var list = new List<IWebElement>();
-            var checkElement = element;
-            while (checkElement != null && !rootSerachContext.Equals(checkElement))
-            {
-                list.Insert(0, checkElement);
-                try
-                {
-                    checkElement = checkElement.GetParent();
-                }
-                catch
-                {
-                    break;
-                }
-            }
+            var ancestors = GetAncestors(rootSerachContext, element);
 
             var js = element.GetJS();
-            var path = "";
+            var fullXPath = "";
             var serachContext = rootSerachContext;
-            foreach (var e in list)
+            foreach (var e in ancestors)
             {
                 var tags = new List<IWebElement>();
                 var parent = js.ExecuteScript("return arguments[0].parentElement;", e);
@@ -261,50 +229,21 @@ return attrs;
 
                 if (tags.Count <= 1)
                 {
-                    path += "/" + e.TagName;
+                    fullXPath += "/" + e.TagName;
                 }
                 else
                 {
-
-                    //ここで属性を使うことができないか？
-                    //span[@class='regular_price']
-
-
-
                     //by attribute
-                    var attrs = js.ExecuteScript(@"
-var target = arguments[0];
-var src = target.attributes;
-var attrs = {};
-for (var key in src) {
-    var val = src[key];
-    if (target.getAttribute(val.name)) {
-        attrs[val.name] =  val.value;
-    }
-}
-return attrs;
-", e) as IDictionary;
-
                     var hit = false;
-                    if (attrs != null)
+                    foreach (var x in GetAttributes(e))
                     {
-                        foreach (var x in attrs.Keys)
+                        var selector = $"{e.TagName}[@{x.Key}='{x.Value}']";
+                        var finded = serachContext.FindElements(By.XPath(selector));
+                        if (finded.Count == 1)
                         {
-                            var key = x?.ToString();
-                            if (string.IsNullOrEmpty(key)) continue;
-                            var value = attrs[x]?.ToString();
-                            if (string.IsNullOrEmpty(value)) continue;
-
-                            var selector = $"{e.TagName}[@{key}='{value}']";
-                            var checkSelector = selector;
-
-                            var finded = serachContext.FindElements(By.XPath(checkSelector));
-                            if (finded.Count == 1)
-                            {
-                                hit = true;
-                                path += "/" + selector;
-                                break;
-                            }
+                            hit = true;
+                            fullXPath += "/" + selector;
+                            break;
                         }
                     }
                     if (!hit)
@@ -313,7 +252,7 @@ return attrs;
                         {
                             if (e.Equals(tags[i]))
                             {
-                                path += "/" + e.TagName + "[" + (i + 1) + "]";
+                                fullXPath += "/" + e.TagName + "[" + (i + 1) + "]";
                                 break;
                             }
                         }
@@ -322,42 +261,33 @@ return attrs;
                 serachContext = e;
             }
 
-            if (!isRoot && 0 < path.Length)
+            if (!isRoot && 0 < fullXPath.Length)
             {
-                path = path.Substring(1);
+                fullXPath = fullXPath.Substring(1);
             }
 
-            return new IdentifyInfo { Identify = $"ByXPath(\"{path}\")", IsPerfect = true, DefaultName = element.TagName };
+            //check
+            var lastCheck = rootSerachContext.FindElements(By.XPath(fullXPath));
+            if (lastCheck.Count != 1 || !lastCheck[0].Equals(element)) return null;
+
+            return new IdentifyInfo { Identify = $"ByXPath(\"{fullXPath}\")", IsPerfect = true, DefaultName = element.TagName };
         }
 
         static IdentifyInfo MakeCssPath(ISearchContext rootSerachContext, IWebElement element)
         {
-            var list = new List<IWebElement>();
-            var checkElement = element;
-            while (checkElement != null && !rootSerachContext.Equals(checkElement))
-            {
-                list.Insert(0, checkElement);
-                try
-                {
-                    checkElement = checkElement.GetParent();
-                }
-                catch
-                {
-                    break;
-                }
-            }
+            var ancestors = GetAncestors(rootSerachContext, element);
 
             string cssPath = string.Empty;
             var js = element.GetJS();
             var serachContext = rootSerachContext;
 
-            while (0 < list.Count)
+            while (0 < ancestors.Count)
             {
                 int identifyIndex = -1;
 
-                for (int i = list.Count - 1; 0 <= i; i--)
+                for (int i = ancestors.Count - 1; 0 <= i; i--)
                 {
-                    var target = list[i];
+                    var target = ancestors[i];
 
                     //by tag
                     if (i != 0 && serachContext.FindElements(By.TagName(target.TagName)).Count == 1)
@@ -369,58 +299,40 @@ return attrs;
                     }
 
                     //by attribute
-                    var attrs = js.ExecuteScript(@"
-var target = arguments[0];
-var src = target.attributes;
-var attrs = {};
-for (var key in src) {
-    var val = src[key];
-    if (target.getAttribute(val.name)) {
-        attrs[val.name] =  val.value;
-    }
-}
-return attrs;
-", target) as IDictionary;
-
-                    if (attrs != null)
+                    foreach (var e in GetAttributes(target))
                     {
-                        foreach (var e in attrs.Keys)
+                        var selector = $"{target.TagName}[{e.Key}='{e.Value}']";
+                        var finded = serachContext.FindElements(By.CssSelector(selector));
+                        if (finded.Count == 1)
                         {
-                            var key = e?.ToString();
-                            if (string.IsNullOrEmpty(key)) continue;
-                            var value = attrs[e]?.ToString();
-                            if (string.IsNullOrEmpty(value)) continue;
-
-                            var selector = $"{target.TagName}[{key}='{value}']";
-                            var checkSelector = selector;
-
-                            var finded = serachContext.FindElements(By.CssSelector(checkSelector));
-                            if (finded.Count == 1)
-                            {
-                                identifyIndex = i;
-                                cssPath += " ";
-                                cssPath += selector;
-                                break;
-                            }
-                        }
-
-                        if (identifyIndex != -1)
-                        {
+                            identifyIndex = i;
+                            cssPath += " ";
+                            cssPath += selector;
                             break;
                         }
+                    }
+
+                    if (identifyIndex != -1)
+                    {
+                        break;
                     }
                 }
 
                 if (identifyIndex == -1) return null;
 
-                serachContext = list[identifyIndex];
-                list = list.Skip(identifyIndex + 1).ToList();
+                serachContext = ancestors[identifyIndex];
+                ancestors = ancestors.Skip(identifyIndex + 1).ToList();
             }
 
             if (0 < cssPath.Length)
             {
                 cssPath = cssPath.Substring(1);
             }
+
+            //check
+            var lastCheck = rootSerachContext.FindElements(By.CssSelector(cssPath));
+            if (lastCheck.Count != 1 || !lastCheck[0].Equals(element)) return null;
+
             return new IdentifyInfo { Identify = $"ByCssSelector(\"{cssPath}\")", IsPerfect = true, DefaultName = element.TagName };
         }
 
@@ -452,6 +364,57 @@ return attrs;
 
             var spByDot = typeFullName.Split(new[] { '.' }, StringSplitOptions.RemoveEmptyEntries);
             return new[] { string.Join(".", spByDot.Take(spByDot.Length - 1)) };
+        }
+
+        static List<IWebElement> GetAncestors(ISearchContext rootSerachContext, IWebElement element)
+        {
+            var list = new List<IWebElement>();
+            var checkElement = element;
+            while (checkElement != null && !rootSerachContext.Equals(checkElement))
+            {
+                list.Insert(0, checkElement);
+                try
+                {
+                    checkElement = checkElement.GetParent();
+                }
+                catch
+                {
+                    break;
+                }
+            }
+
+            return list;
+        }
+
+        static Dictionary<string, string> GetAttributes(IWebElement element)
+        {
+            var js = element.GetJS();
+            var attrs = js.ExecuteScript(@"
+var element = arguments[0];
+var src = element.attributes;
+var attrs = {};
+for (var key in src) {
+    var val = src[key];
+    if (element.getAttribute(val.name)) {
+        attrs[val.name] =  val.value;
+    }
+}
+return attrs;
+", element) as IDictionary;
+
+            var dic = new Dictionary<string, string>();
+            if (attrs == null) return dic;
+
+            foreach (var e in attrs.Keys)
+            {
+                var key = e?.ToString();
+                if (string.IsNullOrEmpty(key)) continue;
+                var value = attrs[e]?.ToString();
+                if (string.IsNullOrEmpty(value)) continue;
+
+                dic[key] = value;
+            }
+            return dic;
         }
     }
 }
