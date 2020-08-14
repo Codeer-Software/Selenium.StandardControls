@@ -12,8 +12,24 @@ namespace Selenium.StandardControls.TestAssistant.GeneratorToolKit
 
         IdentifyInfo[] GetIdentifyingCandidates(ISearchContext serachContext, IWebElement element);
 
-        PageObjectGenerateResult GeneratePageObjectCode(IWebDriver driver, PageIdentifyInfo pageIdenfityInfo, string name, PageObjectPropertyInfo[] properties);
+        PageObjectGenerateResult GeneratePageObjectCode(PageObjectCodeInfo info);
 
-        PageObjectGenerateResult GenerateComponetObjectCode(IWebDriver driver, IWebElement componentElement, string name, PageObjectPropertyInfo[] properties);
+        PageObjectGenerateResult GenerateComponetObjectCode(ComponetObjectCodeInfo info);
+    }
+
+    public class PageObjectCodeInfo
+    {
+        public IWebDriver Driver { get; set; }
+        public PageIdentifyInfo PageIdentifyInfo { get; set; }
+        public string Name { get; set; }
+        public PageObjectPropertyInfo[] Properties { get; set; }
+    }
+    public class ComponetObjectCodeInfo
+    {
+        public IWebDriver Driver { get; set; }
+        public TargetElementInfo TargetElementInfo { get; set; }
+        public IWebElement ComponentElement { get; set; }
+        public string Name { get; set; }
+        public PageObjectPropertyInfo[] Properties { get; set; }
     }
 }

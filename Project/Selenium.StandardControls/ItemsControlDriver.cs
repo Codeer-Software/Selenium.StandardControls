@@ -1,6 +1,7 @@
 ﻿using System;
 using OpenQA.Selenium;
 using Selenium.StandardControls.PageObjectUtility;
+using Selenium.StandardControls.TestAssistant.GeneratorToolKit;
 
 namespace Selenium.StandardControls
 {
@@ -67,5 +68,11 @@ namespace Selenium.StandardControls
         /// </summary>
         /// <param name="finder">Convert</param>
         public static implicit operator ItemsControlDriver<T>(ElementFinder finder) => finder.Find<ItemsControlDriver<T>>();
+
+        /// <summary>
+        /// Element Info.
+        /// </summary>
+        [TargetElementInfo]
+        public static TargetElementInfo TargetElement => new TargetElementInfo("tbody");
     }
 }

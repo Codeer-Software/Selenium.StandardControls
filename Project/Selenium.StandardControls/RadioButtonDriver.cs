@@ -70,5 +70,11 @@ namespace Selenium.StandardControls
                       __codeerTestAssistantPro.pushCode(name + '.Edit();');
                     }}, false);";
         }
+
+        /// <summary>
+        /// Element Info.
+        /// </summary>
+        [TargetElementInfo]
+        public static TargetElementInfo TargetElementInfo => new TargetElementInfo("input", "type", "radio");
     }
 }

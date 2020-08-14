@@ -59,5 +59,16 @@ namespace Selenium.StandardControls
                       __codeerTestAssistantPro.pushCode(name + '.Invoke();');
                     }}, false);";
         }
+
+        /// <summary>
+        /// Element Info.
+        /// </summary>
+        [TargetElementInfo]
+        public static TargetElementInfo[] TargetElementInfo => new[] 
+        {
+            new TargetElementInfo("button"),
+            new TargetElementInfo("input", "type", "submit"),
+            new TargetElementInfo("input", "type", "button"),
+        };
     }
 }

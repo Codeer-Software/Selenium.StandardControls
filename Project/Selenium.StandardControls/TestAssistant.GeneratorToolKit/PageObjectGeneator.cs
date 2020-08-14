@@ -19,9 +19,19 @@ namespace Selenium.StandardControls.TestAssistant.GeneratorToolKit
             return new Dictionary<string, Action>();
         }
 
+        [Obsolete]
         public PageObjectGenerateResult GeneratePageObjectCode(IWebDriver driver, PageIdentifyInfo pageIdenfityInfo, string name, Selenium.StandardControls.TestAssistant.GeneratorToolKit.PageObjectPropertyInfo[] properties)
+        => GeneratePageObjectCode(new PageObjectCodeInfo
         {
-            var typeFullNmae = BrowserAnalyzeInfo.SelectedNameSpace + "." + name;
+            Driver = driver,
+            PageIdentifyInfo = pageIdenfityInfo,
+            Name = name,
+            Properties = properties
+        });
+
+        public PageObjectGenerateResult GeneratePageObjectCode(PageObjectCodeInfo info)
+        {
+            var typeFullNmae = BrowserAnalyzeInfo.SelectedNameSpace + "." + info.Name;
 
             //using
             var code = new List<string>
@@ -31,42 +41,42 @@ namespace Selenium.StandardControls.TestAssistant.GeneratorToolKit
                 "using Selenium.StandardControls.PageObjectUtility;",
                 "using Selenium.StandardControls.TestAssistant.GeneratorToolKit;"
             };
-            code.AddRange(properties.SelectMany(e => GetNameSpace(e.Type)).Where(e => !string.IsNullOrEmpty(e)).Select(e => "using " + e + ";"));
+            code.AddRange(info.Properties.SelectMany(e => GetNameSpace(e.Type)).Where(e => !string.IsNullOrEmpty(e)).Select(e => "using " + e + ";"));
             code = code.Distinct().ToList();
 
             code.Add(string.Empty);
             code.Add($"namespace {BrowserAnalyzeInfo.SelectedNameSpace}");
             code.Add("{");
-            code.Add($"{Indent}public class {name} : PageBase");
+            code.Add($"{Indent}public class {info.Name} : PageBase");
             code.Add($"{Indent}{{");
 
             //member
-            foreach (var e in properties)
+            foreach (var e in info.Properties)
             {
                 code.Add($"{Indent}{Indent}public {GetTypeName(e.Type)} {e.Name} => {GetIdentify(e)};");
             }
             code.Add(string.Empty);
 
             //constructor
-            code.Add($"{Indent}{Indent}public {name}(IWebDriver driver) : base(driver) {{ }}");
+            code.Add($"{Indent}{Indent}public {info.Name}(IWebDriver driver) : base(driver) {{ }}");
 
             code.Add($"{Indent}}}");
 
             code.Add(string.Empty);
 
-            code.Add($"{Indent}public static class {name}Extensions");
+            code.Add($"{Indent}public static class {info.Name}Extensions");
             code.Add($"{Indent}{{");
 
-            if (pageIdenfityInfo.TitleComapreType != "None")
+            if (info.PageIdentifyInfo.TitleComapreType != "None")
             {
-                code.Add($"{Indent}{Indent}[PageObjectIdentify(\"{pageIdenfityInfo.Title}\", TitleComapreType.{pageIdenfityInfo.TitleComapreType})]");
+                code.Add($"{Indent}{Indent}[PageObjectIdentify(\"{info.PageIdentifyInfo.Title}\", TitleComapreType.{info.PageIdentifyInfo.TitleComapreType})]");
             }
-            else if (pageIdenfityInfo.UrlComapreType != "None")
+            else if (info.PageIdentifyInfo.UrlComapreType != "None")
             {
-                code.Add($"{Indent}{Indent}[PageObjectIdentify(\"{pageIdenfityInfo.Url}\", UrlComapreType.{pageIdenfityInfo.UrlComapreType})]");
+                code.Add($"{Indent}{Indent}[PageObjectIdentify(\"{info.PageIdentifyInfo.Url}\", UrlComapreType.{info.PageIdentifyInfo.UrlComapreType})]");
             }
 
-            code.Add($"{Indent}{Indent}public static {name} Attach{name}(this IWebDriver driver) => new {name}(driver);");
+            code.Add($"{Indent}{Indent}public static {info.Name} Attach{info.Name}(this IWebDriver driver) => new {info.Name}(driver);");
 
             code.Add($"{Indent}}}");
 
@@ -74,9 +84,19 @@ namespace Selenium.StandardControls.TestAssistant.GeneratorToolKit
             return new PageObjectGenerateResult { TypeFullName = typeFullNmae, Code = string.Join(Environment.NewLine, code) };
         }
 
+        [Obsolete]
         public PageObjectGenerateResult GenerateComponetObjectCode(IWebDriver driver, IWebElement componentElement, string name, Selenium.StandardControls.TestAssistant.GeneratorToolKit.PageObjectPropertyInfo[] properties)
+        => GenerateComponetObjectCode(new ComponetObjectCodeInfo
         {
-            var typeFullNmae = BrowserAnalyzeInfo.SelectedNameSpace + "." + name;
+            Driver = driver,
+            ComponentElement = componentElement,
+            Name = name,
+            Properties = properties
+        });
+
+        public PageObjectGenerateResult GenerateComponetObjectCode(ComponetObjectCodeInfo info)
+        {
+            var typeFullNmae = BrowserAnalyzeInfo.SelectedNameSpace + "." + info.Name;
 
             //using
             var code = new List<string>
@@ -86,27 +106,44 @@ namespace Selenium.StandardControls.TestAssistant.GeneratorToolKit
                 "using Selenium.StandardControls.PageObjectUtility;",
                 "using Selenium.StandardControls.TestAssistant.GeneratorToolKit;"
             };
-            code.AddRange(properties.SelectMany(e => GetNameSpace(e.Type)).Where(e => !string.IsNullOrEmpty(e)).Select(e => "using " + e + ";"));
+            code.AddRange(info.Properties.SelectMany(e => GetNameSpace(e.Type)).Where(e => !string.IsNullOrEmpty(e)).Select(e => "using " + e + ";"));
             code = code.Distinct().ToList();
 
             code.Add(string.Empty);
             code.Add($"namespace {BrowserAnalyzeInfo.SelectedNameSpace}");
             code.Add("{");
-            code.Add($"{Indent}public class {name} : ComponentBase");
+            code.Add($"{Indent}public class {info.Name} : ComponentBase");
             code.Add($"{Indent}{{");
 
             //member
-            foreach (var e in properties)
+            foreach (var e in info.Properties)
             {
                 code.Add($"{Indent}{Indent}public {GetTypeName(e.Type)} {e.Name} => {GetIdentify(e)};");
             }
             code.Add(string.Empty);
 
             //constructor
-            code.Add($"{Indent}{Indent}public {name}(IWebElement element) : base(element) {{ }}");
+            code.Add($"{Indent}{Indent}public {info.Name}(IWebElement element) : base(element) {{ }}");
 
             //converter
-            code.Add($"{Indent}{Indent}public static implicit operator {name}(ElementFinder finder) => finder.Find<{name}>();");
+            code.Add($"{Indent}{Indent}public static implicit operator {info.Name}(ElementFinder finder) => finder.Find<{info.Name}>();");
+
+            //TargetElementInfo
+            if (info.TargetElementInfo != null)
+            {
+                code.Add(string.Empty);
+                code.Add($"{Indent}{Indent}[TargetElementInfo];");
+                if (info.TargetElementInfo.Attrributes.Count == 0)
+                {
+                    code.Add($"{Indent}{Indent}public TargetElementInfo TargetElementInfo => new TargetElementInfo(\"{info.TargetElementInfo.Tag}\");");
+                }
+                else
+                {
+                    var attrName = info.TargetElementInfo.Attrributes.Keys.First();
+                    var attrValue = info.TargetElementInfo.Attrributes[attrName];
+                    code.Add($"{Indent}{Indent}public TargetElementInfo TargetElementInfo => new TargetElementInfo(\"{info.TargetElementInfo.Tag}\", \"{attrName}\", \"{attrValue}\");");
+                }
+            }
 
             code.Add($"{Indent}}}");
             code.Add("}");
@@ -147,7 +184,7 @@ namespace Selenium.StandardControls.TestAssistant.GeneratorToolKit
             //tag
             try
             {
-                if ( serachContext.FindElements(By.TagName(element.TagName)).Count == 1)
+                if (serachContext.FindElements(By.TagName(element.TagName)).Count == 1)
                 {
                     candidate.Add(new IdentifyInfo { Identify = $"ByTagName(\"{element.TagName}\")", IsPerfect = true, DefaultName = element.TagName });
                     isSpecialPerfect = true;
@@ -159,7 +196,7 @@ namespace Selenium.StandardControls.TestAssistant.GeneratorToolKit
             try
             {
                 var attrs = GetAttributes(element);
-                foreach (var e in attrs.Where(e=>e.Key != "id" && e.Key != "name"))
+                foreach (var e in attrs.Where(e => e.Key != "id" && e.Key != "name"))
                 {
                     var selector = $"{element.TagName}[{e.Key}='{e.Value}']";
                     var finded = serachContext.FindElements(By.CssSelector(selector));

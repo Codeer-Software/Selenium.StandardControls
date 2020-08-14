@@ -66,5 +66,11 @@ namespace Selenium.StandardControls
                     }}, false);
             ";
         }
+
+        /// <summary>
+        /// Element Info.
+        /// </summary>
+        [TargetElementInfo]
+        public static TargetElementInfo TargetElementInfo => new TargetElementInfo("input");
     }
 }

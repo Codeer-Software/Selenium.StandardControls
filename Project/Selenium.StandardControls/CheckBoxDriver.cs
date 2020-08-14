@@ -73,5 +73,11 @@ namespace Selenium.StandardControls
                       __codeerTestAssistantPro.pushCode(name + '.Edit(' + element.checked + ');');
                     }}, false);";
         }
+
+        /// <summary>
+        /// Element Info.
+        /// </summary>
+        [TargetElementInfo]
+        public static TargetElementInfo TargetElementInfo => new TargetElementInfo("input", "type", "checkbox");
     }
 }

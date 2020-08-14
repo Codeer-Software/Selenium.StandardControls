@@ -77,6 +77,8 @@
     <Compile Include="TestAssistant.GeneratorToolKit\PageObjectGenerateResult.cs" />
     <Compile Include="TestAssistant.GeneratorToolKit\PageObjectIdentifyAttribute.cs" />
     <Compile Include="TestAssistant.GeneratorToolKit\PageObjectPropertyInfo.cs" />
+    <Compile Include="TestAssistant.GeneratorToolKit\TargetElementInfo.cs" />
+    <Compile Include="TestAssistant.GeneratorToolKit\TargetElementInfoAttribute.cs" />
     <Compile Include="TestAssistant.GeneratorToolKit\WebElementCaptureGenerator.cs" />
     <Compile Include="TextAreaDriver.cs" />
     <Compile Include="DateDriver.cs" />
