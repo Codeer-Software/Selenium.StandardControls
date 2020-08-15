@@ -12,6 +12,7 @@ namespace Selenium.StandardControls.TestAssistant.GeneratorToolKit
 
         static List<string> _code = new List<string>();
         static List<string> _using = new List<string>();
+        static bool _clearCode;
 
         /// <summary>
         /// Search CaptureCodeGenerator from Driver.
@@ -19,6 +20,12 @@ namespace Selenium.StandardControls.TestAssistant.GeneratorToolKit
         /// <param name="driver"></param>
         /// <returns></returns>
         public static object GetCaptureCodeGenerator(object driver) => GetCaptureCodeGeneratorCore?.Invoke(driver);
+
+        /// <summary>
+        /// Clear code.
+        /// </summary>
+        public static void ClearCode()
+            => _clearCode = true;
 
         /// <summary>
         /// Add code.
@@ -70,6 +77,17 @@ namespace Selenium.StandardControls.TestAssistant.GeneratorToolKit
                 _using.Clear();
                 return ret;
             }
+        }
+
+        /// <summary>
+        /// Get is clearing code.
+        /// </summary>
+        /// <returns>is clearing code</returns>
+        internal static bool PopClearCode()
+        {
+            var ret = _clearCode;
+            _clearCode = false;
+            return ret;
         }
     }
 }
