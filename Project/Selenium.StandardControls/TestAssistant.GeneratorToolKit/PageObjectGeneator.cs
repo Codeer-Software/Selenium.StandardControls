@@ -132,10 +132,10 @@ namespace Selenium.StandardControls.TestAssistant.GeneratorToolKit
             if (info.TargetElementInfo != null)
             {
                 code.Add(string.Empty);
-                code.Add($"{Indent}{Indent}[TargetElementInfo];");
+                code.Add($"{Indent}{Indent}[TargetElementInfo]");
                 if (info.TargetElementInfo.Attrributes.Count == 0)
                 {
-                    code.Add($"{Indent}{Indent}public TargetElementInfo TargetElementInfo => new TargetElementInfo(\"{info.TargetElementInfo.Tag}\");");
+                    code.Add($"{Indent}{Indent}public static TargetElementInfo TargetElementInfo => new TargetElementInfo(\"{info.TargetElementInfo.Tag}\");");
                 }
                 else
                 {
@@ -178,6 +178,32 @@ namespace Selenium.StandardControls.TestAssistant.GeneratorToolKit
                     candidate.Add(new IdentifyInfo { Identify = $"ByName(\"{elementInfo.Name}\")", IsPerfect = true, DefaultName = elementInfo.Name });
                     isSpecialPerfect = true;
                 }
+            }
+            catch { }
+
+            //link text
+            try
+            {
+                if (element.TagName.ToLower() == "a")
+                {
+                    if (serachContext.FindElements(By.LinkText(element.Text)).Count == 1)
+                    {
+                        candidate.Add(new IdentifyInfo { Identify = $"ByLinkText(\"{element.Text}\")", IsPerfect = true, DefaultName = element.Text });
+                        isSpecialPerfect = true;
+                    }
+                    else
+                    {
+                        foreach (var e in element.Text.Split(new[] { "\r\n", "\n" }, StringSplitOptions.RemoveEmptyEntries))
+                        {
+                            if (serachContext.FindElements(By.PartialLinkText(e)).Count == 1)
+                            {
+                                candidate.Add(new IdentifyInfo { Identify = $"ByPartialLinkText(\"{e}\")", IsPerfect = true, DefaultName = e });
+                                isSpecialPerfect = true;
+                            }
+                        }
+                    }
+                }
+
             }
             catch { }
 
