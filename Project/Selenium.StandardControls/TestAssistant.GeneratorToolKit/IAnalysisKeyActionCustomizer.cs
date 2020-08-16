@@ -16,10 +16,11 @@
         /// <summary>
         /// Customize key action.
         /// </summary>
+        /// <param name="webDriver">web driver.</param>
         /// <param name="elemnet">selected driver.</param>
         /// <param name="key">System.Windows.Forms.Keys</param>
         /// <param name="modifyKeys">System.Windows.Forms.Keys</param>
         /// <returns>Is handled ?</returns>
-        bool Invoke(object elemnet, int key, int modifyKeys);
+        bool Invoke(object webDriver, object elemnet, int key, int modifyKeys);
     }
 }

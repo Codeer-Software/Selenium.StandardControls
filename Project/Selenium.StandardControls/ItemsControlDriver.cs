@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Linq;
 using OpenQA.Selenium;
 using Selenium.StandardControls.PageObjectUtility;
 using Selenium.StandardControls.TestAssistant.GeneratorToolKit;
@@ -12,6 +14,11 @@ namespace Selenium.StandardControls
     /// <typeparam name="T">Item's type.</typeparam>
     public interface IIndexAccessItemsControlDriver<T>
     {
+        /// <summary>
+        /// 可視状態のアイテムのインデックス
+        /// </summary>
+        int[] VisibleItemIndices { get; }
+
         /// <summary>
         /// Item count.
         /// </summary>
@@ -38,6 +45,29 @@ namespace Selenium.StandardControls
     /// <typeparam name="T">Item's type.</typeparam>
     public class ItemsControlDriver<T> : ControlDriverBase, IIndexAccessItemsControlDriver<T> where T : class
     {
+        /// <summary>
+        /// 可視状態のアイテムのインデックス
+        /// </summary>
+        public int[] VisibleItemIndices
+        {
+            get
+            {
+                var visibles = (IEnumerable)Element.GetJS().ExecuteScript(@"
+var parent = arguments[0];
+var visibles = [];
+for (var i = 0; i < parent.children.length; i++)
+{
+    var rect = parent.children[i].getBoundingClientRect();
+    if (0 < rect.bottom && rect.top < window.innerHeight) {
+        visibles.push(i);
+    }
+}
+return visibles;
+", Element);
+                return visibles.Cast<long>().Select(e => (int)e).ToArray();
+            }
+        }
+
         /// <summary>
         /// Item count.
         /// </summary>
