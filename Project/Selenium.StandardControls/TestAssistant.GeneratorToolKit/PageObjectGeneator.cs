@@ -446,8 +446,8 @@ namespace Selenium.StandardControls.TestAssistant.GeneratorToolKit
 
         static string GetIdentify(PageObjectPropertyInfo propertyInfo)
         {
-            if (propertyInfo.Type == "OpenQA.Selenium.IWebElement") return propertyInfo.Identify + ".Find()";
-            return propertyInfo.Identify;
+            if (propertyInfo.Type == "OpenQA.Selenium.IWebElement") return propertyInfo.Identify + ".Wait().Find()";
+            return propertyInfo.Identify + ".Wait()";
         }
 
         static string GetTypeName(string typeFullName)

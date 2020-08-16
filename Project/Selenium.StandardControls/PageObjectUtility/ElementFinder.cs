@@ -1,4 +1,7 @@
 ﻿using OpenQA.Selenium;
+using OpenQA.Selenium.Internal;
+using OpenQA.Selenium.Support.UI;
+using Selenium.StandardControls.TestAssistant.GeneratorToolKit;
 using System;
 using System.Linq;
 
@@ -11,9 +14,9 @@ namespace Selenium.StandardControls.PageObjectUtility
     {
         ISearchContext _context;
         By _by;
-
         ElementFinder _innerFinder;
         int _index;
+        int _waitMilliseconds = -1;
 
         /// <summary>
         /// Constructor
@@ -38,11 +41,46 @@ namespace Selenium.StandardControls.PageObjectUtility
             _by = by;
         }
 
+        ElementFinder(ISearchContext context, By by, ElementFinder innerFinder, int index, int waitMilliseconds)
+        {
+            _context = context;
+            _by = by;
+            _innerFinder = innerFinder;
+            _index = index;
+            _waitMilliseconds = waitMilliseconds;
+        }
+
         /// <summary>
         /// Finds the first OpenQA.Selenium.IWebElement using the given method
         /// </summary>
-        /// <returns></returns>
+        /// <returns>IWebElement</returns>
         public IWebElement Find()
+        {
+            if (!TestAssistantMode.IsCreatingMode)
+            {
+                if (_waitMilliseconds != -1)
+                {
+                    var driver = _context as IWebDriver;
+                    if (driver == null)
+                    {
+                        driver = (_context as IWrapsDriver)?.WrappedDriver;
+                        if (driver == null) return null;
+                    }
+                    return new WebDriverWait(driver, TimeSpan.FromMilliseconds(_waitMilliseconds)).Until(_ => FindCore());
+                }
+            }
+            return FindCore();
+        }
+
+        /// <summary>
+        /// Add wait.
+        /// </summary>
+        /// <param name="waitMilliseconds">Waiting time. default value is int.MaxValue</param>
+        /// <returns>ElementFinder.</returns>
+        public ElementFinder Wait(int waitMilliseconds = int.MaxValue)
+            => new ElementFinder(_context, _by, _innerFinder, _index, waitMilliseconds);
+
+        IWebElement FindCore()
         {
             if (_innerFinder != null)
             {

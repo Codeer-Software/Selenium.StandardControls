@@ -80,10 +80,12 @@
     <Compile Include="TestAssistant.GeneratorToolKit\SettingAdaptor.cs" />
     <Compile Include="TestAssistant.GeneratorToolKit\TargetElementInfo.cs" />
     <Compile Include="TestAssistant.GeneratorToolKit\TargetElementInfoAttribute.cs" />
+    <Compile Include="TestAssistant.GeneratorToolKit\TestAssistantMode.cs" />
     <Compile Include="TestAssistant.GeneratorToolKit\WebElementCaptureGenerator.cs" />
     <Compile Include="TextAreaDriver.cs" />
     <Compile Include="DateDriver.cs" />
     <Compile Include="TextBoxDriver.cs" />
+    <Compile Include="WebDriverExtensions.cs" />
     <Compile Include="WebElementExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
