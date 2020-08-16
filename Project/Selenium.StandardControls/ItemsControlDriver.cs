@@ -12,13 +12,9 @@ namespace Selenium.StandardControls
     /// Access item by index.
     /// </summary>
     /// <typeparam name="T">Item's type.</typeparam>
+    [Obsolete]
     public interface IIndexAccessItemsControlDriver<T>
     {
-        /// <summary>
-        /// 可視状態のアイテムのインデックス
-        /// </summary>
-        int[] VisibleItemIndices { get; }
-
         /// <summary>
         /// Item count.
         /// </summary>
@@ -32,23 +28,45 @@ namespace Selenium.StandardControls
         T GetItem(int index);
     }
 
-    //TODO
-    //public interface IKeyItemsControlDriver<T>
-    //{
-    //    string[] Keys { get; }
-    //    T GetItem(string key);
-    //}
+    /// <summary>
+    /// Items Control Driver.
+    /// Access item by key.
+    /// </summary>
+    /// <typeparam name="Key">Key type.</typeparam>
+    /// <typeparam name="Driver">Driver type.</typeparam>
+    public interface IKeyAccessItemsControlDriver<Key, Driver>
+    {
+        /// <summary>
+        /// Keys of visible item.
+        /// </summary>
+        Key[] VisibleItemKeys { get; }
+
+        /// <summary>
+        /// Get item.
+        /// </summary>
+        /// <param name="key">key</param>
+        /// <returns>item.</returns>
+        Driver GetItem(Key key);
+
+        /// <summary>
+        /// Code text of argument passed to GetItem.
+        /// Used by TestAssistantPro during capture.
+        /// </summary>
+        /// <param name="key">key.</param>
+        /// <returns>text.</returns>
+        string ToArgumentCode(Key key);
+    }
 
     /// <summary>
     /// Items Control Driver
     /// </summary>
     /// <typeparam name="T">Item's type.</typeparam>
-    public class ItemsControlDriver<T> : ControlDriverBase, IIndexAccessItemsControlDriver<T> where T : class
+    public class ItemsControlDriver<T> : ControlDriverBase, IKeyAccessItemsControlDriver<int, T> where T : class
     {
         /// <summary>
-        /// 可視状態のアイテムのインデックス
+        /// Keys of visible item.
         /// </summary>
-        public int[] VisibleItemIndices
+        public int[] VisibleItemKeys
         {
             get
             {
@@ -67,6 +85,14 @@ return visibles;
                 return visibles.Cast<long>().Select(e => (int)e).ToArray();
             }
         }
+
+        /// <summary>
+        /// Code text of argument passed to GetItem.
+        /// Used by TestAssistantPro during capture.
+        /// </summary>
+        /// <param name="key">key.</param>
+        /// <returns>text.</returns>
+        public string ToArgumentCode(int key) => key.ToString();
 
         /// <summary>
         /// Item count.
