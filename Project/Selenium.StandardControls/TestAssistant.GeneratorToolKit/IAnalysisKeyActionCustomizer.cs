@@ -1,4 +1,6 @@
-﻿namespace Selenium.StandardControls.TestAssistant.GeneratorToolKit
+﻿using OpenQA.Selenium;
+
+namespace Selenium.StandardControls.TestAssistant.GeneratorToolKit
 { 
     /// <summary>
     /// Customize key action at analyze window.
@@ -21,6 +23,6 @@
         /// <param name="key">System.Windows.Forms.Keys</param>
         /// <param name="modifyKeys">System.Windows.Forms.Keys</param>
         /// <returns>Is handled ?</returns>
-        bool Invoke(object webDriver, object elemnet, int key, int modifyKeys);
+        bool Invoke(IWebDriver webDriver, object elemnet, int key, int modifyKeys);
     }
 }
