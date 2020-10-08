@@ -141,7 +141,7 @@ namespace Selenium.StandardControls.TestAssistant.GeneratorToolKit
                 {
                     var attrName = info.TargetElementInfo.Attrributes.Keys.First();
                     var attrValue = info.TargetElementInfo.Attrributes[attrName];
-                    code.Add($"{Indent}{Indent}public TargetElementInfo TargetElementInfo => new TargetElementInfo(\"{info.TargetElementInfo.Tag}\", \"{attrName}\", \"{attrValue}\");");
+                    code.Add($"{Indent}{Indent}public static TargetElementInfo TargetElementInfo => new TargetElementInfo(\"{info.TargetElementInfo.Tag}\", \"{attrName}\", \"{attrValue}\");");
                 }
             }
 
