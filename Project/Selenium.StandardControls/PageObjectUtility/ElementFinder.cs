@@ -101,7 +101,9 @@ namespace Selenium.StandardControls.PageObjectUtility
                 }
                 else
                 {
-                    return _innerFinder.Find().FindElement(_by);
+                    var innerElement = _innerFinder.Find();
+                    if (innerElement == null) return null;
+                    return innerElement.FindElement(_by);
                 }
             }
             else
