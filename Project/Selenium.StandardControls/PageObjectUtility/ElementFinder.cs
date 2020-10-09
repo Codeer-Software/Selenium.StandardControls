@@ -60,16 +60,25 @@ namespace Selenium.StandardControls.PageObjectUtility
             {
                 if (_waitMilliseconds != -1)
                 {
-                    var driver = _context as IWebDriver;
-                    if (driver == null)
-                    {
-                        driver = (_context as IWrapsDriver)?.WrappedDriver;
-                        if (driver == null) return null;
-                    }
+                    var driver = GetWebDriver();
+                    if (driver == null) return null;
                     return new WebDriverWait(driver, TimeSpan.FromMilliseconds(_waitMilliseconds)).Until(_ => FindCore());
                 }
             }
             return FindCore();
+        }
+
+        IWebDriver GetWebDriver()
+        {
+            var driver = _context as IWebDriver;
+            if (driver != null) return driver;
+
+            driver = (_context as IWrapsDriver)?.WrappedDriver;
+            if (driver != null) return driver;
+
+            if (_innerFinder != null) return _innerFinder.GetWebDriver();
+
+            return null;
         }
 
         /// <summary>
