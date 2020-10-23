@@ -62,7 +62,7 @@ namespace Selenium.StandardControls
             return $@"
                     element.addEventListener('click', function() {{ 
                       var name = __codeerTestAssistantPro.getElementName(this);
-                      __codeerTestAssistantPro.pushCode(name + '.Invoke();');
+                      __codeerTestAssistantPro.pushCode(name + '.Click();');
                     }}, false);";
         }
 
