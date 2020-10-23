@@ -36,7 +36,13 @@ namespace Selenium.StandardControls
         /// <summary>
         /// Click the Anchor
         /// </summary>
-        public void Invoke()
+        [Obsolete("Please use Click()")]
+        public void Invoke() => Click();
+
+        /// <summary>
+        /// Click the Anchor
+        /// </summary>
+        public void Click()
         {
             Element.ClickEx();
             Wait?.Invoke();
@@ -54,7 +60,7 @@ namespace Selenium.StandardControls
             return $@"
                     element.addEventListener('click', function() {{ 
                       var name = __codeerTestAssistantPro.getElementName(this);
-                      __codeerTestAssistantPro.pushCode(name + '.Invoke();');
+                      __codeerTestAssistantPro.pushCode(name + '.Click();');
                     }}, false);";
         }
 
