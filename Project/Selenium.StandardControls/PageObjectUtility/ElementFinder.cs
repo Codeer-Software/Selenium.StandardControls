@@ -16,7 +16,10 @@ namespace Selenium.StandardControls.PageObjectUtility
         By _by;
         ElementFinder _innerFinder;
         int _index;
-        int _waitMilliseconds = -1;
+
+        internal const int DefaultWaitTime = 60 * 1000;
+
+        internal int WaitMilliseconds { get; private set; } = -1;
 
         /// <summary>
         /// Constructor
@@ -47,7 +50,7 @@ namespace Selenium.StandardControls.PageObjectUtility
             _by = by;
             _innerFinder = innerFinder;
             _index = index;
-            _waitMilliseconds = waitMilliseconds;
+            WaitMilliseconds = waitMilliseconds;
         }
 
         /// <summary>
@@ -58,11 +61,11 @@ namespace Selenium.StandardControls.PageObjectUtility
         {
             if (!TestAssistantMode.IsCreatingMode)
             {
-                if (_waitMilliseconds != -1)
+                if (WaitMilliseconds != -1)
                 {
                     var driver = GetWebDriver();
                     if (driver == null) return null;
-                    return new WebDriverWait(driver, TimeSpan.FromMilliseconds(_waitMilliseconds)).Until(_ => FindCore());
+                    return new WebDriverWait(driver, TimeSpan.FromMilliseconds(WaitMilliseconds)).Until(_ => FindCore());
                 }
             }
             return FindCore();
@@ -84,9 +87,9 @@ namespace Selenium.StandardControls.PageObjectUtility
         /// <summary>
         /// Add wait.
         /// </summary>
-        /// <param name="waitMilliseconds">Waiting time. default value is int.MaxValue</param>
+        /// <param name="waitMilliseconds">Waiting time. default value is minute</param>
         /// <returns>ElementFinder.</returns>
-        public ElementFinder Wait(int waitMilliseconds = int.MaxValue)
+        public ElementFinder Wait(int waitMilliseconds = DefaultWaitTime)
             => new ElementFinder(_context, _by, _innerFinder, _index, waitMilliseconds);
 
         IWebElement FindCore()

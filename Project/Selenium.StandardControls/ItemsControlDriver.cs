@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Diagnostics;
 using System.Linq;
 using OpenQA.Selenium;
 using Selenium.StandardControls.PageObjectUtility;
@@ -63,6 +64,8 @@ namespace Selenium.StandardControls
     /// <typeparam name="T">Item's type.</typeparam>
     public class ItemsControlDriver<T> : ControlDriverBase, IKeyAccessItemsControlDriver<int, T> where T : class
     {
+        int _waitMilliseconds;
+
         /// <summary>
         /// Keys of visible item.
         /// </summary>
@@ -106,9 +109,35 @@ return visibles;
         /// <returns></returns>
         public T GetItem(int index)
         {
-            var indexConstructor = typeof(T).GetConstructor(new[] { typeof(IWebElement), typeof(int) });
-            var element = JS.ExecuteScript("return arguments[0].children[arguments[1]];", Element, index);
+            object element = null;
 
+            if (TestAssistantMode.IsCreatingMode || _waitMilliseconds == -1)
+            {
+                element = JS.ExecuteScript("return arguments[0].children[arguments[1]];", Element, index);
+            }
+            else
+            {
+                var watch = new Stopwatch();
+                watch.Start();
+                while (true)
+                {
+                    try
+                    {
+                        element = JS.ExecuteScript("return arguments[0].children[arguments[1]];", Element, index);
+                        if (element != null) break;
+                    }
+                    catch { }
+                    if (_waitMilliseconds < watch.ElapsedMilliseconds)
+                    {
+                        throw new ArgumentOutOfRangeException("index is out of children");
+                    }
+                }
+            }
+
+            if (typeof(T) == typeof(IWebElement)) return (T)element;
+            if (element == null) return null;
+
+            var indexConstructor = typeof(T).GetConstructor(new[] { typeof(IWebElement), typeof(int) });
             if (indexConstructor != null) return (T)Activator.CreateInstance(typeof(T), new object[] { element, index });
             return (T)Activator.CreateInstance(typeof(T), new object[] { element });
         }
@@ -117,13 +146,31 @@ return visibles;
         /// Constructor
         /// </summary>
         /// <param name="element">Element for generating the driver</param>
-        public ItemsControlDriver(IWebElement element) : base(element) { }
+        public ItemsControlDriver(IWebElement element) : base(element)
+        {
+            _waitMilliseconds = -1;
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="element">Element for generating the driver</param>
+        /// <param name="waitMilliseconds">Waiting time.</param>
+        public ItemsControlDriver(IWebElement element, int waitMilliseconds) : base(element)
+        {
+            _waitMilliseconds = waitMilliseconds;
+        }
 
         /// <summary>
         /// Converter
         /// </summary>
         /// <param name="finder">Convert</param>
-        public static implicit operator ItemsControlDriver<T>(ElementFinder finder) => finder.Find<ItemsControlDriver<T>>();
+        public static implicit operator ItemsControlDriver<T>(ElementFinder finder)
+        {
+            var element = finder.Find();
+            var driver = new ItemsControlDriver<T>(element, finder.WaitMilliseconds);
+            return driver;
+        }
 
         /// <summary>
         /// Element Info.
