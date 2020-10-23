@@ -34,9 +34,15 @@ namespace Selenium.StandardControls
         public Action Wait { get; set; }
 
         /// <summary>
-        /// Press the button
+        /// Click the button
         /// </summary>
-        public void Invoke()
+        [Obsolete("Please use Click()")]
+        public void Invoke() => Click();
+
+        /// <summary>
+        /// Click the button
+        /// </summary>
+        public void Click()
         {
             //It does not move when you are viewing Show 's only part of the button .
             Element.ScrollIntoView(true);

@@ -87,7 +87,7 @@ namespace Test
         [TestMethod]
         public void Button()
         {
-            _page.Button_JS.Invoke();
+            _page.Button_JS.Click();
             _page.TextBox_Name.Text.Is("JS");
         }
 

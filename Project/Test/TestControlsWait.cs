@@ -76,7 +76,7 @@ namespace Test
         public void Button()
         {
             var button = new ButtonDriver(_driver.FindElement(By.Id("inputJS")), () => WaitForSuccess(() => _page.DropDown_Fruit.Show()));
-            button.Invoke();
+            button.Click();
             _page.TextBox_Name.Text.Is("JS");
         }
 
