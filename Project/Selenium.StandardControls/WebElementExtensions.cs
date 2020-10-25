@@ -68,25 +68,18 @@ namespace Selenium.StandardControls
         }
 
         static bool HitTestCenter(IWebElement element)
-        {
-            var js = element.GetJS();
-            var rc = js.ExecuteScript(@"return arguments[0].getBoundingClientRect();", element);
-
-            var hitElement = (IWebElement)js.ExecuteScript(@"
+            => (bool)element.GetJS().ExecuteScript(@"
 var element = arguments[0];
 var rc = element.getBoundingClientRect();
-return document.elementFromPoint(rc.x + rc.width / 2, rc.y + rc.height / 2);
+var hitElement = document.elementFromPoint(rc.x + rc.width / 2, rc.y + rc.height / 2);
+
+while (!!hitElement)
+{
+    if (hitElement === element) return true;
+    hitElement = hitElement.parentElement;
+}
+return false;
 ", element);
-
-            while (hitElement != null)
-            {
-                if (hitElement.Equals(element)) return true;
-                hitElement = hitElement.GetParent();
-                if (hitElement.TagName.ToLower() == "html") return false;
-            }
-
-            return false;
-        }
 
         /// <summary>
         ///Reliably Show(Show failure and other elements at the top)
