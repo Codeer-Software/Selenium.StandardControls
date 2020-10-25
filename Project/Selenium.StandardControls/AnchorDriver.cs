@@ -44,6 +44,8 @@ namespace Selenium.StandardControls
         /// </summary>
         public void Click()
         {
+            Element.Show();
+            Element.Focus();
             Element.ClickEx();
             Wait?.Invoke();
         }

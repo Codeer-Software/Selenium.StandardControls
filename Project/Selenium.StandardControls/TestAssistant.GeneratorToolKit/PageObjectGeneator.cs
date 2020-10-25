@@ -483,6 +483,7 @@ namespace Selenium.StandardControls.TestAssistant.GeneratorToolKit
                 list.Insert(0, checkElement);
                 try
                 {
+                    if (checkElement.TagName.ToLower() == "html") break;
                     checkElement = checkElement.GetParent();
                 }
                 catch

@@ -45,7 +45,8 @@ namespace Selenium.StandardControls
         public void Click()
         {
             //It does not move when you are viewing Show 's only part of the button .
-            Element.ScrollIntoView(true);
+            Element.Show();
+            Element.Focus();
             Element.ClickEx();
             Wait?.Invoke();
         }

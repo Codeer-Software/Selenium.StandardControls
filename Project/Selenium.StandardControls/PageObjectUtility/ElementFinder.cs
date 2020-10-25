@@ -65,11 +65,14 @@ namespace Selenium.StandardControls.PageObjectUtility
                 {
                     var driver = GetWebDriver();
                     if (driver == null) return null;
-                    return new WebDriverWait(driver, TimeSpan.FromMilliseconds(WaitMilliseconds)).Until(_ => FindCore());
+                    return new WebDriverWait(driver, TimeSpan.FromMilliseconds(WaitMilliseconds)).Until(_ => InteractableOrNull(FindCore()));
                 }
             }
             return FindCore();
         }
+
+        static IWebElement InteractableOrNull(IWebElement webElement)
+            => (webElement != null && webElement.Displayed) ? webElement : null;
 
         IWebDriver GetWebDriver()
         {

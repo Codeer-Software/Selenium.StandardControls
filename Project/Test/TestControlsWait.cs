@@ -84,7 +84,7 @@ namespace Test
         public void Anchor()
         {
             var anchor = new AnchorDriver(_driver.FindElement(By.Id("codeer")), () => WaitForSuccess(()=>_driver.Url.Is("https://www.codeer.co.jp/")));
-            anchor.Invoke();
+            anchor.Click();
         }
 
         void WaitForSuccess(Action a)
