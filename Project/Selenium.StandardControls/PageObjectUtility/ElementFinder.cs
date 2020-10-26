@@ -16,10 +16,14 @@ namespace Selenium.StandardControls.PageObjectUtility
         By _by;
         ElementFinder _innerFinder;
         int _index;
+        Func<IWebElement, bool> _isValidElement;
 
         internal const int DefaultWaitTime = 60 * 1000;
 
-        internal int WaitMilliseconds { get; private set; } = -1;
+        /// <summary>
+        /// Waiting time
+        /// </summary>
+        public TimeSpan? Timeout { get; private set; } = null;
 
         /// <summary>
         /// Constructor
@@ -44,13 +48,14 @@ namespace Selenium.StandardControls.PageObjectUtility
             _by = by;
         }
 
-        ElementFinder(ISearchContext context, By by, ElementFinder innerFinder, int index, int waitMilliseconds)
+        ElementFinder(ISearchContext context, By by, ElementFinder innerFinder, int index, TimeSpan? timeout, Func<IWebElement, bool> isValidElement)
         {
             _context = context;
             _by = by;
             _innerFinder = innerFinder;
             _index = index;
-            WaitMilliseconds = waitMilliseconds;
+            Timeout = timeout;
+            _isValidElement = isValidElement;
         }
 
         /// <summary>
@@ -61,18 +66,22 @@ namespace Selenium.StandardControls.PageObjectUtility
         {
             if (!TestAssistantMode.IsCreatingMode)
             {
-                if (WaitMilliseconds != -1)
+                if (Timeout.HasValue)
                 {
                     var driver = GetWebDriver();
                     if (driver == null) return null;
-                    return new WebDriverWait(driver, TimeSpan.FromMilliseconds(WaitMilliseconds)).Until(_ => InteractableOrNull(FindCore()));
+                    return new WebDriverWait(driver, Timeout.Value).Until(_ => CheckValid(FindCore()));
                 }
             }
             return FindCore();
         }
 
-        static IWebElement InteractableOrNull(IWebElement webElement)
-            => (webElement != null && webElement.Displayed) ? webElement : null;
+        IWebElement CheckValid(IWebElement element)
+        {
+            if (element == null) return null;
+            if (_isValidElement == null) return element;
+            return _isValidElement(element) ? element : null;
+        }
 
         IWebDriver GetWebDriver()
         {
@@ -90,10 +99,33 @@ namespace Selenium.StandardControls.PageObjectUtility
         /// <summary>
         /// Add wait.
         /// </summary>
-        /// <param name="waitMilliseconds">Waiting time. default value is minute</param>
         /// <returns>ElementFinder.</returns>
-        public ElementFinder Wait(int waitMilliseconds = DefaultWaitTime)
-            => new ElementFinder(_context, _by, _innerFinder, _index, waitMilliseconds);
+        public ElementFinder Wait()
+            => new ElementFinder(_context, _by, _innerFinder, _index, TimeSpan.FromMilliseconds(DefaultWaitTime), null);
+
+        /// <summary>
+        /// Add wait.
+        /// </summary>
+        /// <returns>ElementFinder.</returns>
+        public ElementFinder Wait(TimeSpan timeout)
+            => new ElementFinder(_context, _by, _innerFinder, _index, timeout, null);
+
+        /// <summary>
+        /// Add wait.
+        /// </summary>
+        /// <param name="isValidElement">Is it a valid element?</param>
+        /// <returns>ElementFinder.</returns>
+        public ElementFinder Wait(Func<IWebElement, bool> isValidElement)
+            => new ElementFinder(_context, _by, _innerFinder, _index, TimeSpan.FromMilliseconds(DefaultWaitTime), isValidElement);
+
+        /// <summary>
+        /// Add wait.
+        /// </summary>
+        /// <param name="timeout">Waiting time.</param>
+        /// <param name="isValidElement">Is it a valid element?</param>
+        /// <returns>ElementFinder.</returns>
+        public ElementFinder Wait(TimeSpan timeout, Func<IWebElement, bool> isValidElement)
+            => new ElementFinder(_context, _by, _innerFinder, _index, timeout, isValidElement);
 
         IWebElement FindCore()
         {

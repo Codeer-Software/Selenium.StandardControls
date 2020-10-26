@@ -64,7 +64,7 @@ namespace Selenium.StandardControls
     /// <typeparam name="T">Item's type.</typeparam>
     public class ItemsControlDriver<T> : ControlDriverBase, IKeyAccessItemsControlDriver<int, T> where T : class
     {
-        int _waitMilliseconds;
+        TimeSpan? _timeout;
 
         /// <summary>
         /// Keys of visible item.
@@ -111,12 +111,13 @@ return visibles;
         {
             object element = null;
 
-            if (TestAssistantMode.IsCreatingMode || _waitMilliseconds == -1)
+            if (TestAssistantMode.IsCreatingMode || _timeout == null)
             {
                 element = JS.ExecuteScript("return arguments[0].children[arguments[1]];", Element, index);
             }
             else
             {
+                var waitMilliseconds = _timeout.Value.TotalMilliseconds;
                 var watch = new Stopwatch();
                 watch.Start();
                 while (true)
@@ -127,7 +128,7 @@ return visibles;
                         if (element != null) break;
                     }
                     catch { }
-                    if (_waitMilliseconds < watch.ElapsedMilliseconds)
+                    if (waitMilliseconds < watch.ElapsedMilliseconds)
                     {
                         throw new ArgumentOutOfRangeException("index is out of children");
                     }
@@ -146,19 +147,16 @@ return visibles;
         /// Constructor
         /// </summary>
         /// <param name="element">Element for generating the driver</param>
-        public ItemsControlDriver(IWebElement element) : base(element)
-        {
-            _waitMilliseconds = -1;
-        }
+        public ItemsControlDriver(IWebElement element) : base(element) { }
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="element">Element for generating the driver</param>
-        /// <param name="waitMilliseconds">Waiting time.</param>
-        public ItemsControlDriver(IWebElement element, int waitMilliseconds) : base(element)
+        /// <param name="timeout">Waiting time.</param>
+        public ItemsControlDriver(IWebElement element, TimeSpan? timeout) : base(element)
         {
-            _waitMilliseconds = waitMilliseconds;
+            _timeout = timeout;
         }
 
         /// <summary>
@@ -168,7 +166,7 @@ return visibles;
         public static implicit operator ItemsControlDriver<T>(ElementFinder finder)
         {
             var element = finder.Find();
-            var driver = new ItemsControlDriver<T>(element, finder.WaitMilliseconds);
+            var driver = new ItemsControlDriver<T>(element, finder.Timeout);
             return driver;
         }
 
