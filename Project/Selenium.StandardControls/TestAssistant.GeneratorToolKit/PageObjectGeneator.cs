@@ -67,17 +67,23 @@ namespace Selenium.StandardControls.TestAssistant.GeneratorToolKit
             code.Add($"{Indent}public static class {info.Name}Extensions");
             code.Add($"{Indent}{{");
 
+            var wait = string.Empty;
             if (info.PageIdentifyInfo.TitleComapreType != "None")
             {
+                wait = $"WaitForTitle(\"{info.PageIdentifyInfo.Title}\", TitleComapreType.{info.PageIdentifyInfo.TitleComapreType})";
                 code.Add($"{Indent}{Indent}[PageObjectIdentify(\"{info.PageIdentifyInfo.Title}\", TitleComapreType.{info.PageIdentifyInfo.TitleComapreType})]");
             }
             else if (info.PageIdentifyInfo.UrlComapreType != "None")
             {
+                wait = $"WaitForUrl(\"{info.PageIdentifyInfo.Url}\", UrlComapreType.{info.PageIdentifyInfo.UrlComapreType})";
                 code.Add($"{Indent}{Indent}[PageObjectIdentify(\"{info.PageIdentifyInfo.Url}\", UrlComapreType.{info.PageIdentifyInfo.UrlComapreType})]");
             }
 
-            code.Add($"{Indent}{Indent}public static {info.Name} Attach{info.Name}(this IWebDriver driver) => new {info.Name}(driver);");
-
+            code.Add($"{Indent}{Indent}public static {info.Name} Attach{info.Name}(this IWebDriver driver)");
+            code.Add($"{Indent}{Indent}{{");
+            code.Add($"{Indent}{Indent}{Indent}driver.{wait};");
+            code.Add($"{Indent}{Indent}{Indent}return new {info.Name}(driver);");
+            code.Add($"{Indent}{Indent}}}");
             code.Add($"{Indent}}}");
 
             code.Add("}");

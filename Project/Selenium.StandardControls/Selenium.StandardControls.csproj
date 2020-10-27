@@ -62,9 +62,11 @@
     <Compile Include="PageObjectUtility\PageBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RadioButtonDriver.cs" />
+    <Compile Include="Settings.cs" />
     <Compile Include="TestAssistant.GeneratorToolKit\BrowserAnalyzeInfo.cs" />
     <Compile Include="TestAssistant.GeneratorToolKit\CaptureAdaptor.cs" />
     <Compile Include="TestAssistant.GeneratorToolKit\ControlDriverTypeSelector.cs" />
+    <Compile Include="TestAssistant.GeneratorToolKit\ElementFinderWaitAttribute.cs" />
     <Compile Include="TestAssistant.GeneratorToolKit\GridSelectedType.cs" />
     <Compile Include="TestAssistant.GeneratorToolKit\IAnalysisKeyActionCustomizer.cs" />
     <Compile Include="TestAssistant.GeneratorToolKit\ICaptureAttachTreeMenuAction.cs" />
@@ -85,6 +87,7 @@
     <Compile Include="TextAreaDriver.cs" />
     <Compile Include="DateDriver.cs" />
     <Compile Include="TextBoxDriver.cs" />
+    <Compile Include="WaitUtils.cs" />
     <Compile Include="WebDriverExtensions.cs" />
     <Compile Include="WebElementExtensions.cs" />
   </ItemGroup>

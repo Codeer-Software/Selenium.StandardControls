@@ -18,8 +18,6 @@ namespace Selenium.StandardControls.PageObjectUtility
         int _index;
         Func<IWebElement, bool> _isValidElement;
 
-        internal const int DefaultWaitTime = 60 * 1000;
-
         /// <summary>
         /// Waiting time
         /// </summary>
@@ -101,7 +99,7 @@ namespace Selenium.StandardControls.PageObjectUtility
         /// </summary>
         /// <returns>ElementFinder.</returns>
         public ElementFinder Wait()
-            => new ElementFinder(_context, _by, _innerFinder, _index, TimeSpan.FromMilliseconds(DefaultWaitTime), null);
+            => new ElementFinder(_context, _by, _innerFinder, _index, Settings.DefaultWaitTime, null);
 
         /// <summary>
         /// Add wait.
@@ -116,7 +114,7 @@ namespace Selenium.StandardControls.PageObjectUtility
         /// <param name="isValidElement">Is it a valid element?</param>
         /// <returns>ElementFinder.</returns>
         public ElementFinder Wait(Func<IWebElement, bool> isValidElement)
-            => new ElementFinder(_context, _by, _innerFinder, _index, TimeSpan.FromMilliseconds(DefaultWaitTime), isValidElement);
+            => new ElementFinder(_context, _by, _innerFinder, _index, Settings.DefaultWaitTime, isValidElement);
 
         /// <summary>
         /// Add wait.
