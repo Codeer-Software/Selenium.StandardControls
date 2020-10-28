@@ -52,13 +52,13 @@ namespace Selenium.StandardControls
                 switch (comapreType)
                 {
                     case TitleComapreType.Contains:
-                        return driver.Url.Contains(title);
+                        return driver.Title.Contains(title);
                     case TitleComapreType.EndsWith:
-                        return driver.Url.EndsWith(title);
+                        return driver.Title.EndsWith(title);
                     case TitleComapreType.StartsWith:
-                        return driver.Url.StartsWith(title);
+                        return driver.Title.StartsWith(title);
                     case TitleComapreType.Equals:
-                        return driver.Url.Equals(title);
+                        return driver.Title.Equals(title);
                     default:
                         throw new NotSupportedException();
                 }
