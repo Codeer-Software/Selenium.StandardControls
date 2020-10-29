@@ -65,7 +65,34 @@ namespace Selenium.StandardControls
 
             if (HitTestCenter(element)) return;
             element.ScrollIntoView(true);
+
+            if (HitTestCenter(element)) return;
+
+            var scroll = GetYScrollElement(element);
+            for (var i = 0; i < 2; i++)
+            {
+                ScrollY(scroll, element.Size.Height / 2);
+                if (HitTestCenter(element)) return;
+            }
         }
+
+        static void ScrollY(IWebElement scroll, int amount)
+            => scroll.GetJS().ExecuteScript(@"
+var target = arguments[0];
+if (target == null) target = window;
+target.scrollBy(0, arguments[1]);
+", scroll, -amount);
+
+        static IWebElement GetYScrollElement(IWebElement element)
+            => element.GetJS().ExecuteScript(@"
+var node = arguments[0].parentNode;
+while(node != null)
+{
+    if (window.getComputedStyle(node).overflowY === 'scroll') return node;
+    node = node.parentNode;
+}
+return null;
+", element) as IWebElement;
 
         static bool HitTestCenter(IWebElement element)
             => (bool)element.GetJS().ExecuteScript(@"

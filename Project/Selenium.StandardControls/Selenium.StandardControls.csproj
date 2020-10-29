@@ -88,7 +88,6 @@
     <Compile Include="DateDriver.cs" />
     <Compile Include="TextBoxDriver.cs" />
     <Compile Include="WaitUtils.cs" />
-    <Compile Include="WebDriverExtensions.cs" />
     <Compile Include="WebElementExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
