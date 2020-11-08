@@ -2,6 +2,7 @@
 using OpenQA.Selenium.Support.UI;
 using Selenium.StandardControls.TestAssistant.GeneratorToolKit;
 using System;
+using System.Linq;
 
 namespace Selenium.StandardControls
 {
@@ -19,46 +20,46 @@ namespace Selenium.StandardControls
         public static TResult Until<TResult>(this IWebDriver driver, Func<IWebDriver, TResult> condition, TimeSpan timeout)
             => new WebDriverWait(driver, timeout).Until(e => condition(e));
 
-        public static void WaitForUrl(this IWebDriver driver, string url, UrlComapreType comapreType)
-            => driver.WaitForUrl(url, comapreType, Settings.DefaultWaitTime);
+        public static void WaitForUrl(this IWebDriver driver, UrlComapreType comapreType, params string[] urls)
+            => driver.WaitForUrl(comapreType, Settings.DefaultWaitTime, urls);
 
-        public static void WaitForUrl(this IWebDriver driver, string url, UrlComapreType comapreType, TimeSpan timeout)
+        public static void WaitForUrl(this IWebDriver driver, UrlComapreType comapreType, TimeSpan timeout, params string[] urls)
         {
             new WebDriverWait(driver, timeout).Until(_ => 
             {
                 switch (comapreType)
                 {
                     case UrlComapreType.Contains:
-                        return driver.Url.Contains(url);
+                        return urls.Any(e => driver.Url.Contains(e));
                     case UrlComapreType.EndsWith:
-                        return driver.Url.EndsWith(url);
+                        return urls.Any(e => driver.Url.EndsWith(e));
                     case UrlComapreType.StartsWith:
-                        return driver.Url.StartsWith(url);
+                        return urls.Any(e => driver.Url.StartsWith(e));
                     case UrlComapreType.Equals:
-                        return driver.Url.Equals(url);
+                        return urls.Any(e => driver.Url.Equals(e));
                     default:
                         throw new NotSupportedException();
                 }
             });
         }
 
-        public static void WaitForTitle(this IWebDriver driver, string title, TitleComapreType comapreType)
-            => driver.WaitForTitle(title, comapreType, Settings.DefaultWaitTime);
+        public static void WaitForTitle(this IWebDriver driver, TitleComapreType comapreType, params string[] titles)
+            => driver.WaitForTitle(comapreType, Settings.DefaultWaitTime, titles);
 
-        public static void WaitForTitle(this IWebDriver driver, string title, TitleComapreType comapreType, TimeSpan timeout)
+        public static void WaitForTitle(this IWebDriver driver, TitleComapreType comapreType, TimeSpan timeout, params string[] titles)
         {
             new WebDriverWait(driver, timeout).Until(_ =>
             {
                 switch (comapreType)
                 {
                     case TitleComapreType.Contains:
-                        return driver.Title.Contains(title);
+                        return titles.Any(e => driver.Title.Contains(e));
                     case TitleComapreType.EndsWith:
-                        return driver.Title.EndsWith(title);
+                        return titles.Any(e => driver.Title.EndsWith(e));
                     case TitleComapreType.StartsWith:
-                        return driver.Title.StartsWith(title);
+                        return titles.Any(e => driver.Title.StartsWith(e));
                     case TitleComapreType.Equals:
-                        return driver.Title.Equals(title);
+                        return titles.Any(e => driver.Title.Equals(e));
                     default:
                         throw new NotSupportedException();
                 }
