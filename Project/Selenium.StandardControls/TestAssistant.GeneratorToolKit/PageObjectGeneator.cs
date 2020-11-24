@@ -294,20 +294,11 @@ namespace Selenium.StandardControls.TestAssistant.GeneratorToolKit
             var ancestors = GetAncestors(rootSerachContext, element);
 
             var js = element.GetJS();
-            var fullXPath = "";
+            var fullXPath = string.Empty;
             var serachContext = rootSerachContext;
             foreach (var e in ancestors)
             {
-                var tags = new List<IWebElement>();
-                var parent = js.ExecuteScript("return arguments[0].parentElement;", e);
-                if (parent != null)
-                {
-                    var children = js.ExecuteScript("return arguments[0].children;", parent) as IEnumerable;
-                    if (children != null)
-                    {
-                        tags.AddRange(children.OfType<IWebElement>().Where(x => x.TagName == e.TagName));
-                    }
-                }
+                var tags = GetSameTagBrotherElements(js, e);
 
                 if (tags.Count <= 1)
                 {
@@ -315,42 +306,12 @@ namespace Selenium.StandardControls.TestAssistant.GeneratorToolKit
                 }
                 else
                 {
-                    //by attribute
-                    var hit = false;
-                    var attrs = GetAttributes(e);
-                    foreach (var x in attrs)
+                    for (int i = 0; i < tags.Count; i++)
                     {
-                        var selector = $"{e.TagName}[@{x.Key}='{x.Value}']";
-                        var finded = serachContext.FindElements(By.XPath(selector));
-                        if (finded.Count == 1)
+                        if (e.Equals(tags[i]))
                         {
-                            hit = true;
-                            fullXPath += "/" + selector;
+                            fullXPath += "/" + e.TagName + "[" + (i + 1) + "]";
                             break;
-                        }
-                    }
-
-                    //multi attributes
-                    if (!hit && 1 < attrs.Count)
-                    {
-                        var selector = e.TagName + string.Join(string.Empty, attrs.Select(x => $"[@{x.Key}='{x.Value}']"));
-                        var finded = serachContext.FindElements(By.XPath(selector));
-                        if (finded.Count == 1)
-                        {
-                            hit = true;
-                            fullXPath += "/" + selector;
-                        }
-                    }
-
-                    if (!hit)
-                    {
-                        for (int i = 0; i < tags.Count; i++)
-                        {
-                            if (e.Equals(tags[i]))
-                            {
-                                fullXPath += "/" + e.TagName + "[" + (i + 1) + "]";
-                                break;
-                            }
                         }
                     }
                 }
@@ -367,6 +328,22 @@ namespace Selenium.StandardControls.TestAssistant.GeneratorToolKit
             if (lastCheck.Count != 1 || !lastCheck[0].Equals(element)) return null;
 
             return new IdentifyInfo { Identify = $"ByXPath(\"{fullXPath}\")", IsPerfect = true, DefaultName = element.TagName };
+        }
+
+        static List<IWebElement> GetSameTagBrotherElements(IJavaScriptExecutor js, IWebElement e)
+        {
+            var tags = new List<IWebElement>();
+            var parent = js.ExecuteScript("return arguments[0].parentElement;", e);
+            if (parent != null)
+            {
+                var children = js.ExecuteScript("return arguments[0].children;", parent) as IEnumerable;
+                if (children != null)
+                {
+                    tags.AddRange(children.OfType<IWebElement>().Where(x => x.TagName == e.TagName));
+                }
+            }
+
+            return tags;
         }
 
         static IdentifyInfo MakeCssPath(ISearchContext rootSerachContext, IWebElement element)
