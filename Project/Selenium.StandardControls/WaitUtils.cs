@@ -1,5 +1,6 @@
 ﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
+using Selenium.StandardControls.PageObjectUtility;
 using Selenium.StandardControls.TestAssistant.GeneratorToolKit;
 using System;
 using System.Linq;
@@ -74,5 +75,17 @@ namespace Selenium.StandardControls
         /// <returns>IAlert.</returns>
         public static IAlert WaitForAlert(this IWebDriver driver, int waitMilliseconds = int.MaxValue)
             => new WebDriverWait(driver, TimeSpan.FromMilliseconds(waitMilliseconds)).Until(_ => driver.SwitchTo().Alert());
+
+        [ElementFinderWait]
+        public static ElementFinder WaitForDisplayed(this ElementFinder src) => src.Wait(e => e.Displayed);
+
+        [ElementFinderWait]
+        public static ElementFinder WaitForClickable(this ElementFinder src) => src.Wait(e => 
+        {
+            if (!e.Displayed || !e.Enabled) return false;
+
+            e.Show();
+            return e.HitTestCenter();
+        });
     }
 }

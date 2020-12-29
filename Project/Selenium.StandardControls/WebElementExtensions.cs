@@ -94,7 +94,7 @@ while(node != null)
 return null;
 ", element) as IWebElement;
 
-        static bool HitTestCenter(IWebElement element)
+        internal static bool HitTestCenter(this IWebElement element)
             => (bool)element.GetJS().ExecuteScript(@"
 var element = arguments[0];
 var rc = element.getBoundingClientRect();
