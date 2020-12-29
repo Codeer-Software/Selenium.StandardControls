@@ -42,6 +42,7 @@ namespace Selenium.StandardControls.TestAssistant.GeneratorToolKit
                 "using Selenium.StandardControls.TestAssistant.GeneratorToolKit;"
             };
             code.AddRange(info.Properties.SelectMany(e => GetNameSpace(e.Type)).Where(e => !string.IsNullOrEmpty(e)).Select(e => "using " + e + ";"));
+            code.AddRange(info.Properties.Select(e => e.Wait).Where(e => e != null).Select(e => "using " + e.DeclaringType.Namespace + ";"));
             code = code.Distinct().ToList();
 
             code.Add(string.Empty);
@@ -429,8 +430,14 @@ namespace Selenium.StandardControls.TestAssistant.GeneratorToolKit
 
         static string GetIdentify(PageObjectPropertyInfo propertyInfo)
         {
-            if (propertyInfo.Type == "OpenQA.Selenium.IWebElement") return propertyInfo.Identify + ".Wait().Find()";
-            return propertyInfo.Identify + ".Wait()";
+            var wait = string.Empty;
+            if (propertyInfo.Wait != null)
+            {
+                wait += ("." + propertyInfo.Wait.Name + "()");
+            }
+
+            if (propertyInfo.Type == "OpenQA.Selenium.IWebElement") return propertyInfo.Identify + wait;
+            return propertyInfo.Identify + wait;
         }
 
         static string GetTypeName(string typeFullName)

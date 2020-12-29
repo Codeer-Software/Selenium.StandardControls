@@ -1,4 +1,5 @@
 ﻿using OpenQA.Selenium;
+using System.Reflection;
 
 namespace Selenium.StandardControls.TestAssistant.GeneratorToolKit
 {
@@ -8,5 +9,6 @@ namespace Selenium.StandardControls.TestAssistant.GeneratorToolKit
         public string Type { get; set; }
         public string Name { get; set; }
         public string Identify { get; set; }
+        public MethodInfo Wait { get; set; }
     }
 }
