@@ -436,7 +436,7 @@ namespace Selenium.StandardControls.TestAssistant.GeneratorToolKit
                 wait += ("." + propertyInfo.Wait.Name + "()");
             }
 
-            if (propertyInfo.Type == "OpenQA.Selenium.IWebElement") return propertyInfo.Identify + wait;
+            if (propertyInfo.Type == "OpenQA.Selenium.IWebElement") return propertyInfo.Identify + wait + ".Find()";
             return propertyInfo.Identify + wait;
         }
 
