@@ -75,4 +75,9 @@ namespace Selenium.StandardControls.TestAssistant.GeneratorToolKit
         public string ControlDriverTypeFullName { get; set; }
         public int Priority { get; set; }
     }
+
+    [AttributeUsage(AttributeTargets.Method)]
+    public class ComponentObjectIdentifyAttribute : Attribute
+    {
+    }
 }

@@ -2,8 +2,14 @@
 
 namespace Selenium.StandardControls.PageObjectUtility
 {
-    public abstract class MappingBase
+    /// <summary>
+    /// The base class for mapping elements.
+    /// </summary>
+    public class MappingBase
     {
+        /// <summary>
+        /// SearchContext
+        /// </summary>
         protected ISearchContext SearchContext { get; }
 
         /// <summary>
@@ -66,7 +72,7 @@ namespace Selenium.StandardControls.PageObjectUtility
     /// <summary>
     /// Html of information acquisition base
     /// </summary>
-    public abstract class PageBase : MappingBase
+    public class PageBase : MappingBase
     {
         /// <summary>
         /// Driver to generate a page
@@ -77,7 +83,7 @@ namespace Selenium.StandardControls.PageObjectUtility
         /// Constructor
         /// </summary>
         /// <param name="driver">Driver to generate a page</param>
-        protected PageBase(IWebDriver driver) :base(driver)
+        public PageBase(IWebDriver driver) : base(driver)
         {
             Driver = driver;
         }
@@ -86,7 +92,7 @@ namespace Selenium.StandardControls.PageObjectUtility
     /// <summary>
     /// Html of information acquisition base
     /// </summary>
-    public abstract class ComponentBase : MappingBase
+    public class ComponentBase : MappingBase
     {
         /// <summary>
         /// Driver to generate a page
@@ -97,7 +103,7 @@ namespace Selenium.StandardControls.PageObjectUtility
         /// Constructor
         /// </summary>
         /// <param name="element">Element of Component.</param>
-        protected ComponentBase(IWebElement element) : base(element)
+        public ComponentBase(IWebElement element) : base(element)
         {
             Element = element;
         }
