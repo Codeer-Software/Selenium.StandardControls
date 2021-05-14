@@ -1,6 +1,7 @@
 ﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Internal;
 using OpenQA.Selenium.Remote;
+using Selenium.StandardControls.Properties;
 using System;
 
 namespace Selenium.StandardControls
@@ -124,5 +125,64 @@ return false;
         /// Remove the focus from Element
         /// </summary>
         public static void Blur(this IWebElement element) => element.GetJS().ExecuteScript("arguments[0].blur();", element);
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="findStart"></param>
+        /// <param name="by"></param>
+        /// <returns></returns>
+        public static IWebElement FindNextElement(this IWebElement findStart, By by)
+        {
+            var text = by.ToString();
+            var type = string.Empty;
+            var param = string.Empty;
+            if (text.StartsWith("By.Id:"))
+            {
+                type = "id";
+                param = text.Substring("By.Id:".Length).Trim();;
+            }
+            if (text.StartsWith("By.Name:"))
+            {
+                type = "name";
+                param = text.Substring("By.Name:".Length).Trim();
+            }
+            if (text.StartsWith("By.ClassName[Contains]:"))
+            {
+                type = "className";
+                param = text.Substring("By.ClassName[Contains]:".Length).Trim();
+            }
+            if (text.StartsWith("By.CssSelector:"))
+            {
+                type = "cssSelector";
+                param = text.Substring("By.CssSelector:".Length).Trim();
+            }
+            if (text.StartsWith("By.TagName:"))
+            {
+                type = "tagName";
+                param = text.Substring("By.TagName:".Length).Trim();
+            }
+            if (text.StartsWith("By.XPath:"))
+            {
+                type = "xpath";
+                param = text.Substring("By.XPath:".Length).Trim();
+            }
+            if (text.StartsWith("By.LinkText:"))
+            {
+                type = "linkText";
+                param = text.Substring("By.LinkText:".Length).Trim();
+            }
+            if (text.StartsWith("By.PartialLinkText:"))
+            {
+                type = "partialLinkText";
+                param = text.Substring("By.PartialLinkText:".Length).Trim();
+            }
+
+            var js = Resources.FindNextElement + @"
+            return findNextElement(arguments[0], arguments[1], arguments[2]);
+";
+            return (IWebElement)findStart.GetJS().ExecuteScript(js, findStart, type, param, findStart);
+        }
     }
 }
