@@ -182,7 +182,7 @@ return false;
             var js = Resources.FindNextElement + @"
             return findNextElement(arguments[0], arguments[1], arguments[2]);
 ";
-            return (IWebElement)findStart.GetJS().ExecuteScript(js, findStart, type, param, findStart);
+            return (IWebElement)findStart.GetJS().ExecuteScript(js, type, param, findStart);
         }
     }
 }
