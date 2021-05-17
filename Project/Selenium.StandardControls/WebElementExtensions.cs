@@ -70,22 +70,26 @@ namespace Selenium.StandardControls
             if (HitTestCenter(element)) return;
 
             var scroll = GetYScrollElement(element);
-            for (var i = 0; i < 2; i++)
+            var amount = Math.Max(element.Size.Height / 2, 50);
+            for (var i = 0; i < 20; i++)
             {
-                ScrollY(scroll, element.Size.Height / 2);
+                ScrollY(element, scroll, amount);
                 if (HitTestCenter(element)) return;
             }
         }
 
-        static void ScrollY(IWebElement scroll, int amount)
-            => scroll.GetJS().ExecuteScript(@"
+        static void ScrollY(IWebElement element, IWebElement scroll, int amount)
+            => element.GetJS().ExecuteScript(@"
 var target = arguments[0];
 if (target == null) target = window;
 target.scrollBy(0, arguments[1]);
 ", scroll, -amount);
 
         static IWebElement GetYScrollElement(IWebElement element)
-            => element.GetJS().ExecuteScript(@"
+        {
+            try
+            {
+                return element.GetJS().ExecuteScript(@"
 var node = arguments[0].parentNode;
 while(node != null)
 {
@@ -94,6 +98,10 @@ while(node != null)
 }
 return null;
 ", element) as IWebElement;
+            }
+            catch { }
+            return null;
+        }
 
         internal static bool HitTestCenter(this IWebElement element)
             => (bool)element.GetJS().ExecuteScript(@"
@@ -126,13 +134,12 @@ return false;
         /// </summary>
         public static void Blur(this IWebElement element) => element.GetJS().ExecuteScript("arguments[0].blur();", element);
 
-
         /// <summary>
-        /// 
+        /// Starts the search from the element specified by findStart, and then returns the element that matches the condition specified by by.
         /// </summary>
-        /// <param name="findStart"></param>
-        /// <param name="by"></param>
-        /// <returns></returns>
+        /// <param name="findStart">Element to start the search.</param>
+        /// <param name="by">condition.</param>
+        /// <returns>Element.</returns>
         public static IWebElement FindNextElement(this IWebElement findStart, By by)
         {
             var text = by.ToString();
