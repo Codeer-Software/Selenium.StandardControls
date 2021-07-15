@@ -139,7 +139,9 @@ namespace Selenium.StandardControls.PageObjectUtility
                 {
                     var innerElement = _innerFinder.Find();
                     if (innerElement == null) return null;
-                    return innerElement.FindElement(_by);
+                    var elements = innerElement.FindElements(_by);
+                    if (elements.Count != 1) return null;
+                    return elements[0];
                 }
             }
             else
