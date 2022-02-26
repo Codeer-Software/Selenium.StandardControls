@@ -278,6 +278,14 @@ namespace Selenium.StandardControls.TestAssistant.GeneratorToolKit
             }
             catch { }
 
+            // content
+            try
+            {
+                var xpath = $"ByText(\"{element.TagName}\", \"{element.Text}\")";
+                candidate.Add(new IdentifyInfo { Identify = xpath, IsPerfect = false, DefaultName = element.TagName });
+            }
+            catch { }
+
             //adjust name.
             candidate.ForEach(e => e.DefaultName = AdjustName(e.DefaultName, element.TagName));
 
