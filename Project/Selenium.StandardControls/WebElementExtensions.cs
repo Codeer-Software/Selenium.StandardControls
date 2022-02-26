@@ -1,6 +1,7 @@
 ﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Internal;
 using OpenQA.Selenium.Remote;
+using Selenium.StandardControls.PageObjectUtility;
 using Selenium.StandardControls.Properties;
 using System;
 
@@ -191,5 +192,7 @@ return false;
 ";
             return (IWebElement)findStart.GetJS().ExecuteScript(js, type, param, findStart);
         }
+
+        public static ElementFinder Convert(this IWebElement element) => new ElementFinder(element, null);
     }
 }
