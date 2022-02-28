@@ -69,7 +69,7 @@ namespace Selenium.StandardControls.PageObjectUtility
         /// <param name="text">Text</param>
         /// <returns></returns>
         public ElementFinder ByText(string containerTagName, string text) =>
-            new ElementFinder(SearchContext, By.XPath($"//{containerTagName}[text()='{text}']"));
+            new ElementFinder(SearchContext, By.XPath($"//{containerTagName}[normalize-space(text())='{text.Trim()}']"));
 
         /// <summary>
         /// Find Element by Content Text
