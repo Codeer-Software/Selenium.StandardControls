@@ -67,6 +67,7 @@
     <Compile Include="Scenario\CaptureTest.cs" />
     <Compile Include="ElementDriverTest.cs" />
     <Compile Include="PageObjects\ControlsHtmlPage.cs" />
+    <Compile Include="TestFindByText.cs" />
     <Compile Include="TestFindNext.cs" />
     <Compile Include="TestControlsWait.cs" />
     <Compile Include="TestControls.cs" />
