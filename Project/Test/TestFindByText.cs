@@ -32,8 +32,9 @@ namespace Test
         public void ByText()
         {
             LabelDriver label = _page.ByText("Name：");
-            CheckBoxDriver checkBox = _page.ByText("Cell phone");
-            ButtonDriver button = _page.ByText("JS");
+            LabelDriver checkBoxLabel = _page.ByText(" Cell phone");
+            CheckBoxDriver checkBox = checkBoxLabel.Element.FindNextElement(By.TagName("input")).Convert();
+            checkBox.Edit(true);
         }
     }
 }

@@ -193,6 +193,6 @@ return false;
             return (IWebElement)findStart.GetJS().ExecuteScript(js, type, param, findStart);
         }
 
-        public static ElementFinder Convert(this IWebElement element) => new ElementFinder(element, null);
+        public static ElementFinder Convert(this IWebElement element) => element == null ? null : new ElementFinder(element, null);
     }
 }
