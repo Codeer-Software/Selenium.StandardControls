@@ -146,6 +146,7 @@ namespace Selenium.StandardControls.PageObjectUtility
             }
             else
             {
+                if (_by == null) return (IWebElement)_context;
                 var elements = _context.FindElements(_by);
                 if (elements.Count != 1) return null;
                 return elements[0];
@@ -165,6 +166,7 @@ namespace Selenium.StandardControls.PageObjectUtility
                     return _innerFinder.Find().FindElements(_by).ToArray();
                 }
             }
+            if (_by == null) return new[] { (IWebElement)_context };
             return _context.FindElements(_by).ToArray();
         }
 
@@ -241,5 +243,21 @@ namespace Selenium.StandardControls.PageObjectUtility
         /// <param name="xpathToFind">XPath</param>
         /// <returns>ElementFinder</returns>
         public ElementFinder ByXPath(string xpathToFind) => new ElementFinder(this, By.XPath(xpathToFind));
+
+        /// <summary>
+        /// Find Element by Content Text
+        /// </summary>
+        /// <param name="containerTagName">TagName</param>
+        /// <param name="text">Text</param>
+        /// <returns></returns>
+        public ElementFinder ByText(string containerTagName, string text) =>
+            new ElementFinder(this, By.XPath($"//{containerTagName}[text()='{text}'"));
+
+        /// <summary>
+        /// Find Element by Content Text
+        /// </summary>
+        /// <param name="text">Text</param>
+        /// <returns></returns>
+        public ElementFinder ByText(string text) => ByText("*", text);
     }
 }

@@ -278,8 +278,99 @@ namespace Selenium.StandardControls.TestAssistant.GeneratorToolKit
             }
             catch { }
 
+            // content
+            try
+            {
+                var xpath = $"ByText(\"{element.TagName}\", \"{element.Text}\")";
+                candidate.Add(new IdentifyInfo { Identify = xpath, IsPerfect = false, DefaultName = element.TagName });
+            }
+            catch { }
+
             //adjust name.
             candidate.ForEach(e => e.DefaultName = AdjustName(e.DefaultName, element.TagName));
+
+            return candidate.ToArray();
+        }
+
+        public string[] GetIdentifyingCandidatesForNextElement(ISearchContext searchContext, IWebElement anchorElement, IWebElement element)
+        {
+            var isSpecialPerfect = false;
+
+            var candidate = new List<string>();
+            var elementInfo = new ElementInfo(element);
+
+            //id
+            try
+            {
+                if (!string.IsNullOrEmpty(elementInfo.Id) && anchorElement.FindNextElement(By.Id(elementInfo.Id)).Equals(element))
+                {
+                    candidate.Add($"By.Id(\"{elementInfo.Id}\")");
+                    isSpecialPerfect = true;
+                }
+            }
+            catch { }
+
+            //name
+            try
+            {
+                if (!string.IsNullOrEmpty(elementInfo.Name) && anchorElement.FindNextElement(By.Name(elementInfo.Name)).Equals(element))
+                {
+                    candidate.Add($"By.Name(\"{elementInfo.Name}\")");
+                    isSpecialPerfect = true;
+                }
+            }
+            catch { }
+
+            //link text
+            try
+            {
+                if (element.TagName.ToLower() == "a" && anchorElement.FindNextElement(By.LinkText(element.Text)).Equals(element))
+                {
+                    candidate.Add($"By.LinkText(\"{element.Text}\")");
+                    isSpecialPerfect = true;
+                }
+            }
+            catch { }
+
+            //tag
+            try
+            {
+                if (anchorElement.FindNextElement(By.TagName(element.TagName)).Equals(element))
+                {
+                    candidate.Add($"By.TagName(\"{element.TagName}\")");
+                    isSpecialPerfect = true;
+                }
+            }
+            catch { }
+
+            //css selector (attribute)
+            try
+            {
+                var attrs = GetAttributes(element);
+                foreach (var e in attrs.Where(e => e.Key != "id" && e.Key != "name"))
+                {
+                    var selector = $"{element.TagName}[{e.Key}='{e.Value}']";
+                    var found = anchorElement.FindNextElement(By.CssSelector(selector));
+                    if (found.Equals(element))
+                    {
+                        candidate.Add($"By.CssSelector(\"{selector}\")");
+                        isSpecialPerfect = true;
+                    }
+                }
+
+                //multi attributes
+                if (!isSpecialPerfect && 1 < attrs.Count)
+                {
+                    var selector = element.TagName + string.Join(string.Empty, attrs.Select(e => $"[{e.Key}='{e.Value}']"));
+                    var found = anchorElement.FindNextElement(By.CssSelector(selector));
+                    if (found.Equals(element))
+                    {
+                        candidate.Add($"ByCssSelector(\"{selector}\")");
+                        isSpecialPerfect = true;
+                    }
+                }
+            }
+            catch { }
 
             return candidate.ToArray();
         }

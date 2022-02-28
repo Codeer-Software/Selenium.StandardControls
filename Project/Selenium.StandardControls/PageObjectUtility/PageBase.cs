@@ -63,6 +63,22 @@ namespace Selenium.StandardControls.PageObjectUtility
         public ElementFinder ByXPath(string xpathToFind) => new ElementFinder(SearchContext, By.XPath(xpathToFind));
 
         /// <summary>
+        /// Find Element by Content Text
+        /// </summary>
+        /// <param name="containerTagName">TagName</param>
+        /// <param name="text">Text</param>
+        /// <returns></returns>
+        public ElementFinder ByText(string containerTagName, string text) =>
+            new ElementFinder(SearchContext, By.XPath($"//{containerTagName}[text()='{text}'"));
+
+        /// <summary>
+        /// Find Element by Content Text
+        /// </summary>
+        /// <param name="text">Text</param>
+        /// <returns></returns>
+        public ElementFinder ByText(string text) => ByText("*", text);
+
+        /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="searchContext">SearchContext.</param>
