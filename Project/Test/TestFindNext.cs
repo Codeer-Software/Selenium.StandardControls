@@ -104,5 +104,16 @@ namespace Test
             Assert.IsNotNull(e2);
             Assert.AreEqual(_page.Link3.Element, e2);
         }
+
+        [TestMethod]
+        public void ElementFinder()
+        {
+            var e1 = _anchorElement.FindNext(By.Id("email")).Find();
+            Assert.IsNull(e1);
+            TextBoxDriver e2 = _anchorElement.FindNext(By.Id("tel"));
+            Assert.IsNotNull(e2);
+            e2.Edit("09012345678");
+            Assert.AreEqual("09012345678", _page.Tel.Text);
+        }
     }
 }

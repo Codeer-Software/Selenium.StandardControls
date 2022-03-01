@@ -37,17 +37,16 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ChainingAssertion.MSTest, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\Selenium.StandardControls\packages\ChainingAssertion.Bin.2.0.0\lib\net45\ChainingAssertion.MSTest.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
     <Reference Include="WebDriver, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\Selenium.StandardControls\packages\Selenium.WebDriver.4.1.0\lib\net46\WebDriver.dll</HintPath>
+      <HintPath>..\packages\Selenium.WebDriver.4.1.0\lib\net46\WebDriver.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="WebDriver.Support, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\Selenium.StandardControls\packages\Selenium.Support.4.1.0\lib\net46\WebDriver.Support.dll</HintPath>
+      <HintPath>..\packages\Selenium.Support.4.1.0\lib\net46\WebDriver.Support.dll</HintPath>
+      <Private>True</Private>
     </Reference>
   </ItemGroup>
   <Choose>
@@ -63,6 +62,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="ChainingAssertion.MSTest.cs" />
     <Compile Include="PageObjects\FindNextHtmlPage.cs" />
     <Compile Include="Scenario\CaptureTest.cs" />
     <Compile Include="ElementDriverTest.cs" />
@@ -107,8 +107,9 @@
     <PropertyGroup>
       <ErrorText>このプロジェクトは、このコンピューター上にない NuGet パッケージを参照しています。それらのパッケージをダウンロードするには、[NuGet パッケージの復元] を使用します。詳細については、http://go.microsoft.com/fwlink/?LinkID=322105 を参照してください。見つからないファイルは {0} です。</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\Selenium.StandardControls\packages\Selenium.WebDriver.ChromeDriver.98.0.4758.10200\build\Selenium.WebDriver.ChromeDriver.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\Selenium.StandardControls\packages\Selenium.WebDriver.ChromeDriver.98.0.4758.10200\build\Selenium.WebDriver.ChromeDriver.targets'))" />
+    <Error Condition="!Exists('..\packages\Selenium.WebDriver.ChromeDriver.98.0.4758.10200\build\Selenium.WebDriver.ChromeDriver.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Selenium.WebDriver.ChromeDriver.98.0.4758.10200\build\Selenium.WebDriver.ChromeDriver.targets'))" />
   </Target>
+  <Import Project="..\packages\Selenium.WebDriver.ChromeDriver.98.0.4758.10200\build\Selenium.WebDriver.ChromeDriver.targets" Condition="Exists('..\packages\Selenium.WebDriver.ChromeDriver.98.0.4758.10200\build\Selenium.WebDriver.ChromeDriver.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

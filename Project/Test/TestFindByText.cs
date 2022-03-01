@@ -36,5 +36,16 @@ namespace Test
             CheckBoxDriver checkBox = checkBoxLabel.Element.FindNextElement(By.TagName("input")).Convert();
             checkBox.Edit(true);
         }
+
+        [TestMethod]
+        public void ByTextFromElement()
+        {
+            var body = _page.ByTagName("body").Wait();
+
+            LabelDriver label = body.ByText("Name：");
+            LabelDriver checkBoxLabel = body.ByText("Cell phone");
+            CheckBoxDriver checkBox = checkBoxLabel.Element.FindNextElement(By.TagName("input")).Convert();
+            checkBox.Edit(true);
+        }
     }
 }

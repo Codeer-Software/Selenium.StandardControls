@@ -13,7 +13,7 @@ namespace Selenium.StandardControls.PageObjectUtility
     public class ElementFinder
     {
         ISearchContext _context;
-        By _by;
+        Func<ISearchContext, IWebElement[]> _byExecutor;
         ElementFinder _innerFinder;
         int _index;
         Func<IWebElement, bool> _isValidElement;
@@ -31,8 +31,26 @@ namespace Selenium.StandardControls.PageObjectUtility
         public ElementFinder(ISearchContext context, By by)
         {
             _context = context;
-            _by = by;
+            _byExecutor = x => x.FindElements(by).ToArray();
         }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="context">Defines the interface used to search for elements</param>
+        /// <param name="byExecutor">Provides a mechanism by which to find elements within a document</param>
+        public ElementFinder(ISearchContext context, Func<ISearchContext, IWebElement[]> byExecutor)
+        {
+            _context = context;
+            _byExecutor = byExecutor;
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="element">IWebElement</param>
+        public ElementFinder(IWebElement element)
+            => _context = element;
 
         ElementFinder(ElementFinder innerFinder, int index)
         {
@@ -43,13 +61,13 @@ namespace Selenium.StandardControls.PageObjectUtility
         ElementFinder(ElementFinder innerFinder, By by)
         {
             _innerFinder = innerFinder;
-            _by = by;
+            _byExecutor = x => x.FindElements(by).ToArray();
         }
 
-        ElementFinder(ISearchContext context, By by, ElementFinder innerFinder, int index, TimeSpan? timeout, Func<IWebElement, bool> isValidElement)
+        ElementFinder(ISearchContext context, Func<ISearchContext, IWebElement[]> byExecutor, ElementFinder innerFinder, int index, TimeSpan? timeout, Func<IWebElement, bool> isValidElement)
         {
             _context = context;
-            _by = by;
+            _byExecutor = byExecutor;
             _innerFinder = innerFinder;
             _index = index;
             Timeout = timeout;
@@ -99,14 +117,14 @@ namespace Selenium.StandardControls.PageObjectUtility
         /// </summary>
         /// <returns>ElementFinder.</returns>
         public ElementFinder Wait()
-            => new ElementFinder(_context, _by, _innerFinder, _index, Settings.DefaultWaitTime, null);
+            => new ElementFinder(_context, _byExecutor, _innerFinder, _index, Settings.DefaultWaitTime, null);
 
         /// <summary>
         /// Add wait.
         /// </summary>
         /// <returns>ElementFinder.</returns>
         public ElementFinder Wait(TimeSpan timeout)
-            => new ElementFinder(_context, _by, _innerFinder, _index, timeout, null);
+            => new ElementFinder(_context, _byExecutor, _innerFinder, _index, timeout, null);
 
         /// <summary>
         /// Add wait.
@@ -114,7 +132,7 @@ namespace Selenium.StandardControls.PageObjectUtility
         /// <param name="isValidElement">Is it a valid element?</param>
         /// <returns>ElementFinder.</returns>
         public ElementFinder Wait(Func<IWebElement, bool> isValidElement)
-            => new ElementFinder(_context, _by, _innerFinder, _index, Settings.DefaultWaitTime, isValidElement);
+            => new ElementFinder(_context, _byExecutor, _innerFinder, _index, Settings.DefaultWaitTime, isValidElement);
 
         /// <summary>
         /// Add wait.
@@ -123,13 +141,13 @@ namespace Selenium.StandardControls.PageObjectUtility
         /// <param name="isValidElement">Is it a valid element?</param>
         /// <returns>ElementFinder.</returns>
         public ElementFinder Wait(TimeSpan timeout, Func<IWebElement, bool> isValidElement)
-            => new ElementFinder(_context, _by, _innerFinder, _index, timeout, isValidElement);
+            => new ElementFinder(_context, _byExecutor, _innerFinder, _index, timeout, isValidElement);
 
         IWebElement FindCore()
         {
             if (_innerFinder != null)
             {
-                if (_by == null)
+                if (_byExecutor == null)
                 {
                     var elements = _innerFinder.FindMany();
                     if (_index < elements.Length) return elements[_index];
@@ -139,16 +157,16 @@ namespace Selenium.StandardControls.PageObjectUtility
                 {
                     var innerElement = _innerFinder.Find();
                     if (innerElement == null) return null;
-                    var elements = innerElement.FindElements(_by);
-                    if (elements.Count != 1) return null;
+                    var elements = _byExecutor(innerElement);
+                    if (elements.Length != 1) return null;
                     return elements[0];
                 }
             }
             else
             {
-                if (_by == null) return (IWebElement)_context;
-                var elements = _context.FindElements(_by);
-                if (elements.Count != 1) return null;
+                if (_byExecutor == null) return (IWebElement)_context;
+                var elements = _byExecutor(_context);
+                if (elements.Length != 1) return null;
                 return elements[0];
             }
         }
@@ -157,17 +175,17 @@ namespace Selenium.StandardControls.PageObjectUtility
         {
             if (_innerFinder != null)
             {
-                if (_by == null)
+                if (_byExecutor == null)
                 {
                     return new[] { _innerFinder.FindMany()[_index] };
                 }
                 else
                 {
-                    return _innerFinder.Find().FindElements(_by).ToArray();
+                    return _byExecutor(_innerFinder.Find()).ToArray();
                 }
             }
-            if (_by == null) return new[] { (IWebElement)_context };
-            return _context.FindElements(_by).ToArray();
+            if (_byExecutor == null) return new[] { (IWebElement)_context };
+            return _byExecutor(_context);
         }
 
         /// <summary>

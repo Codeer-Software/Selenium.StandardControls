@@ -372,7 +372,7 @@ namespace Selenium.StandardControls.TestAssistant.GeneratorToolKit
             }
             catch { }
 
-            return candidate.ToArray();
+            return candidate.Select(finder => $"FindNext({finder})").ToArray();
         }
 
         static string AdjustName(string defaultName, string tagName)

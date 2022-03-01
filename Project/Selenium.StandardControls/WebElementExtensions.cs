@@ -141,6 +141,33 @@ return false;
         /// <param name="findStart">Element to start the search.</param>
         /// <param name="by">condition.</param>
         /// <returns>Element.</returns>
+        public static ElementFinder FindNext(this ControlDriverBase findStart, By by)
+            => findStart.Element.FindNext(by);
+
+        /// <summary>
+        /// Starts the search from the element specified by findStart, and then returns the element that matches the condition specified by by.
+        /// </summary>
+        /// <param name="findStart">Element to start the search.</param>
+        /// <param name="by">condition.</param>
+        /// <returns>Element.</returns>
+        public static ElementFinder FindNext(this IWebElement findStart, By by)
+            => new ElementFinder(findStart, _ => new[] { FindNextElement(findStart, by) });
+
+        /// <summary>
+        /// Starts the search from the element specified by findStart, and then returns the element that matches the condition specified by by.
+        /// </summary>
+        /// <param name="findStart">ControlDriverBase to start the search.</param>
+        /// <param name="by">condition.</param>
+        /// <returns>Element.</returns>
+        public static IWebElement FindNextElement(this ControlDriverBase findStart, By by)
+            => findStart.Element.FindNextElement(by);
+
+        /// <summary>
+        /// Starts the search from the element specified by findStart, and then returns the element that matches the condition specified by by.
+        /// </summary>
+        /// <param name="findStart">Element to start the search.</param>
+        /// <param name="by">condition.</param>
+        /// <returns>Element.</returns>
         public static IWebElement FindNextElement(this IWebElement findStart, By by)
         {
             var text = by.ToString();
@@ -193,6 +220,6 @@ return false;
             return (IWebElement)findStart.GetJS().ExecuteScript(js, type, param, findStart);
         }
 
-        public static ElementFinder Convert(this IWebElement element) => element == null ? null : new ElementFinder(element, null);
+        public static ElementFinder Convert(this IWebElement element) => element == null ? null : new ElementFinder(element);
     }
 }
