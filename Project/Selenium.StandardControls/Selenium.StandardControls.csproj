@@ -13,10 +13,10 @@
     <Company>Codeer</Company>
     <Copyright></Copyright>
     <Product>Selenium.StandardControls</Product>
-    <Version>0.51.0</Version>
+    <Version>0.52.0</Version>
     <PackageId>Selenium.StandardControls</PackageId>
-    <AssemblyVersion>0.51.0.0</AssemblyVersion>
-    <FileVersion>0.51.0.0</FileVersion>
+    <AssemblyVersion>0.52.0.0</AssemblyVersion>
+    <FileVersion>0.52.0.0</FileVersion>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageProjectUrl>https://github.com/Codeer-Software/Selenium.StandardControls</PackageProjectUrl>
   </PropertyGroup>
