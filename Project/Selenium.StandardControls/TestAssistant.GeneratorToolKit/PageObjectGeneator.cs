@@ -281,8 +281,26 @@ namespace Selenium.StandardControls.TestAssistant.GeneratorToolKit
             // content
             try
             {
-                var xpath = $"ByText(\"{element.TagName}\", \"{element.Text}\")";
-                candidate.Add(new IdentifyInfo { Identify = xpath, IsPerfect = false, DefaultName = element.TagName });
+                if (!string.IsNullOrWhiteSpace(element.Text))
+                {
+                    var foundAnonElements =
+                        serachContext.FindElements(By.XPath($"//*[normalize-space(text())='{element.Text}']"));
+                    var foundElements =
+                        serachContext.FindElements(
+                            By.XPath($"//{element.TagName}[normalize-space(text())='{element.Text}']"));
+                    if (foundAnonElements.Count == 1)
+                    {
+                        var identify = $"ByText(\"{element.Text}\")";
+                        candidate.Add(new IdentifyInfo
+                            { Identify = identify, IsPerfect = false, DefaultName = element.TagName });
+                    }
+                    else if (foundElements.Count == 1)
+                    {
+                        var identify = $"ByText(\"{element.TagName}\", \"{element.Text}\")";
+                        candidate.Add(new IdentifyInfo
+                            { Identify = identify, IsPerfect = false, DefaultName = element.TagName });
+                    }
+                }
             }
             catch { }
 
