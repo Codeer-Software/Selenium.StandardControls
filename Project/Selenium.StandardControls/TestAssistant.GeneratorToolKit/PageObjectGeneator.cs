@@ -284,21 +284,19 @@ namespace Selenium.StandardControls.TestAssistant.GeneratorToolKit
                 if (!string.IsNullOrWhiteSpace(element.Text))
                 {
                     var foundAnonElements =
-                        serachContext.FindElements(By.XPath($"//*[normalize-space(text())='{element.Text}']"));
+                        serachContext.FindElements(By.XPath($".//*[normalize-space(text())='{element.Text.Trim()}']"));
                     var foundElements =
                         serachContext.FindElements(
-                            By.XPath($"//{element.TagName}[normalize-space(text())='{element.Text}']"));
+                            By.XPath($".//{element.TagName}[normalize-space(text())='{element.Text.Trim()}']"));
                     if (foundAnonElements.Count == 1)
                     {
                         var identify = $"ByText(\"{element.Text}\")";
-                        candidate.Add(new IdentifyInfo
-                            { Identify = identify, IsPerfect = false, DefaultName = element.TagName });
+                        candidate.Add(new IdentifyInfo { Identify = identify, IsPerfect = false, DefaultName = element.TagName });
                     }
                     else if (foundElements.Count == 1)
                     {
                         var identify = $"ByText(\"{element.TagName}\", \"{element.Text}\")";
-                        candidate.Add(new IdentifyInfo
-                            { Identify = identify, IsPerfect = false, DefaultName = element.TagName });
+                        candidate.Add(new IdentifyInfo { Identify = identify, IsPerfect = false, DefaultName = element.TagName });
                     }
                 }
             }
