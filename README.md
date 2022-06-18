@@ -158,7 +158,7 @@ TextBox.Edit("abc");
 //Waiting for the Show
 TextBox.Text.Is("abc");
 ```
-Target Dirver
+Target Driver
 - AnchorDriver
 - ButtonDriver
 - CheckBoxDriver
@@ -175,3 +175,4 @@ Ishikawa-Tatsuya & Matsui-Bin is awarding Microsoft MVP.
 License
 ---
 This library is under the Apache License.
+
