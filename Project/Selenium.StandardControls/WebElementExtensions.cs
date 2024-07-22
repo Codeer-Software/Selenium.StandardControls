@@ -19,12 +19,6 @@ namespace Selenium.StandardControls
         /// <returns>Parent element</returns>
         public static IWebElement GetParent(this IWebElement element) => element.FindElement(By.XPath("parent::node()"));
         /// <summary>
-        /// Simple to RemoteWebElement accessor
-        /// </summary>
-        /// <param name="element"></param>
-        /// <returns>RemoteWebElement</returns>
-        public static RemoteWebElement GetRemoteWebElement(this IWebElement element) => element as RemoteWebElement;
-        /// <summary>
         /// Simple to ILocatable accessor
         /// </summary>
         /// <param name="element"></param>
