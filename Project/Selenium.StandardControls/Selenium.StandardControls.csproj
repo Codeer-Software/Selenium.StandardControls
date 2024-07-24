@@ -13,14 +13,19 @@
     <Company>Codeer</Company>
     <Copyright></Copyright>
     <Product>Selenium.StandardControls</Product>
-    <Version>0.56.0</Version>
+    <Version>0.57.0</Version>
     <PackageId>Selenium.StandardControls</PackageId>
-    <AssemblyVersion>0.56.0.0</AssemblyVersion>
-    <FileVersion>0.56.0.0</FileVersion>
+    <AssemblyVersion>0.57.0.0</AssemblyVersion>
+    <FileVersion>0.57.0.0</FileVersion>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageProjectUrl>https://github.com/Codeer-Software/Selenium.StandardControls</PackageProjectUrl>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+	<PackageReleaseNotes>
+		# Breaking changes
+		- TitleComapre -> TitleCompare
+		- UrlComapre -> UrlCompare
+	</PackageReleaseNotes>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net45|AnyCPU'">
