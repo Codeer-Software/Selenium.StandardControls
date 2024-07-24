@@ -69,15 +69,15 @@ namespace Selenium.StandardControls.TestAssistant.GeneratorToolKit
             code.Add($"{Indent}{{");
 
             var wait = string.Empty;
-            if (info.PageIdentifyInfo.TitleComapreType != "None")
+            if (info.PageIdentifyInfo.TitleCompareType != "None")
             {
-                wait = $"WaitForTitle(TitleComapreType.{info.PageIdentifyInfo.TitleComapreType}, \"{info.PageIdentifyInfo.Title}\")";
-                code.Add($"{Indent}{Indent}[PageObjectIdentify(TitleComapreType.{info.PageIdentifyInfo.TitleComapreType}, \"{info.PageIdentifyInfo.Title}\")]");
+                wait = $"WaitForTitle(TitleCompareType.{info.PageIdentifyInfo.TitleCompareType}, \"{info.PageIdentifyInfo.Title}\")";
+                code.Add($"{Indent}{Indent}[PageObjectIdentify(TitleCompareType.{info.PageIdentifyInfo.TitleCompareType}, \"{info.PageIdentifyInfo.Title}\")]");
             }
-            else if (info.PageIdentifyInfo.UrlComapreType != "None")
+            else if (info.PageIdentifyInfo.UrlCompareType != "None")
             {
-                wait = $"WaitForUrl(UrlComapreType.{info.PageIdentifyInfo.UrlComapreType}, \"{info.PageIdentifyInfo.Url}\")";
-                code.Add($"{Indent}{Indent}[PageObjectIdentify(UrlComapreType.{info.PageIdentifyInfo.UrlComapreType}, \"{info.PageIdentifyInfo.Url}\")]");
+                wait = $"WaitForUrl(UrlCompareType.{info.PageIdentifyInfo.UrlCompareType}, \"{info.PageIdentifyInfo.Url}\")";
+                code.Add($"{Indent}{Indent}[PageObjectIdentify(UrlCompareType.{info.PageIdentifyInfo.UrlCompareType}, \"{info.PageIdentifyInfo.Url}\")]");
             }
 
             code.Add($"{Indent}{Indent}public static {info.Name} Attach{info.Name}(this IWebDriver driver)");

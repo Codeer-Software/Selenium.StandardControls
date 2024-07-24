@@ -26,7 +26,7 @@ namespace Test.PageObjects
 
     public static class FindNextHtmlPageExtensions
     {
-        [PageObjectIdentify(UrlComapreType.Contains, "FindNext.html")]
+        [PageObjectIdentify(UrlCompareType.Contains, "FindNext.html")]
         public static FindNextHtmlPage AttachControlsHtml(this IWebDriver driver) => new FindNextHtmlPage(driver);
     }
 }

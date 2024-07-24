@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace Selenium.StandardControls.TestAssistant.GeneratorToolKit
 {
-    public enum UrlComapreType
+    public enum UrlCompareType
     {
         None,
         Contains,
@@ -12,7 +12,7 @@ namespace Selenium.StandardControls.TestAssistant.GeneratorToolKit
         Equals,
     }
 
-    public enum TitleComapreType
+    public enum TitleCompareType
     {
         None,
         Contains,
@@ -24,8 +24,8 @@ namespace Selenium.StandardControls.TestAssistant.GeneratorToolKit
     [AttributeUsage(AttributeTargets.Method)]
     public class PageObjectIdentifyAttribute : Attribute
     {
-        public UrlComapreType UrlComapreType { get; set; } = UrlComapreType.None;
-        public TitleComapreType TitleComapreType { get; set; } = TitleComapreType.None;
+        public UrlCompareType UrlCompareType { get; set; } = UrlCompareType.None;
+        public TitleCompareType TitleCompareType { get; set; } = TitleCompareType.None;
 
         public string Url 
         {
@@ -42,30 +42,30 @@ namespace Selenium.StandardControls.TestAssistant.GeneratorToolKit
         public string[] Urls { get; set; }
         public string[] Titles { get; set; }
 
-        public PageObjectIdentifyAttribute(UrlComapreType urlCompareType, params string[] urls)
+        public PageObjectIdentifyAttribute(UrlCompareType urlCompareType, params string[] urls)
         {
-            UrlComapreType = urlCompareType;
+            UrlCompareType = urlCompareType;
             Urls = urls;
         }
 
-        public PageObjectIdentifyAttribute(TitleComapreType titleCompareType, params string[] titles)
+        public PageObjectIdentifyAttribute(TitleCompareType titleCompareType, params string[] titles)
         {
-            TitleComapreType = titleCompareType;
+            TitleCompareType = titleCompareType;
             Titles = titles;
         }
 
-        [Obsolete("Please use PageObjectIdentifyAttribute(UrlComapreType urlCompareType, params string[] urls)")]
-        public PageObjectIdentifyAttribute(string url, UrlComapreType urlCompareType)
+        [Obsolete("Please use PageObjectIdentifyAttribute(UrlCompareType urlCompareType, params string[] urls)")]
+        public PageObjectIdentifyAttribute(string url, UrlCompareType urlCompareType)
         {
             Url = url;
-            UrlComapreType = urlCompareType;
+            UrlCompareType = urlCompareType;
         }
 
-        [Obsolete("Please use PageObjectIdentifyAttribute(TitleComapreType titleCompareType, params string[] titles)")]
-        public PageObjectIdentifyAttribute(string title, TitleComapreType titleCompareType)
+        [Obsolete("Please use PageObjectIdentifyAttribute(TitleCompareType titleCompareType, params string[] titles)")]
+        public PageObjectIdentifyAttribute(string title, TitleCompareType titleCompareType)
         {
             Title = title;
-            TitleComapreType = titleCompareType;
+            TitleCompareType = titleCompareType;
         }
     }
 
