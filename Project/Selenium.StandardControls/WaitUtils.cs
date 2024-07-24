@@ -38,6 +38,8 @@ namespace Selenium.StandardControls
                         return urls.Any(e => driver.Url.StartsWith(e));
                     case UrlCompareType.Equals:
                         return urls.Any(e => driver.Url.Equals(e));
+                    case UrlCompareType.IgnoreQueryEndsWith:
+                        return urls.Any(e => driver.Url.Split('?').FirstOrDefault()?.EndsWith(e) == true);
                     default:
                         throw new NotSupportedException();
                 }
