@@ -10,6 +10,7 @@ namespace Selenium.StandardControls.TestAssistant.GeneratorToolKit
         StartsWith,
         EndsWith,
         Equals,
+        IgnoreQueryEndsWith
     }
 
     public enum TitleCompareType
