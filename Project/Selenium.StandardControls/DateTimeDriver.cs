@@ -49,12 +49,28 @@ namespace Selenium.StandardControls
             Element.Focus();
             js.ExecuteScript("arguments[0].select();", Element);
             Element.SendKeys(year.ToString());
+            Element.SendKeys(Keys.Left);
             Element.SendKeys(Keys.Right);
             Element.SendKeys(month.ToString());
+            Element.SendKeys(Keys.Left);
+            Element.SendKeys(Keys.Left);
+            Element.SendKeys(Keys.Right);
             Element.SendKeys(Keys.Right);
             Element.SendKeys(day.ToString());
+            Element.SendKeys(Keys.Left);
+            Element.SendKeys(Keys.Left);
+            Element.SendKeys(Keys.Left);
+            Element.SendKeys(Keys.Right);
+            Element.SendKeys(Keys.Right);
             Element.SendKeys(Keys.Right);
             Element.SendKeys(hour.ToString());
+            Element.SendKeys(Keys.Left);
+            Element.SendKeys(Keys.Left);
+            Element.SendKeys(Keys.Left);
+            Element.SendKeys(Keys.Left);
+            Element.SendKeys(Keys.Right);
+            Element.SendKeys(Keys.Right);
+            Element.SendKeys(Keys.Right);
             Element.SendKeys(Keys.Right);
             Element.SendKeys(minute.ToString());
 
