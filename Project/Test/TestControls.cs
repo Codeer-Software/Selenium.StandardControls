@@ -98,5 +98,13 @@ namespace Test
             _page.A_Codeer.Click();
             _page.Driver.Url.Is("https://www.codeer.co.jp/");
         }
+
+        [TestMethod]
+        public void DateTime()
+        {
+            _page.Date.Edit(2024, 09, 18);
+            _page.DateTime.Edit(2024, 09, 12, 13, 56);
+            _page.Time.Edit(13, 58);
+        }
     }
 }
